@@ -16,8 +16,6 @@
 ///<==
 //单步执行反射方法
 + (void) invoke:(nonnull id) target action:(nonnull SEL)action returnValue:(nullable void*) returnValue params:(nullable void*) param,...NS_REQUIRES_NIL_TERMINATION;
-@end
-@protocol PYInvoke<NSObject>
 /**
  获取指定成员属性描述
  */

@@ -10,7 +10,7 @@
 #import "PYInvoke.h"
 #import "EXTScope.h"
 #import <objc/runtime.h>
-#import "NSObject+Hook.h"
+#import "UIResponder+Hook.h"
 //#import "UIView+Hook.h"
 
 
@@ -20,7 +20,7 @@
 
 NSMapTable<NSNumber*, NSMutableDictionary*> *PYNotifactionTableBlock;
 
-@interface NSObjectHookBaseDelegateImp : NSObject<NSObjectHookBaseDelegate>
+@interface UIResponderHookBaseDelegateImp : NSObject<UIResponderHookBaseDelegate>
 -(void) beforeExcuteDealloc:(nonnull BOOL *) isExcute target:(nonnull NSObject *) target;
 @end
 
@@ -28,7 +28,7 @@ NSMapTable<NSNumber*, NSMutableDictionary*> *PYNotifactionTableBlock;
 //-(void) beforeExcuteRemoveFromSuperview:(nonnull BOOL *) isExcute target:(nonnull UIView *) target;
 //@end
 
-@implementation NSObjectHookBaseDelegateImp
+@implementation UIResponderHookBaseDelegateImp
 -(void) beforeExcuteDealloc:(nonnull BOOL *) isExcute target:(nonnull NSObject *) target{
     [PYKeyboardNotification removeKeyboardNotificationWithResponder:(UIResponder *)target];
     [PYKeyboardNotification hiddenKeyboard];
@@ -42,7 +42,7 @@ NSMapTable<NSNumber*, NSMutableDictionary*> *PYNotifactionTableBlock;
 //    [PYKeyboardNotification hiddenKeyboard];
 //}
 //@end
-NSObjectHookBaseDelegateImp * xNSObjectHookBaseDelegateImp;
+UIResponderHookBaseDelegateImp * xUIResponderHookBaseDelegateImp;
 //UIViewHookDelegateImp * xUIViewHookDelegateImp;
 
 @protocol PYNOtifactionProtocolTag <NSObject>@end
@@ -294,11 +294,11 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
         SEL selInputShow = @selector(inputshow:);
         SEL selInputHidden = @selector(inputhidden:);
         if (![responder conformsToProtocol:@protocol(PYNOtifactionProtocolTag)]) {
-            [NSObject hookWithMethodNames:nil];
-            if (xNSObjectHookBaseDelegateImp == nil) {
-                xNSObjectHookBaseDelegateImp = [NSObjectHookBaseDelegateImp new];
+            [UIResponder hookWithMethodNames:nil];
+            if (xUIResponderHookBaseDelegateImp == nil) {
+                xUIResponderHookBaseDelegateImp = [UIResponderHookBaseDelegateImp new];
             }
-            [[NSObject delegateBase] addObject:xNSObjectHookBaseDelegateImp];
+            [[UIResponder delegateBase] addObject:xUIResponderHookBaseDelegateImp];
             
             
             Method mInputShow = class_getInstanceMethod(self, selInputShow);

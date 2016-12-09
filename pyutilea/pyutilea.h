@@ -33,7 +33,7 @@
 #import  "PYGraphicsDraw.h"
 #import  "PYGraphicsThumb.h"
 
-#import  "NSObject+Hook.h"
+#import  "UIResponder+Hook.h"
 #import  "UIView+Hook.h"
 #import  "UIViewController+Hook.h"
 #import  "UIViewController+HookView.h"
