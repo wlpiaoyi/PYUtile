@@ -15,14 +15,14 @@
 /**
  通过JSON初始化对象
  */
-+(nullable instancetype) objectWithDictionary:(nonnull NSDictionary*) dictionary;
++(nullable instancetype) objectWithDictionary:(nonnull NSObject*) dictionary;
 /**
  通过JSON初始化对象
  */
-+(nullable id) objectWithDictionary:(nonnull NSDictionary*) dictionary clazz:(nonnull Class) clazz;
++(nullable id) objectWithDictionary:(nonnull NSObject*) dictionary clazz:(nonnull Class) clazz;
 /**
  通过对象生成JSON
  */
--(nullable NSDictionary*) objectToDictionary;
+-(nullable NSObject*) objectToDictionary;
 
 @end

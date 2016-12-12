@@ -7,8 +7,18 @@
 //
 
 #import "AppDelegate.h"
+#import "pyutilea.h"
+@interface Test1:NSObject
+@property (nonatomic, assign) CGSize s;
+@property (nonatomic, assign) PYEdgeInsetsItem e;
+@property (nonatomic, strong) Test1 * t;
+@property (nonatomic, strong) NSArray<Test1 *> * ts;
+@property (nonatomic, strong) Test1 * property_ts;
+@end
+@implementation Test1 @end
 
 @interface AppDelegate ()
+
 
 @end
 
@@ -16,7 +26,17 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    Test1 * t1 = [Test1 new];
+    t1.s = CGSizeMake(3, 3);
+    t1.t = [Test1 new];
+    t1.ts = @[t1.t];
+    PYEdgeInsetsItem e= PYEdgeInsetsItemNull();
+    e.top = (__bridge void *)t1;
+    t1.e = e;
+    t1.t.s = CGSizeMake(3, 4);
+    t1.t.e = PYEdgeInsetsItemNull();
+    NSDictionary * obj = (NSDictionary *)[t1 objectToDictionary];
+    t1 = [NSObject objectWithDictionary:obj clazz:t1.class];
     return YES;
 }
 

@@ -39,12 +39,16 @@
 }
 
 + (void) excuInvoke:(nullable void*)returnValue returnType:(char * _Nullable * _Nullable) returnType invocation:(nonnull const id) invocation{
+    [self excuInvoke:returnValue returnType:returnType invocation:invocation isRetainArguments:YES];
+}
+
++ (void) excuInvoke:(nullable void*)returnValue returnType:(char * _Nullable * _Nullable) returnType invocation:(nonnull const id) invocation isRetainArguments:(BOOL) isRetainArguments{
     if (![invocation isKindOfClass:[NSInvocation class]]) {
         return;
     }
     if(invocation == nil) return;
     //retain 所有参数，防止参数被释放dealloc
-    [invocation retainArguments];
+    if(isRetainArguments) [invocation retainArguments];
     //消息调用
     [invocation invoke];
     char *_returnType = (char*)((NSInvocation*)invocation).methodSignature.methodReturnType;

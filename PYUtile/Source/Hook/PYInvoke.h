@@ -12,7 +12,8 @@
 //==>分布执行方法
 + (nullable id) startInvoke:(nonnull id) target action:(nonnull SEL)action;
 + (void) setInvoke:(nullable void *) param index:(NSInteger) index invocation:(nonnull const id) invocation;
-+ (void) excuInvoke:(nullable void *)returnValue returnType:(char * _Nullable * _Nullable) returnType invocation:(nonnull const id) invocation;
++ (void) excuInvoke:(nullable void*)returnValue returnType:(char * _Nullable * _Nullable) returnType invocation:(nonnull const id) invocation;
++ (void) excuInvoke:(nullable void*)returnValue returnType:(char * _Nullable * _Nullable) returnType invocation:(nonnull const id) invocation isRetainArguments:(BOOL) isRetainArguments;
 ///<==
 //单步执行反射方法
 + (void) invoke:(nonnull id) target action:(nonnull SEL)action returnValue:(nullable void*) returnValue params:(nullable void*) param,...NS_REQUIRES_NIL_TERMINATION;

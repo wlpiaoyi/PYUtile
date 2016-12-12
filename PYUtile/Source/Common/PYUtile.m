@@ -230,21 +230,7 @@ float cpu_usage(){
         NSAssert(NO, @"ShareKit: Could not find a root view controller.  You can assign one manually by calling [[SHK currentHelper] setRootViewController:YOURROOTVIEWCONTROLLER].");
     }
     
-    if ([result isKindOfClass:[UINavigationController class]]) {
-        if(!( ((UINavigationController*)result).viewControllers) ||  ((UINavigationController*)result).viewControllers.count == 0){
-            return result;
-        }
-        result =  ((UINavigationController*)result).viewControllers.lastObject;
-    }
-    
-    if ([result isKindOfClass:[UITabBarController class]]) {
-        if(!( ((UITabBarController*)result).viewControllers) ||  ((UITabBarController*)result).viewControllers.count == 0){
-            return result;
-        }
-        result =  ((UITabBarController*)result).viewControllers.lastObject;
-    }
-    
-    return result;
+    return [self getCurrentController:result];
 }
 +(nonnull UIViewController *) getCurrentController:(nonnull UIViewController *) result{
     
