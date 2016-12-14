@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NSObject+Hook.h"
+#import "UIResponder+Hook.h"
 /**
  hook Controller method 的基础实体
  */

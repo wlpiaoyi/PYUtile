@@ -7,7 +7,7 @@
 //
 
 #import "UIView+Hook.h"
-#import "NSObject+Hook.h"
+#import "UIResponder+Hook.h"
 #import <objc/runtime.h>
 void * UIViewDelegatePointer = &UIViewDelegatePointer;
 
