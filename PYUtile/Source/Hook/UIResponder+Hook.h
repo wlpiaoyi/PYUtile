@@ -1,5 +1,5 @@
 //
-//  NSObject+Hook.h
+//  UIResponder+Hook.h
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 16/7/11.
