@@ -9,14 +9,11 @@
 #import <UIKit/UIKit.h>
 @protocol UIViewHookDelegate<NSObject>
 @optional
-
 -(void) beforeExcuteAddSubview:(nonnull UIView *)view isExcute:(nonnull BOOL *) isExcute target:(nonnull UIView *) target;
 -(void) afterExcuteAddSubview:(nonnull UIView *)view target:(nonnull UIView *) target;
 
 -(void) beforeExcuteRemoveFromSuperview:(nonnull BOOL *) isExcute target:(nonnull UIView *) target;
 -(void) afterExcuteRemoveFromSuperviewWithTarget:(nonnull UIView *) target;
-
-
 @end
 
 @interface UIView(Hook)

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "UIResponder+Hook.h"
 
 @interface ViewController ()
 
@@ -16,6 +17,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [UIResponder hookWithMethodNames:nil];
+    [UIView new];
     // Do any additional setup after loading the view, typically from a nib.
 }
 

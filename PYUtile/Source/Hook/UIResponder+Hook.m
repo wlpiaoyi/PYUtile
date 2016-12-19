@@ -7,6 +7,7 @@
 //
 
 #import "UIResponder+Hook.h"
+#import "PYUtile.h"
 #import <objc/runtime.h>
 
 void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
@@ -21,19 +22,16 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
 }
 
 -(void) exchangeDealloc{
-    void * pointer = (__bridge void *)(self);
-    if(pointer != nil){
-        BOOL isExcute = true;
-        NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
-        for (id<UIResponderHookBaseDelegate> delegate in delegates){
-            if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDealloc:target:)]) {
-                [delegate beforeExcuteDealloc:&isExcute target:self];
-            }
+    BOOL isExcute = true;
+    NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
+    for (id<UIResponderHookBaseDelegate> delegate in delegates){
+        if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDealloc:target:)]) {
+            [delegate beforeExcuteDealloc:&isExcute target:self];
         }
-        objc_removeAssociatedObjects(self);
-        if (isExcute) {
-            [self exchangeDealloc];
-        }
+    }
+    objc_removeAssociatedObjects(self);
+    if (isExcute) {
+        [self exchangeDealloc];
     }
 }
 ///<== exchangeMethods
@@ -41,15 +39,19 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
     
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        [UIResponder hookMethodWithName:@"dealloc"];
-        [UIResponder setDelegateBase:[NSHashTable<id<UIResponderHookBaseDelegate>> weakObjectsHashTable]];
+        if(IOS8_OR_LATER){
+            [UIResponder hookMethodWithName:@"dealloc"];
+            [UIResponder setDelegateBase:[NSHashTable<id<UIResponderHookBaseDelegate>> weakObjectsHashTable]];
+        }else{
+            NSLog(@"not hook dealloc method \"objc_removeAssociatedObjects\" should not be excuted!");
+        }
     });
     if (!methodNames) {
         return false;
     }
     @synchronized([UIResponder class]){
         for (NSString *methodName in methodNames) {
-            if([self hookMethodWithName:methodName]){
+            if([UIResponder hookMethodWithName:methodName]){
                 NSLog(@"%@ hook Success",methodName);
             }else{
                 NSLog(@"%@ hook Faild",methodName);
