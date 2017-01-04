@@ -37,6 +37,13 @@
     t1.t.e = PYEdgeInsetsItemNull();
     NSDictionary * obj = (NSDictionary *)[t1 objectToDictionary];
     t1 = [NSObject objectWithDictionary:obj clazz:t1.class];
+    [PYUtile class];
+    NSData * data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/1.html", bundleDir]];
+    NSString * arg = [data toBase64String];
+    arg = [[NSString alloc] initWithData:[arg toDataFromBase64] encoding:NSUTF8StringEncoding];
+    NSMutableDictionary * dict = [NSMutableDictionary new];
+    [dict setWeakValue:self forKey:@"a"];
+    typeof(self) s = [dict weakValueForKey:@"a"];
     return YES;
 }
 

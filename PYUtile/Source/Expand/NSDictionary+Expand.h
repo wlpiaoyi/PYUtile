@@ -11,3 +11,7 @@
 @interface NSDictionary(Expand)
 -(NSData * _Nullable) toData;
 @end
+@interface NSMutableDictionary(Expand)
+-(void) setWeakValue:(nullable id)value forKey:(nonnull NSString *)key;
+-(nonnull id) weakValueForKey:(nonnull NSString *) key;
+@end

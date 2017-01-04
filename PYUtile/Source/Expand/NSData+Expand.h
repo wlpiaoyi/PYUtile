@@ -11,4 +11,5 @@
 @interface NSData(Expand)
 -(id _Nullable) toDictionary;
 -(NSString * _Nullable) toString;
+-(nullable NSString *) toBase64String;
 @end

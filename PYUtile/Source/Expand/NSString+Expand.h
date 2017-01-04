@@ -18,15 +18,19 @@
 /**
  将字符串转换成日期
  */
--(nullable NSDate*) dateFormateString:(nullable NSString *) formatePattern;
+-(nullable NSDate *) dateFormateString:(nullable NSString *) formatePattern;
 /**
  判断字符串是否有效 "",nil,NO,NSNull
  */
 +(bool) isEnabled:(nullable id) target;
 /**
- 将Data转换成64位对应的字符串
+ 将64位的字符串装换成正常的Data数据
  */
-+(nullable NSString *) base64forData:(nullable NSData *)theData;
+-(nullable NSData *) toDataFromBase64;
+/**
+ 将字符串装换成Data数据
+ */
+-(nullable NSData *) toData;
 /**
  整数
  */

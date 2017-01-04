@@ -49,9 +49,9 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
     if (!methodNames) {
         return false;
     }
-    @synchronized([UIResponder class]){
+    @synchronized([self class]){
         for (NSString *methodName in methodNames) {
-            if([UIResponder hookMethodWithName:methodName]){
+            if([self hookMethodWithName:methodName]){
                 NSLog(@"%@ hook Success",methodName);
             }else{
                 NSLog(@"%@ hook Faild",methodName);

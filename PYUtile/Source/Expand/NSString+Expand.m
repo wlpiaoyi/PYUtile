@@ -101,6 +101,18 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
     if(!target||target==nil||target==[NSNull null]||[@"" isEqual:target])return NO;
     else return YES;
 }
+/**
+ 将64位的字符串装换成正常的Data数据
+ */
+-(nullable NSData *) toDataFromBase64{
+    return [[NSData alloc] initWithBase64EncodedString:self options:NSDataBase64DecodingIgnoreUnknownCharacters];
+}
+/**
+ 将字符串装换成Data数据
+ */
+-(nullable NSData *) toData{
+    return [self dataUsingEncoding:NSUTF8StringEncoding];
+}
 -(NSString *)filterHTML
 {
     NSString *html = self;

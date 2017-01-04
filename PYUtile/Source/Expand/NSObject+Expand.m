@@ -10,7 +10,9 @@
 #import "PYInvoke.h"
 #import <objc/runtime.h>
 #import <CoreLocation/CoreLocation.h>
+
 static NSArray * NSObjectToDictionaryPaserClasses;
+
 @implementation NSObject(toDictionary)
 +(NSArray *) objectParseClasses{
     if (NSObjectToDictionaryPaserClasses == nil) {
@@ -139,7 +141,7 @@ static NSArray * NSObjectToDictionaryPaserClasses;
     unsigned int outCount;
     objc_property_t *properties = class_copyPropertyList([obejct class], &outCount);
     @try {
-        static NSDictionary *PYObjectSuperPropertNameDic = nil;
+        static NSDictionary *PYObjectSuperPropertNameDic;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             PYObjectSuperPropertNameDic = @{@"hash":@YES,@"superclass":@YES,@"description":@YES,@"debugDescription":@YES};

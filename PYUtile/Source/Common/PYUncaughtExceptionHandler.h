@@ -14,5 +14,6 @@ extern NSString * _Nonnull const PYUncaughtExceptionHandlerAddressesKey;
 
 @interface PYUncaughtExceptionHandler : NSObject
 @property (nonatomic, copy, nullable) void (^blockExceptionHandle)(NSException * _Nonnull exception, bool * _Nonnull dismissedPointer);
++(nonnull NSString *) getExceptionPath;
 @end
 PYUncaughtExceptionHandler * _Nonnull PYInstallUncaughtExceptionHandler(void);

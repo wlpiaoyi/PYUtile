@@ -42,6 +42,9 @@ const int32_t UncaughtExceptionMaximum = 10;
     }
 #endif
 }
++(nonnull NSString *) getExceptionPath{
+    return PYUncaughtExceptionHandlerLogUrl;
+}
 
 + (NSArray *)backtrace{
     void* callstack[128];
