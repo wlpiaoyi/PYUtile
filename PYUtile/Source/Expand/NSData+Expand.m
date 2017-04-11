@@ -21,6 +21,6 @@
     return [[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding];
 }
 -(nullable NSString *) toBase64String{
-    return [[NSString alloc] initWithData:[self base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength] encoding:NSUTF8StringEncoding];
+    return [[NSString alloc] initWithData:[self base64EncodedDataWithOptions:0] encoding:NSUTF8StringEncoding];
 }
 @end

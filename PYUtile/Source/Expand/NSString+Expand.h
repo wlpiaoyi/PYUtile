@@ -26,7 +26,7 @@
 /**
  将64位的字符串装换成正常的Data数据
  */
--(nullable NSData *) toDataFromBase64;
+-(nullable NSData *) toDataForBase64;
 /**
  将字符串装换成Data数据
  */

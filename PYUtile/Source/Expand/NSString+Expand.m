@@ -104,8 +104,8 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
 /**
  将64位的字符串装换成正常的Data数据
  */
--(nullable NSData *) toDataFromBase64{
-    return [[NSData alloc] initWithBase64EncodedString:self options:NSDataBase64DecodingIgnoreUnknownCharacters];
+-(nullable NSData *) toDataForBase64{
+    return [[self toData] base64EncodedDataWithOptions:0];
 }
 /**
  将字符串装换成Data数据

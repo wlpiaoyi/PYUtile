@@ -43,6 +43,4 @@ typedef void (^BlockKeyboardAnimatedBE)(UIResponder * _Nonnull responder);
  */
 +(BOOL) hiddenKeyboard;
 
-//+(BOOL)setKeyboardNotificationWithResponder:(nonnull UIResponder*) responder start:(nonnull BlockKeyboardAnimatedDoing) blockStart end:(nonnull BlockKeyboardAnimatedDoing) blockEnd;
-//+(BOOL)setKeyboardNotificationWithResponder:(nonnull UIResponder*) responder completionStart:(nonnull BlockKeyboardAnimatedBE) blockCompletionStart completionEnd:(nonnull BlockKeyboardAnimatedBE) blockCompletionEnd;
 @end

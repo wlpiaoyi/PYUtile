@@ -26,6 +26,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSString * a = @"我的abc";
+//    a = [[a toDataFromBase64] toString];
     Test1 * t1 = [Test1 new];
     t1.s = CGSizeMake(3, 3);
     t1.t = [Test1 new];
@@ -40,10 +42,10 @@
     [PYUtile class];
     NSData * data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/1.html", bundleDir]];
     NSString * arg = [data toBase64String];
-    arg = [[NSString alloc] initWithData:[arg toDataFromBase64] encoding:NSUTF8StringEncoding];
-    NSMutableDictionary * dict = [NSMutableDictionary new];
-    [dict setWeakValue:self forKey:@"a"];
-    typeof(self) s = [dict weakValueForKey:@"a"];
+//    arg = [[NSString alloc] initWithData:[arg toDataFromBase64] encoding:NSUTF8StringEncoding];
+//    NSMutableDictionary * dict = [NSMutableDictionary new];
+//    [dict setWeakValue:self forKey:@"a"];
+//    typeof(self) s = [dict weakValueForKey:@"a"];
     return YES;
 }
 

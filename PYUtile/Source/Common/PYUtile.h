@@ -45,7 +45,13 @@
 #define is64BitArm  __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
 
 #define PYPNSNA @property (nonatomic, strong, nullable)
+#define PYPNSNN @property (nonatomic, strong, nonnull)
+#define PYPNCNA @property (nonatomic, copy, nullable)
+#define PYPNA @property (nonatomic, assign)
 #define PYINITPARAMS -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams];}return self;}
+
+#define PYSOULDLAYOUTP @property (nonatomic) CGSize __layoutSubviews_UseSize;
+#define PYSOULDLAYOUTM -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.bounds.size;return true;}
 
 extern const NSString * _Nonnull documentDir;
 extern const NSString * _Nonnull cachesDir;
