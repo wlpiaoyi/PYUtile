@@ -32,7 +32,7 @@ typedef void (^BlockKeyboardAnimatedBE)(UIResponder * _Nonnull responder);
  @showing 键盘隐藏中
  @showEnd 键盘隐藏结束
  */
-+(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nonnull BlockKeyboardAnimatedBE) end;
++(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end;
 
 /**
  移除键盘监听事件

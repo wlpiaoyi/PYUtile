@@ -10,6 +10,7 @@
 #import "UIResponder+Hook.h"
 #import "PYGraphicsDraw.h"
 #import "UIView+Expand.h"
+#import "PYKeyboardNotification.h"
 @interface Dview2 : UIView
 
 @end
@@ -47,6 +48,7 @@
 @end
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *search;
 
 @end
 
@@ -55,6 +57,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [UIResponder hookWithMethodNames:nil];
+    [PYKeyboardNotification setKeyboardNotificationShowWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
+        NSLog(@"=====>");
+    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
+        
+    } end:^(UIResponder * _Nonnull responder) {
+        
+    }];
+    [PYKeyboardNotification setKeyboardNotificationHiddenWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
+        NSLog(@"=====>");
+    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
+        
+    } end:nil];
     // Do any additional setup after loading the view, typically from a nib.
 }
 

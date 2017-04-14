@@ -70,6 +70,9 @@
                             <constraint firstItem="EN1-p2-8Ux" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oFD-Tb-GrI"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="search" destination="0cK-Vc-YQX" id="iES-uf-Sl4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
