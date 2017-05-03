@@ -46,8 +46,12 @@
 
 #define PYPNSNA @property (nonatomic, strong, nullable)
 #define PYPNSNN @property (nonatomic, strong, nonnull)
+#define PYPNRNA @property (nonatomic, readonly, nullable)
+#define PYPNRNN @property (nonatomic, readonly, nonnull)
 #define PYPNCNA @property (nonatomic, copy, nullable)
+#define PYPNCNN @property (nonatomic, copy, nonnull)
 #define PYPNA @property (nonatomic, assign)
+
 #define PYINITPARAMS -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams];}return self;}
 
 #define PYSOULDLAYOUTP @property (nonatomic) CGSize __layoutSubviews_UseSize;

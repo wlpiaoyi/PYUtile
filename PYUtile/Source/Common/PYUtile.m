@@ -48,7 +48,9 @@ UIDeviceOrientation parseInterfaceOrientationToDeviceOrientation(UIInterfaceOrie
             orientation = UIDeviceOrientationPortraitUpsideDown;
         }
             break;
-        default:
+        default:{
+            orientation = UIDeviceOrientationUnknown;
+        }
             break;
     }
     return orientation;
@@ -72,7 +74,9 @@ UIInterfaceOrientation parseDeviceOrientationToInterfaceOrientation(UIDeviceOrie
             interfaceOrientation = UIInterfaceOrientationPortraitUpsideDown;
         }
             break;
-        default:
+        default:{
+            interfaceOrientation = UIInterfaceOrientationUnknown;
+        }
             break;
     }
     return interfaceOrientation;
@@ -234,22 +238,22 @@ float cpu_usage(){
 }
 +(nonnull UIViewController *) getCurrentController:(nonnull UIViewController *) result{
     
-    if ([result isKindOfClass:[UINavigationController class]]) {
-        if(!( ((UINavigationController*)result).viewControllers) ||  ((UINavigationController*)result).viewControllers.count == 0){
-            return result;
-        }
+    if ([result isKindOfClass:[UINavigationController class]]
+         && ((UINavigationController*)result).viewControllers
+        && ((UINavigationController*)result).viewControllers.count > 0) {
         result =  ((UINavigationController*)result).viewControllers.lastObject;
-    }
-    
-    if ([result isKindOfClass:[UITabBarController class]]) {
-        if(!( ((UITabBarController*)result).viewControllers) ||  ((UITabBarController*)result).viewControllers.count == 0){
-            return result;
-        }
+    }else if ([result isKindOfClass:[UITabBarController class]]
+              && ((UITabBarController*)result).viewControllers
+              && ((UITabBarController*)result).viewControllers.count > 0) {
         result =  ((UITabBarController*)result).viewControllers.lastObject;
     }
     
     if([result isKindOfClass:[UINavigationController class]] || [result isKindOfClass:[UITabBarController class]]){
-        return [self getCurrentController:result];
+        result = [self getCurrentController:result];
+    }
+    
+    if(result.childViewControllers.count > 0){
+        return [self getCurrentController:result.childViewControllers.lastObject];
     }
     
     return result;

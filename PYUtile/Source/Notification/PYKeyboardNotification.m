@@ -76,13 +76,12 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
  @showing 键盘显示中
  @showEnd 键盘显示结束
  */
-+(BOOL)setKeyboardNotificationShowWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nonnull BlockKeyboardAnimatedBE) end{
++(BOOL)setKeyboardNotificationShowWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
         if(!responder.pointerContext.hasKeyboard){
             SEL selInputShow = @selector(inputshow:);
-            SEL selInputHidden = @selector(inputhidden:);
+            [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillShowNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector:selInputShow name:UIKeyboardWillShowNotification object:nil];
-            [[NSNotificationCenter defaultCenter]addObserver:responder selector: selInputHidden name: UIKeyboardWillHideNotification object:nil];
             responder.pointerContext.hasKeyboard = true;
             [PYKeyboardNotification hookResponder:responder];
         }
@@ -102,9 +101,8 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
 +(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
         if(!responder.pointerContext.hasKeyboard){
-            SEL selInputShow = @selector(inputshow:);
             SEL selInputHidden = @selector(inputhidden:);
-            [[NSNotificationCenter defaultCenter]addObserver:responder selector:selInputShow name:UIKeyboardWillShowNotification object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillHideNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector: selInputHidden name: UIKeyboardWillHideNotification object:nil];
             responder.pointerContext.hasKeyboard = true;
             [PYKeyboardNotification hookResponder:responder];

@@ -6,6 +6,7 @@
 //  Copyright © 2016年 wlpiaoyi. All rights reserved.
 //
 
+#define pyutilea true;
 
 #import  "PYUtile.h"
 #import  "PYInvoke.h"

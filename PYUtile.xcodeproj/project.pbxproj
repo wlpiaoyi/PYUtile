@@ -12,7 +12,6 @@
 		15242A6D1DF6580100C361E4 /* PYReachabilityNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A681DF6580100C361E4 /* PYReachabilityNotification.m */; };
 		15242A6E1DF6580100C361E4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A6A1DF6580100C361E4 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		15242A751DF6592400C361E4 /* PYInvoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A741DF6592400C361E4 /* PYInvoke.m */; };
-		1554878D1E1CCEE40026827A /* 1.html in Resources */ = {isa = PBXBuildFile; fileRef = 1554878C1E1CCEE40026827A /* 1.html */; };
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */; };
@@ -103,7 +102,6 @@
 		15C5FB381DF66C4800FF2C75 /* PYGraphicsThumb.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15C5FB331DF66C3B00FF2C75 /* PYGraphicsThumb.h */; };
 		15C5FB391DF66C5200FF2C75 /* PYGraphicsDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C5FB321DF66C3B00FF2C75 /* PYGraphicsDraw.m */; };
 		15C5FB3A1DF66C5200FF2C75 /* PYGraphicsThumb.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C5FB341DF66C3B00FF2C75 /* PYGraphicsThumb.m */; };
-		15C927841E96750C007D9C62 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 15C927831E96750C007D9C62 /* 1.jpg */; };
 		15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
 		15DB17431DF6935700182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
 /* End PBXBuildFile section */
@@ -172,7 +170,6 @@
 		15242A6A1DF6580100C361E4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		15242A731DF6592400C361E4 /* PYInvoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYInvoke.h; sourceTree = "<group>"; };
 		15242A741DF6592400C361E4 /* PYInvoke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYInvoke.m; sourceTree = "<group>"; };
-		1554878C1E1CCEE40026827A /* 1.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = 1.html; path = PYUtile/1.html; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
 		15BFDEAB1DF4FFF20044EDAA /* PYUtile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PYUtile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,7 +231,6 @@
 		15C5FB321DF66C3B00FF2C75 /* PYGraphicsDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYGraphicsDraw.m; sourceTree = "<group>"; };
 		15C5FB331DF66C3B00FF2C75 /* PYGraphicsThumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYGraphicsThumb.h; sourceTree = "<group>"; };
 		15C5FB341DF66C3B00FF2C75 /* PYGraphicsThumb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYGraphicsThumb.m; sourceTree = "<group>"; };
-		15C927831E96750C007D9C62 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		15DB171E1DF687AB00182429 /* py_hook_encode_type.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = py_hook_encode_type.c; sourceTree = "<group>"; };
 		15DB171F1DF687AB00182429 /* py_hook_encode_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = py_hook_encode_type.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -260,7 +256,6 @@
 		15BFDEA21DF4FFF20044EDAA = {
 			isa = PBXGroup;
 			children = (
-				1554878C1E1CCEE40026827A /* 1.html */,
 				15BFDEAD1DF4FFF20044EDAA /* PYUtile */,
 				15C5FACA1DF6688600FF2C75 /* pyutilea */,
 				15BFDEAC1DF4FFF20044EDAA /* Products */,
@@ -279,7 +274,6 @@
 		15BFDEAD1DF4FFF20044EDAA /* PYUtile */ = {
 			isa = PBXGroup;
 			children = (
-				15C927831E96750C007D9C62 /* 1.jpg */,
 				15BFDEC51DF5034A0044EDAA /* Source */,
 				15BFDEB11DF4FFF20044EDAA /* AppDelegate.h */,
 				15BFDEB21DF4FFF20044EDAA /* AppDelegate.m */,
@@ -519,9 +513,7 @@
 			files = (
 				15BFDEBE1DF4FFF20044EDAA /* LaunchScreen.storyboard in Resources */,
 				15BFDEBB1DF4FFF20044EDAA /* Assets.xcassets in Resources */,
-				1554878D1E1CCEE40026827A /* 1.html in Resources */,
 				15BFDEB91DF4FFF20044EDAA /* Main.storyboard in Resources */,
-				15C927841E96750C007D9C62 /* 1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
