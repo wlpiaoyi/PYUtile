@@ -11,6 +11,7 @@
 #import "PYGraphicsDraw.h"
 #import "UIView+Expand.h"
 #import "PYKeyboardNotification.h"
+#import "NSNumber+Expand.h"
 @interface Dview2 : UIView
 
 @end
@@ -56,6 +57,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSNumber * n = @(22.4);
+    NSString * a = [n stringValueWithPrecision:2];
     [UIResponder hookWithMethodNames:nil];
     [PYKeyboardNotification setKeyboardNotificationShowWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
         NSLog(@"=====>");

@@ -12,6 +12,11 @@
 
 #import <mach/mach.h>
 
+
+//extern OSStatus
+//AudioServicesCreateSystemSoundID(   CFURLRef                    inFileURL,
+//                                 SystemSoundID*              outSystemSoundID){
+//}
 NSString * documentDir;
 NSString * cachesDir;
 NSString * bundleDir;
@@ -345,7 +350,6 @@ float cpu_usage(){
  简易发声
  */
 +(BOOL) soundWithPath:(NSString*) path isShake:(BOOL) isShake{
-    
     if(isShake){
         AudioServicesAddSystemSoundCompletion(kSystemSoundID_Vibrate, NULL, NULL, SoundFinished,nil);
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

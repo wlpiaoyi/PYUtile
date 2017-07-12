@@ -15,7 +15,9 @@
 void * UIResponderKeyboardPointerContextPointer = &UIResponderKeyboardPointerContextPointer;
 
 @interface UIResponderKeyboardPointerContext : NSObject
-@property BOOL hasKeyboard;
+@property BOOL hasHookKeyboard;
+@property BOOL hasAddShowKeyboard;
+@property BOOL hasAddHiddenKeyboard;
 @property (nonatomic, nullable) BlockKeyboardAnimatedBE showBeginKeyboarAnimation;
 @property (nonatomic, nullable) BlockKeyboardAnimatedDoing showDoingKeyboarAnimation;
 @property (nonatomic, nullable) BlockKeyboardAnimatedBE showEndKeyboarAnimation;
@@ -41,8 +43,8 @@ NSObject * syn_UIResponder_Keyboard;
 @implementation UIResponderHookBaseDelegateImp
 -(void) beforeExcuteDealloc:(nonnull BOOL *) isExcute target:(nonnull NSObject *) target{
     if([target isKindOfClass:[UIResponder class]]){
-        if( ((UIResponder*)target).pointerContext.hasKeyboard){
-            ((UIResponder*)target).pointerContext.hasKeyboard = false;
+        if( ((UIResponder*)target).pointerContext.hasAddShowKeyboard || ((UIResponder*)target).pointerContext.hasAddHiddenKeyboard){
+            ((UIResponder*)target).pointerContext.hasAddShowKeyboard = ((UIResponder*)target).pointerContext.hasAddHiddenKeyboard = false;
             [PYKeyboardNotification removeKeyboardNotificationWithResponder:(UIResponder *)target];
             [PYKeyboardNotification hiddenKeyboard];
         }
@@ -78,11 +80,14 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
  */
 +(BOOL)setKeyboardNotificationShowWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
-        if(!responder.pointerContext.hasKeyboard){
+        if(!responder.pointerContext.hasAddShowKeyboard){
             SEL selInputShow = @selector(inputshow:);
             [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillShowNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector:selInputShow name:UIKeyboardWillShowNotification object:nil];
-            responder.pointerContext.hasKeyboard = true;
+            responder.pointerContext.hasAddShowKeyboard = true;
+        }
+        if(!responder.pointerContext.hasHookKeyboard){
+            responder.pointerContext.hasHookKeyboard = true;
             [PYKeyboardNotification hookResponder:responder];
         }
         responder.pointerContext.showBeginKeyboarAnimation = begin;
@@ -100,11 +105,14 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
  */
 +(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
-        if(!responder.pointerContext.hasKeyboard){
+        if(!responder.pointerContext.hasAddHiddenKeyboard){
             SEL selInputHidden = @selector(inputhidden:);
             [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillHideNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector: selInputHidden name: UIKeyboardWillHideNotification object:nil];
-            responder.pointerContext.hasKeyboard = true;
+            responder.pointerContext.hasAddHiddenKeyboard = true;
+        }
+        if(!responder.pointerContext.hasHookKeyboard){
+            responder.pointerContext.hasHookKeyboard = true;
             [PYKeyboardNotification hookResponder:responder];
         }
         responder.pointerContext.hiddenBeginKeyboarAnimation = begin;
@@ -116,7 +124,7 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
 }
 +(BOOL) removeKeyboardNotificationWithResponder:(nonnull UIResponder*) responder{
     @synchronized(syn_UIResponder_Keyboard) {
-        responder.pointerContext.hasKeyboard = false;
+        responder.pointerContext.hasAddShowKeyboard = responder.pointerContext.hasAddHiddenKeyboard = false;
         [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillHideNotification object:nil];
     }

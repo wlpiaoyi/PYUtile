@@ -120,6 +120,8 @@ static NSArray * NSObjectToDictionaryPaserClasses;
                     }
                     propertyValue = objs;
                     [PYInvoke setInvoke:&propertyValue index:2 invocation:invocaton];
+                }else{
+                    NSLog(@"there has no property name:%@",_propertyName);
                 }
             }else{
                 [PYInvoke setInvoke:&propertyValue index:2 invocation:invocaton];

@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface PYHook : NSObject
-+(BOOL) mergeHookInstanceWithTarget:(nonnull Class) target action:(nonnull SEL) action blockBefore:(BOOL (^ _Nonnull) (NSInvocation * _Nonnull invoction)) blockBefore blockAfter:(void (^ _Nonnull) (NSInvocation * _Nonnull invoction)) blockAfter;
++(BOOL) mergeHookInstanceWithTarget:(nonnull Class) target action:(nonnull SEL) action blockBefore:(BOOL (^ _Nullable) (NSInvocation * _Nonnull invoction)) blockBefore blockAfter:(void (^ _Nullable) (NSInvocation * _Nonnull invoction)) blockAfter;
 +(BOOL) removeHookInstanceWithTarget:(nonnull Class) target action:(nonnull SEL) action;
 @end

@@ -103,7 +103,7 @@ SEL py_gethookSel(SEL action){
     });
 }
 
-+ (BOOL) mergeHookInstanceWithTarget:(Class) target action:(SEL) action blockBefore:(BOOL (^) (NSInvocation * invoction)) blockBefore blockAfter:(void (^) (NSInvocation * invoction)) blockAfter{
++(BOOL) mergeHookInstanceWithTarget:(nonnull Class) target action:(nonnull SEL) action blockBefore:(BOOL (^ _Nullable) (NSInvocation * _Nonnull invoction)) blockBefore blockAfter:(void (^ _Nullable) (NSInvocation * _Nonnull invoction)) blockAfter;{
     @synchronized(target) {
         [self removeHookInstanceWithTarget:target action:action];
         NSMutableDictionary *dict = [self getHookInstanceWithTarget:target action:action];

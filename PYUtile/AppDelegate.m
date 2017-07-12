@@ -8,14 +8,23 @@
 
 #import "AppDelegate.h"
 #import "pyutilea.h"
-@interface Test1:NSObject
+#import <objc/runtime.h>
+@interface Test1:NSObject<UITextFieldDelegate>
 @property (nonatomic, assign) CGSize s;
 @property (nonatomic, assign) PYEdgeInsetsItem e;
 @property (nonatomic, strong) Test1 * t;
 @property (nonatomic, strong) NSArray<Test1 *> * ts;
 @property (nonatomic, strong) Test1 * property_ts;
+
 @end
-@implementation Test1 @end
+@implementation Test1
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    return false;
+}
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+    return YES;
+}
+@end
 
 @interface AppDelegate ()
 
@@ -26,8 +35,12 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [UITextField hookWithMethodNames:nil];
+    Method m = class_getInstanceMethod([Test1 class], @selector(textFieldShouldEndEditing:));
+    const char * daf =  method_getTypeEncoding(m);
     NSString * a = @"我的abc";
 //    a = [[a toDataFromBase64] toString];
+    
     Test1 * t1 = [Test1 new];
     t1.s = CGSizeMake(3, 3);
     t1.t = [Test1 new];
