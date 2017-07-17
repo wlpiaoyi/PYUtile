@@ -9,10 +9,15 @@
 #import "UIResponder+Hook.h"
 #import "PYUtile.h"
 #import <objc/runtime.h>
+#import <objc/message.h>
 
 void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
 
 @implementation UIResponder(Hook)
+
+-(void) myDealloc{
+    
+}
 
 +(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
     return objc_getAssociatedObject([UIResponder class], UIResponderHookBaseDelegatePointer);
@@ -39,12 +44,17 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
     
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        if(IOS8_OR_LATER){
-            [UIResponder hookMethodWithName:@"dealloc"];
-            [UIResponder setDelegateBase:[NSHashTable<id<UIResponderHookBaseDelegate>> weakObjectsHashTable]];
-        }else{
-            NSLog(@"not hook dealloc method \"objc_removeAssociatedObjects\" should not be excuted!");
+        SEL sel = sel_getUid("dealloc");
+        IMP imp = class_getMethodImplementation([UIResponder class], sel);
+        IMP superImp = class_getMethodImplementation(class_getSuperclass([UIResponder class]), sel);
+        if(imp == superImp){
+            SEL mySel = @selector(myDealloc);
+            IMP myImp = class_getMethodImplementation([UIResponder class], mySel);
+            Method myMethod = class_getInstanceMethod(self, mySel);
+            class_replaceMethod(self, sel, myImp, method_getTypeEncoding(myMethod));
         }
+        [UIResponder hookMethodWithName:@"dealloc"];
+        [UIResponder setDelegateBase:[NSHashTable<id<UIResponderHookBaseDelegate>> weakObjectsHashTable]];
     });
     if (!methodNames) {
         return false;
@@ -64,16 +74,25 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
 +(BOOL) hookMethodWithName:(NSString*) name{
     SEL orgSel = sel_getUid(name.UTF8String);
     SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[name substringToIndex:1] uppercaseString], [name substringFromIndex:1]].UTF8String);
-    if(![self instancesRespondToSelector:orgSel]){
+    IMP exchangeIMP = class_getMethodImplementation(self, exchangeSel);
+    IMP orgIMP = class_getMethodImplementation(self, orgSel);
+    IMP gmf = (IMP)_objc_msgForward;
+    if(exchangeIMP == gmf || orgIMP == gmf){
         return false;
     }
-    if(![self instancesRespondToSelector:exchangeSel]){
-        return false;
+    
+    Class superClazz = class_getSuperclass(self);
+    IMP superOrgIMP = class_getMethodImplementation(superClazz, orgSel);
+    IMP superExchangeIMP = class_getMethodImplementation(superClazz, exchangeSel);
+    
+    if(superOrgIMP != gmf && superExchangeIMP != gmf && superOrgIMP == orgIMP){
+        return [superClazz hookMethodWithName:name];;
     }
+    
     Method orgMethod = class_getInstanceMethod(self, orgSel);
     Method exchangeMethod = class_getInstanceMethod(self, exchangeSel);
-    method_exchangeImplementations(exchangeMethod, orgMethod);
-    
+    class_replaceMethod(self, orgSel, exchangeIMP, method_getTypeEncoding(orgMethod));
+    class_replaceMethod(self, exchangeSel, orgIMP, method_getTypeEncoding(exchangeMethod));
     return true;
 }
 

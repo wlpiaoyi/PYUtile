@@ -9,13 +9,12 @@
 #import "AppDelegate.h"
 #import "pyutilea.h"
 #import <objc/runtime.h>
-@interface Test1:NSObject<UITextFieldDelegate>
+@interface Test1:UIResponder<UITextFieldDelegate>
 @property (nonatomic, assign) CGSize s;
 @property (nonatomic, assign) PYEdgeInsetsItem e;
 @property (nonatomic, strong) Test1 * t;
 @property (nonatomic, strong) NSArray<Test1 *> * ts;
 @property (nonatomic, strong) Test1 * property_ts;
-
 @end
 @implementation Test1
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -24,6 +23,20 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
     return YES;
 }
+- (BOOL)exchangeTextFieldShouldEndEditing:(UITextField *)textField{
+    [self exchangeTextFieldShouldEndEditing:textField];
+    return YES;
+}
+@end
+@interface Test2:Test1
+@end
+@implementation Test2
+@end
+@interface Test3:NSObject
+@end
+@implementation Test3
+//-(void) dealloc{
+//}
 @end
 
 @interface AppDelegate ()
@@ -36,12 +49,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [UITextField hookWithMethodNames:nil];
-    Method m = class_getInstanceMethod([Test1 class], @selector(textFieldShouldEndEditing:));
-    const char * daf =  method_getTypeEncoding(m);
-    NSString * a = @"我的abc";
-//    a = [[a toDataFromBase64] toString];
+    [Test2 hookMethodWithName:@"textFieldShouldEndEditing:"];
+    [Test3 new];
+    Test1 * t1 = [Test2 new];
+    [t1 textFieldShouldEndEditing:nil];
     
-    Test1 * t1 = [Test1 new];
     t1.s = CGSizeMake(3, 3);
     t1.t = [Test1 new];
     t1.ts = @[t1.t];
