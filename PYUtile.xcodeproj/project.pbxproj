@@ -12,6 +12,7 @@
 		15242A6D1DF6580100C361E4 /* PYReachabilityNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A681DF6580100C361E4 /* PYReachabilityNotification.m */; };
 		15242A6E1DF6580100C361E4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A6A1DF6580100C361E4 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		15242A751DF6592400C361E4 /* PYInvoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A741DF6592400C361E4 /* PYInvoke.m */; };
+		153B97761F1DE566000F007C /* PYXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 153B97751F1DE566000F007C /* PYXml.m */; };
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */; };
@@ -120,7 +121,7 @@
 		15C5FAC71DF6688600FF2C75 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
+			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 				1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */,
@@ -170,6 +171,8 @@
 		15242A6A1DF6580100C361E4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		15242A731DF6592400C361E4 /* PYInvoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYInvoke.h; sourceTree = "<group>"; };
 		15242A741DF6592400C361E4 /* PYInvoke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYInvoke.m; sourceTree = "<group>"; };
+		153B97741F1DE566000F007C /* PYXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYXml.h; sourceTree = "<group>"; };
+		153B97751F1DE566000F007C /* PYXml.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYXml.m; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
 		15BFDEAB1DF4FFF20044EDAA /* PYUtile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PYUtile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +256,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		153B97731F1DE544000F007C /* Xml */ = {
+			isa = PBXGroup;
+			children = (
+				153B97741F1DE566000F007C /* PYXml.h */,
+				153B97751F1DE566000F007C /* PYXml.m */,
+			);
+			path = Xml;
+			sourceTree = "<group>";
+		};
 		15BFDEA21DF4FFF20044EDAA = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +311,7 @@
 		15BFDEC51DF5034A0044EDAA /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				153B97731F1DE544000F007C /* Xml */,
 				15C5FB301DF66C3B00FF2C75 /* Graphics */,
 				15C5FB2A1DF66A7900FF2C75 /* ViewAutolayout */,
 				15BFDEC61DF5034A0044EDAA /* Common */,
@@ -536,6 +549,7 @@
 				15BFDEB31DF4FFF20044EDAA /* AppDelegate.m in Sources */,
 				15BFDF0F1DF5034A0044EDAA /* EXTScope.m in Sources */,
 				1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */,
+				153B97761F1DE566000F007C /* PYXml.m in Sources */,
 				15BFDF061DF5034A0044EDAA /* NSDate+Expand.m in Sources */,
 				15BFDF041DF5034A0044EDAA /* NSArray+Expand.m in Sources */,
 				15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */,

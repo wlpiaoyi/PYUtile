@@ -9,7 +9,11 @@
 #import "AppDelegate.h"
 #import "pyutilea.h"
 #import <objc/runtime.h>
-@interface Test1:UIResponder<UITextFieldDelegate>
+#import "PYXml.h"
+
+@interface Test1:NSObject<UITextFieldDelegate>
+@property (nonatomic, copy) void (^block) (int i);
+@property (nonatomic) SEL action;
 @property (nonatomic, assign) CGSize s;
 @property (nonatomic, assign) PYEdgeInsetsItem e;
 @property (nonatomic, strong) Test1 * t;
@@ -40,20 +44,34 @@
 @end
 
 @interface AppDelegate ()
-
-
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [UITextField hookWithMethodNames:nil];
-    [Test2 hookMethodWithName:@"textFieldShouldEndEditing:"];
-    [Test3 new];
-    Test1 * t1 = [Test2 new];
-    [t1 textFieldShouldEndEditing:nil];
+//    NSString * value = @"{\"T\":{\"S1\":{\"MinStay\":[[\"\",\"无限制\"]],\"MaxStay\":[[\"\",\"无限制。\"]],\"Penalties\":[[\"Cancel/Refund\",\"允许，收取手续费500人民币。\"],[\"Change\",\"允许。\"],[\"Noshow\",\"退票：收取手续费500人民币。\n\n更改：不允许。\"]],\"ResultData\":[[\"\",\"最短停留:\n无限制\n\n最长停留:\n无限制。\n\n退改规定:\n1.退票:\n允许，收取手续费500人民币。\n2.更改:允许。\n3.误机:退票：收取手续费500人民币。更改：不允许。\r\n\n\n\"]]}}}";
+////    value = @"{\"ResultData\":[[\"\",\"最短停留:\n无限制 最长停留:无限制\"]]}";
+//    value = [value stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+//    [[value toData] toDictionary];
+//    NSMutableString * xmlString = [NSMutableString new];
+//    [xmlString appendString:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"];
+//    [xmlString appendString:@"<string xmlns=\"http://tempuri.org/\">\n"];
+//    [xmlString appendString:@"<item a=\"b\">2</item>\n"];
+//    [xmlString appendString:@"<item a=\"b\">2</item>\n"];
+//    [xmlString appendString:@"</string>"];
+//    [xmlString appendString:@"</string>"];
     
+//    PYXml * xml = [PYXml instanceWithXmlString:xmlString];
+//    
+//    [UITextField hookWithMethodNames:nil];
+//    [Test2 hookMethodWithName:@"textFieldShouldEndEditing:"];
+//    [Test3 new];
+    Test1 * t1 = [Test1 new];
+    
+//    [t1 setBlock:^(int i){
+//        NSLog(@"aa");
+//    }];
     t1.s = CGSizeMake(3, 3);
     t1.t = [Test1 new];
     t1.ts = @[t1.t];
@@ -62,8 +80,10 @@
     t1.e = e;
     t1.t.s = CGSizeMake(3, 4);
     t1.t.e = PYEdgeInsetsItemNull();
-    NSDictionary * obj = (NSDictionary *)[t1 objectToDictionary];
-    t1 = [NSObject objectWithDictionary:obj clazz:t1.class];
+//    NSDictionary * obj = (NSDictionary *)[self objectToDictionary];
+//    t1 = [NSObject objectWithDictionary:obj clazz:self.class];
+    
+//    t1.block(2);
     [PYUtile class];
     NSData * data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/1.html", bundleDir]];
     NSString * arg = [data toBase64String];

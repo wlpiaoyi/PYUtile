@@ -45,12 +45,13 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         SEL sel = sel_getUid("dealloc");
-        IMP imp = class_getMethodImplementation([UIResponder class], sel);
-        IMP superImp = class_getMethodImplementation(class_getSuperclass([UIResponder class]), sel);
+        Class responderClazz = [UIResponder class];
+        IMP imp = class_getMethodImplementation(responderClazz, sel);
+        IMP superImp = class_getMethodImplementation(class_getSuperclass(responderClazz), sel);
         if(imp == superImp){
             SEL mySel = @selector(myDealloc);
-            IMP myImp = class_getMethodImplementation([UIResponder class], mySel);
-            Method myMethod = class_getInstanceMethod(self, mySel);
+            IMP myImp = class_getMethodImplementation(responderClazz, mySel);
+            Method myMethod = class_getInstanceMethod(responderClazz, mySel);
             class_replaceMethod(self, sel, myImp, method_getTypeEncoding(myMethod));
         }
         [UIResponder hookMethodWithName:@"dealloc"];
@@ -73,6 +74,7 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
 
 +(BOOL) hookMethodWithName:(NSString*) name{
     SEL orgSel = sel_getUid(name.UTF8String);
+    
     SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[name substringToIndex:1] uppercaseString], [name substringFromIndex:1]].UTF8String);
     IMP exchangeIMP = class_getMethodImplementation(self, exchangeSel);
     IMP orgIMP = class_getMethodImplementation(self, orgSel);

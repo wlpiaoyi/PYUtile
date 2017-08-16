@@ -1,5 +1,5 @@
 //
-//  NSObejct+Expand.m
+//  NSobject+Expand.m
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/5.
@@ -7,16 +7,16 @@
 //
 
 #import "NSObject+Expand.h"
-#import "PYInvoke.h"
 #import <objc/runtime.h>
 #import <CoreLocation/CoreLocation.h>
-
+#import <UIKit/UIKit.h>
+#import "PYInvoke.h"
 static NSArray * NSObjectToDictionaryPaserClasses;
-
+static NSMutableArray * static_arry;
 @implementation NSObject(toDictionary)
 +(NSArray *) objectParseClasses{
     if (NSObjectToDictionaryPaserClasses == nil) {
-        NSObjectToDictionaryPaserClasses = @[[NSNumber class],[NSString class],[NSDate class],[NSData class],[NSNumber class],[NSArray class],[NSValue class]];
+        NSObjectToDictionaryPaserClasses = @[[NSNumber class],[NSString class],[NSDate class],[NSData class]];
     }
     return NSObjectToDictionaryPaserClasses;
 }
@@ -42,200 +42,217 @@ static NSArray * NSObjectToDictionaryPaserClasses;
     if(![dictionary isKindOfClass:[NSDictionary class]]) return nil;
     id target = [[clazz alloc] init];
     if (target) {
-        for (NSString *propertyName in [((NSDictionary *)dictionary) allKeys]) {
-            
-            NSString * _propertyName_ = propertyName;
-            if ([propertyName isEqual:@"id"]) {
-                _propertyName_ = @"keyId";
+        for (NSString *key in [((NSDictionary *)dictionary) allKeys]) {
+            NSString * _key_ = key;
+            if ([key isEqual:@"id"]) {
+                _key_ = @"keyId";
             }
             
-            NSMutableString *setMethodName = [[NSMutableString alloc] initWithString:@"set"];
-            if(_propertyName_.length > 1){
-                [setMethodName appendString:[[_propertyName_ substringToIndex:1] uppercaseString]];
-                [setMethodName appendString:[_propertyName_ substringFromIndex:1]];
-            }else if(_propertyName_.length == 1){
-                [setMethodName appendString:[_propertyName_ uppercaseString]];
-            }else continue;
-            [setMethodName appendString:@":"];
-            SEL setSel = sel_getUid([setMethodName UTF8String]);
-            if(![target respondsToSelector:setSel]){
-                NSLog(@"has no set name with:%@ in %@",setMethodName, NSStringFromClass([target class]));
+            id value = ((NSDictionary *)dictionary)[key];
+            if (value == nil || value == [NSNull null]) {
                 continue;
             }
             
-            id propertyValue = ((NSDictionary *)dictionary)[propertyName];
-            if (propertyValue == nil || propertyValue == [NSNull null]) {
-                continue;
-            }
-            
-            NSInvocation *invocaton = [PYInvoke startInvoke:target action:setSel];
-            const char * encode = [invocaton.methodSignature getArgumentTypeAtIndex:2];
-            if(strcasecmp(encode, @encode(int)) == 0){
-                int v = [propertyValue intValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(long)) == 0){
-                long v = [propertyValue longValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(long long)) == 0){
-                long long v = [propertyValue longLongValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(bool)) == 0){
-                bool v = [propertyValue boolValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(float)) == 0){
-                float v = [propertyValue floatValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(double)) == 0){
-                double v = [propertyValue doubleValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(short)) == 0){
-                short v = [propertyValue shortValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(strcasecmp(encode, @encode(char)) == 0){
-                char v = [propertyValue charValue];
-                [PYInvoke setInvoke:&v index:2 invocation:invocaton];
-            }else if(encode[0] == '{' && encode[strlen(encode) -1] == '}'){
-                NSValue * value = [NSValue valueWithBytes:((NSData*)propertyValue).bytes objCType:encode];
-                void * v = malloc(((NSData*)propertyValue).length);
-                [value getValue:v];
-                [PYInvoke setInvoke:v index:2 invocation:invocaton];
-                free(v);
-            }else if(![NSObject canParseClass:[propertyValue class]]){
-                objc_property_t property = class_getProperty(clazz, propertyName.UTF8String);
-                NSArray * classArgs = [[NSString stringWithUTF8String:property_getAttributes(property)] componentsSeparatedByString:@"\""];
-                Class clazz = NSClassFromString(classArgs[1]);
-                propertyValue = [clazz objectWithDictionary:propertyValue];
-                [PYInvoke setInvoke:&propertyValue index:2 invocation:invocaton];
-                
-            }else if ([propertyValue isKindOfClass:[NSArray class]]) {
-                NSMutableArray * objs = [NSMutableArray new];
-                NSString * _propertyName = [NSString stringWithFormat:@"property_%@",propertyName];
-                objc_property_t property = class_getProperty(clazz, _propertyName.UTF8String);
-                if (property) {
-                    NSArray * classArgs = [[NSString stringWithUTF8String:property_getAttributes(property)] componentsSeparatedByString:@"\""];
-                    Class clazz = NSClassFromString(classArgs[1]);
-                    for (NSObject * obj in propertyValue) {
-                        id _value = [clazz objectWithDictionary:obj];
-                        [objs addObject:_value ? _value : obj];
-                    }
-                    propertyValue = objs;
-                    [PYInvoke setInvoke:&propertyValue index:2 invocation:invocaton];
-                }else{
-                    NSLog(@"there has no property name:%@",_propertyName);
-                }
+            objc_property_t property = class_getProperty(clazz, _key_.UTF8String);
+            Ivar ivar = class_getInstanceVariable(clazz, _key_.UTF8String);
+            const char * typeEncoding;
+            if(property){
+                unsigned int count;
+                objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
+                typeEncoding = attribute[0].value;
+            }else if(ivar){
+                typeEncoding = ivar_getTypeEncoding(ivar);
             }else{
-                [PYInvoke setInvoke:&propertyValue index:2 invocation:invocaton];
+                printf("the class [%s] has no ivar [%s]\n", NSStringFromClass(clazz).UTF8String, _key_.UTF8String);
+                continue;
             }
-            [PYInvoke excuInvoke:nil returnType:nil invocation:invocaton];
+            
+            if(strlen(typeEncoding) <= 0){
+                printf("the class [%s]'s ivar [%s] has not found typeEncoding\n", NSStringFromClass(clazz).UTF8String, _key_.UTF8String);
+                continue;
+            }
+            
+            size_t tedl = strlen(typeEncoding);
+            if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+                if ([value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSSet class]]) {
+                    const char * ctypeEncoding = NULL;
+                    objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",_key_].UTF8String);
+                    Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",_key_].UTF8String);
+                    if(cproperty){
+                        unsigned int count;
+                        objc_property_attribute_t * attribute = property_copyAttributeList(cproperty, &count);
+                        ctypeEncoding = attribute[0].value;
+                    }else if(civar){
+                        ctypeEncoding = ivar_getTypeEncoding(civar);
+                    }else{
+                        value = nil;
+                        printf("the class has no pattern for property_%s or ivar_%s\n", _key_.UTF8String, _key_.UTF8String);
+                        continue;
+                    }
+                    Class cClazz = nil;
+                    if(ctypeEncoding != NULL && strlen(ctypeEncoding)){
+                        NSArray * classArgs = [[NSString stringWithUTF8String:ctypeEncoding] componentsSeparatedByString:@"\""];
+                        cClazz = NSClassFromString(classArgs[1]);
+                    }
+                    
+                    if(cClazz == nil){
+                        value = nil;
+                        continue;
+                    }else{
+                        id objs = [value isKindOfClass:[NSArray class]] ? [NSMutableArray new]: [NSMutableSet new];
+                        for (NSObject * obj in value) {
+                            id cvalue = [cClazz objectWithDictionary:obj];
+                            if(cvalue){
+                                if([value isKindOfClass:[NSArray class]]){
+                                    [((NSMutableArray *)objs) addObject:cvalue];
+                                }else{
+                                    [((NSMutableSet *)objs) addObject:cvalue];
+                                }
+                            };
+                        }
+                        value = objs;
+                    }
+                }else if(![NSObject canParseClass:clazz]){
+                    value = [clazz objectWithDictionary:value];
+                }
+            }else if(typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}'){
+                value = nil;
+                continue;
+//                NSInvocation *invocaton = [PYInvoke startInvoke:target action:sel_getUid(key.UTF8String)];
+//                if(invocaton){
+//                    value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];
+//                    void * v = malloc(((NSData*)value).length);
+//                    [value getValue:v];
+//                    [PYInvoke setInvoke:v index:2 invocation:invocaton];
+//                    free(v);
+//                    value = nil;
+//                    continue;
+//                }
+            }
+            if(value){
+                @try {
+                    [target setValue:value forKey:_key_];
+                } @catch (NSException *exception) {
+                    printf("%s:%s\n",exception.name.UTF8String, exception.reason.UTF8String);
+                }
+            }
         }
     }
     return target;
 }
-/**
- 通过对象生成JSON
- */
+
 -(NSObject*) objectToDictionary{
-    if ([NSObject canParseClass:self.class]){
-        return self;
+    return [NSObject objectToDictionaryWithObject:self deep:0 hashStr:[NSMutableString new] fliteries:nil];
+}
+-(NSObject*) objectToDictionaryWithFliteries:(nonnull NSArray<Class> *) fliteries{
+    return [NSObject objectToDictionaryWithObject:self deep:0 hashStr:[NSMutableString new] fliteries:fliteries];
+}
++(NSObject*) objectToDictionaryWithObject:(nonnull NSObject *) object deep:(int) deep hashStr:(nonnull NSMutableString *) hashStr fliteries:(nullable NSArray<Class> *) fliteries{
+    if ([NSObject canParseClass:object.class]){
+        return object;
     }
+    NSString * hash = @(object.hash).stringValue;
+    if(fliteries && fliteries.count > 0 && [fliteries containsObject:object.class]){
+        return  [object description];
+    }
+    if(deep > 5 || [hashStr containsString:hash]){
+        return nil;
+    }
+    [hashStr appendString:hash];
+    [hashStr appendString:@","];
+    
+    static NSDictionary *PYObjectSuperPropertNameDic;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        PYObjectSuperPropertNameDic = @{@"hash":@YES,@"superclass":@YES,@"description":@YES,@"debugDescription":@YES};
+    });
+    
     NSMutableDictionary *dict = [NSMutableDictionary new];
-    __weak id obejct = self;
     unsigned int outCount;
-    objc_property_t *properties = class_copyPropertyList([obejct class], &outCount);
+    objc_property_t *properties = class_copyPropertyList([object class], &outCount);
+    unsigned int outCount2;
+    Ivar *ivars = class_copyIvarList([object class], &outCount2);
     @try {
-        static NSDictionary *PYObjectSuperPropertNameDic;
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            PYObjectSuperPropertNameDic = @{@"hash":@YES,@"superclass":@YES,@"description":@YES,@"debugDescription":@YES};
-        });
-        
-        for (int i = 0; i < outCount; i++) {
-            
-            objc_property_t property = properties[i];
-            NSString *propertyName = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-            
-            if (PYObjectSuperPropertNameDic[propertyName]) {
-                continue;
+        void (^block) (NSMutableDictionary * dict, NSObject * obj, NSString * key, const char * typeEncoding) = ^(NSMutableDictionary * dict, NSObject * obj,NSString * key, const char * typeEncoding){
+            if(((NSNumber *)PYObjectSuperPropertNameDic[key]).boolValue){
+                return;
             }
-            
-            SEL getSel = sel_getUid([propertyName UTF8String]);
-            if(![obejct respondsToSelector:getSel]){
-                NSLog(@"has no get name with:%@ in %@",propertyName, NSStringFromClass([obejct class]));
-                continue;
+            NSObject * returnValue = nil;
+            size_t tedl = strlen(typeEncoding);
+            if(tedl > 1){
+                if(typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}'){
+//                    NSInvocation *invocaton = [PYInvoke startInvoke:obj action:sel_getUid(key.UTF8String)];
+//                    if(invocaton == nil) return;
+//                    __block void * ptr;
+//                    [PYInvoke excuInvoke:ptr returnType:nil invocation:invocaton];
+//                    NSUInteger size = invocaton.methodSignature.methodReturnLength;
+//                    returnValue = [NSData dataWithBytes:ptr length:size];
+                    return;
+                }else if(typeEncoding[0] == '@' && typeEncoding[1] == '?'){
+                    return;
+                }
             }
-            NSInvocation *invocaton = [PYInvoke startInvoke:obejct action:getSel];
-            const char * encode = invocaton.methodSignature.methodReturnType;
-            id returnValue;
-            if(strcasecmp(encode, @encode(int)) == 0){
-                int v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithInt:v];
-            }else if(strcasecmp(encode, @encode(long)) == 0){
-                long v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithLong:v];
-            }else if(strcasecmp(encode, @encode(long long)) == 0){
-                long long v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithLongLong:v];
-            }else if(strcasecmp(encode, @encode(bool)) == 0){
-                bool v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithBool:v];
-            }else if(strcasecmp(encode, @encode(float)) == 0){
-                float v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithFloat:v];
-            }else if(strcasecmp(encode, @encode(double)) == 0){
-                double v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithDouble:v];
-            }else if(strcasecmp(encode, @encode(short)) == 0){
-                short v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithShort:v];
-            }else if(strcasecmp(encode, @encode(char)) == 0){
-                char v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = [NSNumber numberWithChar:v];
-            }else if(encode[0] == '{' && encode[strlen(encode) -1] == '}'){
-                void * v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                NSValue * value = [NSValue valueWithBytes:&v objCType:encode];
-                NSUInteger size;
-                const char* encoding = [value objCType];
-                NSGetSizeAndAlignment(encoding, &size, NULL);
-                void* ptr = malloc(size);
-                [value getValue:ptr];
-                returnValue = [NSData dataWithBytes:ptr length:size];
-                free(ptr);
-                
-            }else{
-                void * v;
-                [PYInvoke excuInvoke:&v returnType:nil invocation:invocaton];
-                returnValue = (__bridge id)v;
+            @try {
+                returnValue = [obj valueForKey:key];
+            } @catch (NSException *exception) {
+                returnValue = nil;
+                printf("%s:%s\n",exception.name.UTF8String, exception.reason.UTF8String);
             }
             if(!returnValue){
-                continue;
+                return;
             }
-            if (![NSObject canParseClass:[returnValue class]]) {
-                returnValue = [returnValue objectToDictionary];
-            }else if ([returnValue isKindOfClass:[NSArray class]]) {
+            if ([returnValue isKindOfClass:[NSArray class]]) {
                 NSMutableArray * objs = [NSMutableArray new];
-                for (id obj in returnValue) {
-                    [objs addObject:[obj objectToDictionary]];
+                for (id obj in (NSArray*)returnValue) {
+                    id value = [NSObject objectToDictionaryWithObject:obj deep:deep+1 hashStr:hashStr fliteries:fliteries];
+                    if(value)[objs addObject:value];
                 }
                 returnValue = objs;
+            }else if ([returnValue isKindOfClass:[NSSet class]]) {
+                NSMutableArray * objs = [NSMutableArray new];
+                for (NSObject * obj in (NSSet*)returnValue) {
+                    NSObject * value =  [NSObject objectToDictionaryWithObject:obj deep:deep+1 hashStr:hashStr fliteries:fliteries];
+                    if(value)[objs addObject:value];
+                }
+                returnValue = objs;
+            }else if(typeEncoding[0] == '@' && ![NSObject canParseClass:[returnValue class]]) {
+                returnValue = [NSObject objectToDictionaryWithObject:returnValue deep:deep+1 hashStr:hashStr fliteries:fliteries];
+            }else if([returnValue isKindOfClass:[UIResponder class]]) {
+                returnValue = [returnValue description];
             }
-            if ([propertyName isEqual:@"keyId"]) {
-                propertyName = @"id";
+            if(!returnValue){
+                return;
             }
-            [dict setObject:returnValue forKey:propertyName];
+            [dict setObject:returnValue forKey:key];
+        };
+        for (int i = 0; i < outCount; i++) {
+            objc_property_t property = properties[i];
+            NSString *propertyName = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+            const char * typeEncoding;
+            if(property){
+                unsigned int count;
+                objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
+                typeEncoding = attribute[0].value;
+            }
+            block(dict, object, propertyName, typeEncoding);
+        }
+        
+        for (int i = 0; i < outCount2; i++) {
+            Ivar ivar = ivars[i];
+            NSString * ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+            if([[ivarName substringToIndex:1] isEqual:@"_"]){
+                ivarName =  [ivarName substringFromIndex:1];
+            }
+            if([dict valueForKey:ivarName] != nil) continue;
+            const char * typeEncoding = ivar_getTypeEncoding(ivar);
+            block(dict, object, ivarName, typeEncoding);
         }
     }
     @finally {
         free(properties);
+        free(ivars);
     }
+    
     return dict;
 }
 

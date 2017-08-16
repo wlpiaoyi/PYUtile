@@ -12,6 +12,7 @@
 #import "UIView+Expand.h"
 #import "PYKeyboardNotification.h"
 #import "NSNumber+Expand.h"
+#import "pyutilea.h"
 @interface Dview2 : UIView
 
 @end
@@ -49,30 +50,52 @@
 @end
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *search;
+//@property (weak, nonatomic) IBOutlet UITextField *search;
+//@property (nonatomic) UIView * aView;
 
+@property int a;
+@property NSString * b;
+@property ViewController * vc;
+@property NSArray * vcs;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSNumber * n = @(22.4);
-    NSString * a = [n stringValueWithPrecision:2];
-    [UIResponder hookWithMethodNames:nil];
-    [PYKeyboardNotification setKeyboardNotificationShowWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
-        NSLog(@"=====>");
-    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
-        
-    } end:^(UIResponder * _Nonnull responder) {
-        
-    }];
-    [PYKeyboardNotification setKeyboardNotificationHiddenWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
-        NSLog(@"=====>");
-    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
-        
-    } end:nil];
+    self.a = 2;
+    self.b = @"adfadf";
+    id obj = [self objectToDictionary];
+    ViewController * vc = [ViewController objectWithDictionary:obj];
+    self.vc = vc;
+    self.vcs = @[[ViewController new]];
+    obj = [self objectToDictionary];
+    vc = [ViewController objectWithDictionary:obj];
+    
+//    self.aView = self.view;
+//    NSNumber * n = @(22.4);
+//    NSString * a = [n stringValueWithPrecision:2];
+//    [UIResponder hookWithMethodNames:nil];
+//    [PYKeyboardNotification setKeyboardNotificationShowWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
+//        NSLog(@"=====>");
+//    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
+//        
+//    } end:^(UIResponder * _Nonnull responder) {
+//        
+//    }];
+//    [PYKeyboardNotification setKeyboardNotificationHiddenWithResponder:self.search begin:^(UIResponder * _Nonnull responder) {
+//        NSLog(@"=====>");
+//    } doing:^(UIResponder * _Nonnull responder, CGRect keyBoardFrame) {
+//        
+//    } end:nil];
     // Do any additional setup after loading the view, typically from a nib.
+}
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    NSDictionary * obj =  [[UIApplication sharedApplication].keyWindow objectToDictionary];
+//    UIWindow * windwos =  [UIWindow objectWithDictionary:obj];
+    NSString * value = [[obj toData] toString];
+    value = value;
 }
 
 
