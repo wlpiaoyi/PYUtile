@@ -28,7 +28,7 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 
 @implementation UIImage (Expand)
 -(UIImage*) setImageSize:(CGSize) size{
-    UIGraphicsBeginImageContext(size);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 2);
     [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

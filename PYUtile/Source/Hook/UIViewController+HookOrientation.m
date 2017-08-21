@@ -10,153 +10,181 @@
 #import "UIViewController+Hook.h"
 #import "PYUtile.h"
 #import <objc/runtime.h>
-
-void * UIViewControllerHookOrientationDelegatePointer = &UIViewControllerHookOrientationDelegatePointer;
+static id HookOrientationSynTag = @"";
+static id HookOrientationTempSynTag = @"";
+static BOOL HookOrientationIsIteritor = NO;
 BOOL isExcuteUIViewControllerHookOrientationMethod = false;
 
 @implementation UIViewController(HookOrientation)
 
 //重写父类方法判断是否可以旋转
 -(BOOL) exchangeShouldAutorotate{
-    BOOL isExcute = true;
+    __block BOOL isExcute = true;
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteShouldAutorotate:target:)]) {
             [delegate beforeExcuteShouldAutorotate:&isExcute target:self];
         }
-    }
+    }];
     
-    BOOL result = false;
+    __block BOOL result = false;
     if (isExcute) {
         result = [self exchangeShouldAutorotate];
     }
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(aftlerExcuteShouldAutorotateWithTarget:)]) {
             result = [delegate aftlerExcuteShouldAutorotateWithTarget:self];
         }
-    }
+    }];
     return result;
 }
 
 //重写父类方法判断支持的旋转方向
 -(NSUInteger) exchangeSupportedInterfaceOrientations{
-    BOOL isExcute = true;
+    __block BOOL isExcute = true;
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteSupportedInterfaceOrientations:target:)]) {
             [delegate beforeExcuteSupportedInterfaceOrientations:&isExcute target:self];
         }
-    }
+    }];
     
-    NSUInteger result = 0;
+    __block NSUInteger result = 0;
     if (isExcute) {
         result = [self exchangeSupportedInterfaceOrientations];
     }
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteSupportedInterfaceOrientationsWithTarget:)]) {
             result = [delegate afterExcuteSupportedInterfaceOrientationsWithTarget:self];
         }
-    }
+    }];
     
     return result;
 }
 //重写父类方法返回当前方向
 - (UIInterfaceOrientation) exchangePreferredInterfaceOrientationForPresentation{
-    BOOL isExcute = true;
+    __block BOOL isExcute = true;
     
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcutePreferredInterfaceOrientationForPresentation:target:)]) {
             [delegate beforeExcutePreferredInterfaceOrientationForPresentation:&isExcute target:self];
         }
-    }
+    }];
     
-    UIInterfaceOrientation result = UIInterfaceOrientationUnknown;
+    __block UIInterfaceOrientation result = UIInterfaceOrientationUnknown;
     if (isExcute) {
         result = [self exchangePreferredInterfaceOrientationForPresentation];
     }
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredInterfaceOrientationForPresentationWithTarget:)]) {
             result = [delegate afterExcutePreferredInterfaceOrientationForPresentationWithTarget:self];
-            
         }
-    }
+    }];
     
     return result;
 }
 -(void) exchangeViewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
-    BOOL isExcute = true;
+    __block BOOL isExcute = true;
     
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewWillTransitionToSize:withTransitionCoordinator:isExcute:target:)]) {
             [delegate beforeExcuteViewWillTransitionToSize:size withTransitionCoordinator:coordinator isExcute:&isExcute target:self];
         }
-    }
+    }];
     
     if (isExcute) {
         [self exchangeViewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     }
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewWillTransitionToSize:withTransitionCoordinator:target:)]) {
             [delegate afterExcuteViewWillTransitionToSize:size withTransitionCoordinator:coordinator target:self];
         }
-    }
+    }];
 }
 //⇒ 重写父类方法旋转开始和结束
 -(void) exchangeWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration{
-    BOOL isExcute = true;
+    __block BOOL isExcute = true;
     
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate) {
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteWillRotateToInterfaceOrientation:duration:isExcute:target:)]) {
             [delegate beforeExcuteWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration isExcute:&isExcute target:self];
         }
-    }
+    }];
     
     if (isExcute) {
         [self exchangeWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     }
     
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteWillRotateToInterfaceOrientation:duration:target:)]) {
             [delegate afterExcuteWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration target:self];
         }
-    }
+    }];
 }
 -(void) exchangeDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation{
-    BOOL isExcute = true;
-    
+    __block BOOL isExcute = true;
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate) {
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDidRotateFromInterfaceOrientation:isExcute:target:)]) {
             [delegate beforeExcuteDidRotateFromInterfaceOrientation:fromInterfaceOrientation isExcute:&isExcute target:self];
         }
-    }
+    }];
     if (isExcute) {
         [self exchangeDidRotateFromInterfaceOrientation:fromInterfaceOrientation];
     }
-    for (id<UIViewcontrollerHookOrientationDelegate> delegate in delegates){
+    [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate) {
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteDidRotateFromInterfaceOrientation:target:)]) {
             [delegate afterExcuteDidRotateFromInterfaceOrientation:fromInterfaceOrientation target:self];
         }
-    }
+    }];
 }
 //⇐
 
 +(nullable NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> *) delegateOrientations{
-    return objc_getAssociatedObject([UIViewController class], UIViewControllerHookOrientationDelegatePointer);
+    return [self paramsDictForHookExpand][@"delegateOrientations"];
 }
 +(void) setDelegateOrientations:(nullable NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> *) delegateOrientations{
-    objc_setAssociatedObject([UIViewController class], UIViewControllerHookOrientationDelegatePointer, delegateOrientations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self paramsDictForHookExpand][@"delegateOrientations"] = delegateOrientations;
+}
++(void) hookOrientationIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block{
+    @synchronized (HookOrientationSynTag) {
+        HookOrientationIsIteritor = YES;
+        for (id sub in table) {
+            block(sub);
+        }
+        HookOrientationIsIteritor = NO;
+        @synchronized (HookOrientationTempSynTag) {
+            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateOrientationsTemp"];
+            if(temps && temps.count > 0){
+                for (id temp in temps) {
+                    [self addDelegateOrientation:temp];
+                }
+            }
+            [temps removeAllObjects];
+        }
+    }
 }
 +(void) addDelegateOrientation:(nullable id<UIViewcontrollerHookOrientationDelegate>) delegateOrientation{
+    if(HookOrientationIsIteritor && delegateOrientation){
+        @synchronized (HookOrientationTempSynTag) {
+            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateOrientationsTemp"];
+            if(temps == nil){
+                temps = [NSMutableArray new];
+                [self paramsDictForHookExpand][@"delegateOrientationsTemp"] = temps;
+            }
+            [temps addObject:delegateOrientation];
+        }
+        return;
+    }
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegateOrientations = (NSHashTable<id<UIViewcontrollerHookOrientationDelegate>>*)[self delegateOrientations];
     if (!delegateOrientations) {
         delegateOrientations = [NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> weakObjectsHashTable];

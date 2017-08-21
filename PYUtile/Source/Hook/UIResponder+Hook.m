@@ -11,7 +11,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
+void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 
 @implementation UIResponder(Hook)
 
@@ -19,11 +19,19 @@ void * UIResponderHookBaseDelegatePointer = &UIResponderHookBaseDelegatePointer;
     
 }
 
++(nonnull NSMutableDictionary *) paramsDictForHookExpand{
+    NSMutableDictionary * paramsDict = objc_getAssociatedObject([UIResponder class], UIResponderHookParamDictPointer);
+    if(paramsDict == nil) {
+        paramsDict = [NSMutableDictionary new];
+        objc_setAssociatedObject([UIResponder class], UIResponderHookParamDictPointer, paramsDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return paramsDict;
+}
 +(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
-    return objc_getAssociatedObject([UIResponder class], UIResponderHookBaseDelegatePointer);
+    return [self paramsDictForHookExpand][@"delegateBase"];
 }
 +(void) setDelegateBase:(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
-    objc_setAssociatedObject([UIResponder class], UIResponderHookBaseDelegatePointer, delegateBase, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self paramsDictForHookExpand][@"delegateBase"] = delegateBase;
 }
 
 -(void) exchangeDealloc{

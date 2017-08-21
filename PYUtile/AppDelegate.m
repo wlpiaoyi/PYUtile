@@ -43,6 +43,7 @@
 //}
 @end
 
+NSTimer * timer;
 @interface AppDelegate ()
 @end
 
@@ -67,7 +68,13 @@
 //    [UITextField hookWithMethodNames:nil];
 //    [Test2 hookMethodWithName:@"textFieldShouldEndEditing:"];
 //    [Test3 new];
+    
+     timer = [NSTimer scheduledTimerWithTimeInterval:3 repeats:NO block:^(NSTimer * _Nonnull timer) {
+         NSLog(@"");
+    }];
+//    [timer invalidate];
     Test1 * t1 = [Test1 new];
+    
     
 //    [t1 setBlock:^(int i){
 //        NSLog(@"aa");

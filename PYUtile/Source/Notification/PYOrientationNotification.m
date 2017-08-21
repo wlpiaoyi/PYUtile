@@ -66,7 +66,7 @@ static PYOrientationNotification *xPYOrientationNotification;
 /**
  旋转当前装置
  */
--(void) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^)(void)) completion{
+-(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^)(NSTimer * _Nonnull timer)) completion{
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         SEL selector = NSSelectorFromString(@"setOrientation:");
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
@@ -76,17 +76,18 @@ static PYOrientationNotification *xPYOrientationNotification;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
         [UIViewController attemptRotationToDeviceOrientation];//这句是关键
-        
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [NSThread sleepForTimeInterval:self.duration];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completion) {
-                    completion();
-                }
-            });
-            
-        });
+        return completion ? [NSTimer scheduledTimerWithTimeInterval:self.duration repeats:NO block:completion] : nil;
+//        NSTimeInterval duration = self.duration;
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            [NSThread sleepForTimeInterval:duration];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                if (completion) {
+//                    completion();
+//                }
+//            });
+//        });
     }
+    return nil;
 }
 -(void) addListener:(id<PYOrientationNotification>) listener{
     @synchronized(self.tableListeners){
@@ -166,7 +167,6 @@ static PYOrientationNotification *xPYOrientationNotification;
 +(BOOL) isSupportInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation targetController:(nonnull UIViewController *) targetController{
     UIInterfaceOrientationMask interfaceOrientationMask = 1 << interfaceOrientation;
     return [self isSupportInterfaceOrientationMask:interfaceOrientationMask targetController:targetController];
-    return true;
 }
 /**
  是否支持旋转到当前方向

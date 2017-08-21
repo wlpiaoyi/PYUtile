@@ -9,7 +9,6 @@
 #import "UIView+Hook.h"
 #import "UIResponder+Hook.h"
 #import <objc/runtime.h>
-void * UIViewDelegatePointer = &UIViewDelegatePointer;
 
 BOOL isExcuteUIViewHookMethod;
 
@@ -55,10 +54,10 @@ BOOL isExcuteUIViewHookMethod;
 }
 
 +(nullable NSHashTable<id<UIViewHookDelegate>> *) delegateViews{
-    return objc_getAssociatedObject([UIView class], UIViewDelegatePointer);
+    return [self paramsDictForHookExpand][@"delegateViews"];
 }
 +(void) setDelegateViews:(NSHashTable<id<UIViewHookDelegate>> *) delegateViews{
-    objc_setAssociatedObject([UIView class], UIViewDelegatePointer, delegateViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [self paramsDictForHookExpand][@"delegateViews"] = delegateViews;
 }
 +(void) addDelegateView:(nonnull id<UIViewHookDelegate>) delegateView{
     NSHashTable<id<UIViewHookDelegate>> * delegateViews = [self delegateViews];

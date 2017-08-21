@@ -32,7 +32,7 @@
 /**
  旋转当前装置
  */
--(void) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^ _Nullable)(void)) completion;
+-(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^ _Nullable)(NSTimer * _Nonnull timer)) completion;
 -(void) addListener:(nonnull id<PYOrientationNotification>) listener;
 -(void) removeListenser:(nonnull id<PYOrientationNotification>) listener;
 /**

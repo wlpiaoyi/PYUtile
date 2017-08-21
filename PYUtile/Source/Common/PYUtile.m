@@ -241,27 +241,35 @@ float cpu_usage(){
     
     return [self getCurrentController:result];
 }
-+(nonnull UIViewController *) getCurrentController:(nonnull UIViewController *) result{
-    
-    if ([result isKindOfClass:[UINavigationController class]]
-         && ((UINavigationController*)result).viewControllers
-        && ((UINavigationController*)result).viewControllers.count > 0) {
-        result =  ((UINavigationController*)result).viewControllers.lastObject;
-    }else if ([result isKindOfClass:[UITabBarController class]]
-              && ((UITabBarController*)result).viewControllers
-              && ((UITabBarController*)result).viewControllers.count > 0) {
-        result =  ((UITabBarController*)result).viewControllers.lastObject;
++(nonnull UIViewController *) getCurrentController:(nonnull UIViewController *) parentVc{
+    UIViewController * childVc = nil;
+    if ([parentVc isKindOfClass:[UINavigationController class]]
+         && ((UINavigationController*)parentVc).viewControllers
+        && ((UINavigationController*)parentVc).viewControllers.count > 0) {
+        childVc =  ((UINavigationController*)parentVc).viewControllers.lastObject;
+    }else if ([parentVc isKindOfClass:[UITabBarController class]]
+              && ((UITabBarController*)parentVc).viewControllers
+              && ((UITabBarController*)parentVc).viewControllers.count > 0) {
+        childVc =  ((UITabBarController*)parentVc).viewControllers.lastObject;
     }
     
-    if([result isKindOfClass:[UINavigationController class]] || [result isKindOfClass:[UITabBarController class]]){
-        result = [self getCurrentController:result];
+    parentVc = childVc;
+    childVc = nil;
+    
+    if([parentVc isKindOfClass:[UINavigationController class]] || [parentVc isKindOfClass:[UITabBarController class]]){
+        childVc = [self getCurrentController:parentVc];
     }
     
-    if(result.childViewControllers.count > 0){
-        return [self getCurrentController:result.childViewControllers.lastObject];
-    }
+    parentVc = childVc;
+    childVc = nil;
     
-    return result;
+    if(parentVc.childViewControllers.count > 0){
+        childVc = [self getCurrentController:parentVc.childViewControllers.lastObject];
+    }
+
+    if(!childVc) return parentVc;
+    
+    return childVc;
 }
 //==>
 //计算文字占用的大小

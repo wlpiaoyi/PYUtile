@@ -67,10 +67,12 @@ typedef long long                         PYInt64;
 #define PYPNA @property (nonatomic, assign)
 #define PYPNAR @property (nonatomic, assign, readonly)
 
-#define PYINITPARAMS -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams];}return self;}
+#define PYINITPARAMS -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams];}return self;} -(void) initParams
 
 #define PYSOULDLAYOUTP @property (nonatomic) CGSize __layoutSubviews_UseSize;
-#define PYSOULDLAYOUTM -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.bounds.size;return true;}
+#define PYSOULDLAYOUTMSTART -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.bounds.size;return true;} -(void) layoutSubviews{ [super layoutSubviews]; if([self __layoutSubviews_Size_Compare ]){
+#define PYSOULDLAYOUTVMSTART -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.view.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.view.bounds.size;return true;} -(void) viewDidLayoutSubviews{ [super viewDidLayoutSubviews]; if([self __layoutSubviews_Size_Compare ]){
+#define PYSOULDLAYOUTMEND }}
 
 extern const NSString * _Nonnull documentDir;
 extern const NSString * _Nonnull cachesDir;
