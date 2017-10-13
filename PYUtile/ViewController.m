@@ -65,7 +65,7 @@
     [super viewDidLoad];
     self.a = 2;
     self.b = @"adfadf";
-    id obj = [self objectToDictionary];
+    id obj = [[UIApplication sharedApplication].keyWindow objectToDictionary];
     ViewController * vc = [ViewController objectWithDictionary:obj];
     self.vc = vc;
     self.vcs = @[[ViewController new]];
@@ -92,10 +92,11 @@
 }
 -(void) viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    NSDictionary * obj =  [[UIApplication sharedApplication].keyWindow objectToDictionary];
+    NSDictionary * obj =  [((NSObject *)[UIApplication sharedApplication].delegate) objectToDictionary];
 //    UIWindow * windwos =  [UIWindow objectWithDictionary:obj];
     NSString * value = [[obj toData] toString];
     value = value;
+
 }
 
 

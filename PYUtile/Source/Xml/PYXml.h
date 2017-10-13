@@ -10,9 +10,9 @@
 #import "PYUtile.h"
 
 @interface PYXmlDom:NSObject
-PYPNSNN NSString * elementName;
-PYPNSNN NSDictionary<NSString *, NSString *> * attributeDict;
-PYPNSNN id datas;
+kPNSNN NSString * elementName;
+kPNSNN NSDictionary<NSString *, NSString *> * attributeDict;
+kPNSNN id datas;
 @end
 @interface PYXml : NSObject
 +(nullable instancetype) instanceWithXmlString:(nonnull NSString *) xmlString;

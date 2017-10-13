@@ -32,41 +32,45 @@
  */
 -(nullable NSData *) toData;
 /**
- 整数
+ 整数验证
  */
 -(BOOL) matchInteger;
 /**
- 小数
+ 小数验证
  */
 -(BOOL) matchFloat;
 /**
- 手机号码
+ 手机号码验证
  */
 -(BOOL) matchMobliePhone;
 /**
- 座机号码
+ 座机号码验证
  */
 -(BOOL) matchHomePhone;
 /**
- 邮箱
+ 邮箱验证
  */
 -(BOOL) matchEmail;
 /**
- 港澳通行证
+ 港澳通行证验证
  */
 -(BOOL) matchHkMacCard;
 /**
- 台湾通行证
+ 台湾通行证验证
  */
 -(BOOL) matchTWCard;
 /**
- 护照
+ 护照验证
  */
 -(BOOL) matchPassport;
 /**
- 身份证
+ 身份证验证
  */
 -(BOOL) matchIdentifyNumber;
+/**
+ 银行卡验证
+ */
+-(BOOL) matchBankNumber;
 
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
 

@@ -136,6 +136,7 @@
     Method* methods = class_copyMethodList(clazz, &outCount);
     NSMutableArray<NSDictionary*> *methodDics = [[NSMutableArray<NSDictionary*> alloc] init];
     for (int i = 0; i<outCount; i++) {
+        printf("===>%d\n",i);
         Method method = methods[i];
         [methodDics addObject:[self getMethodInfoWithMethod:method]];
     }
@@ -165,8 +166,8 @@
 +(NSDictionary*) getMethodInfoWithMethod:(Method) method{
     
     NSNumber *argumentNum = @(method_getNumberOfArguments(method)-2);
-    char returnEncode[2];
-    method_getReturnType(method, returnEncode, 2);
+    char returnEncode[100];
+    method_getReturnType(method, returnEncode, 100);
     NSString *returnType = [[NSString alloc] initWithUTF8String:[PYInvoke pyParseEncodeTpe:returnEncode isBaseType:nil]];
     static NSString *keyName;
     static NSString *keyArgumentNum;

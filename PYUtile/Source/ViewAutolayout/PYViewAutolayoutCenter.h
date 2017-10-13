@@ -16,11 +16,11 @@ extern const CGFloat DisableConstrainsValueMIN;
 typedef struct PYEdgeInsetsItem {
     void  * _Nullable top, * _Nullable left, * _Nullable bottom, * _Nullable right;  // specify amount to inset (positive) for each of the edges. values can be negative to 'outset'
 } PYEdgeInsetsItem;
-PYUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemMake(void  * _Nullable top, void  * _Nullable left, void  * _Nullable bottom, void  * _Nullable right) {
+kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemMake(void  * _Nullable top, void  * _Nullable left, void  * _Nullable bottom, void  * _Nullable right) {
     PYEdgeInsetsItem insets = {top, left, bottom, right};
     return insets;
 }
-PYUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
+kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
     PYEdgeInsetsItem insets = {nil, nil, nil, nil};
     return insets;
 }

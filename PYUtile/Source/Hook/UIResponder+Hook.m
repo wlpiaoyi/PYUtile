@@ -35,17 +35,16 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 }
 
 -(void) exchangeDealloc{
-    BOOL isExcute = true;
     NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
     for (id<UIResponderHookBaseDelegate> delegate in delegates){
-        if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDealloc:target:)]) {
-            [delegate beforeExcuteDealloc:&isExcute target:self];
+        if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
+            [delegate beforeExcuteDeallocWithTarget:self];
         }
     }
     objc_removeAssociatedObjects(self);
-    if (isExcute) {
-        [self exchangeDealloc];
-    }
+    if([self canResignFirstResponder])
+        [self resignFirstResponder];
+    [self exchangeDealloc];
 }
 ///<== exchangeMethods
 +(BOOL) hookWithMethodNames:(nullable NSArray<NSString *> *) methodNames{

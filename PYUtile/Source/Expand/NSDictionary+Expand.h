@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface NSDictionary(Expand)
--(NSData * _Nullable) toData;
+-(nullable NSData *) toData;
++(nullable id) checkDict:(nullable id) value;
 @end
 @interface NSMutableDictionary(Expand)
 -(void) setWeakValue:(nullable id)value forKey:(nonnull NSString *)key;

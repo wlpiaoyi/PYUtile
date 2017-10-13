@@ -105,7 +105,9 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
  将64位的字符串装换成正常的Data数据
  */
 -(nullable NSData *) toDataForBase64{
-    return [[self toData] base64EncodedDataWithOptions:0];
+    NSData * tempData = [self toData];
+    return [[NSData alloc] initWithBase64EncodedData:tempData options:0];
+//    return [[self toData] base64EncodedDataWithOptions:0];
 }
 /**
  将字符串装换成Data数据
@@ -227,6 +229,34 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
         return pszSrc[17] == szVerCode[iY];
     }
     return NO;
+}
+
+/**
+ * 银行卡验证
+ * 从不含校验位的银行卡卡号采用 Luhm 校验算法获得校验位
+ * 该校验的过程：
+ * 1、从卡号最后一位数字开始，逆向将奇数位(1、3、5等等)相加。
+ * 2、从卡号最后一位数字开始，逆向将偶数位数字，先乘以2（如果乘积为两位数，则将其减去9），再求和。
+ * 3、将奇数位总和加上偶数位总和，结果应该可以被10整除。
+ */
+-(BOOL) matchBankNumber{
+    if(self.length == 0
+       || ( ![NSString matchArg:self regex:@"^(\\d{15,18})$"])) {
+        return NO;
+    }
+    
+    const char * chs = self.UTF8String;
+    int luhmSum = 0;
+    // 执行luh算法
+    for(NSInteger i = self.length - 1, j = 0; i >= 0; i--, j++) {
+        int k = chs[i] - '0';
+        if(j % 2 == 0) {  //偶数位处理
+            k *= 2;
+            k = k / 10 + k % 10;
+        }
+        luhmSum += k;
+    }
+    return (luhmSum % 10 == 0) ? '0' : (char)((10 - luhmSum % 10) + '0');
 }
 
 +(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{

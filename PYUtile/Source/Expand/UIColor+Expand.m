@@ -235,21 +235,6 @@ static NSMutableDictionary *colorNameCache = nil;
 						   alpha:MIN(a, alpha)];
 }
 
-- (UIColor *)colorByMultiplyingBy:(CGFloat)f {
-	return [self colorByMultiplyingByRed:f green:f blue:f alpha:1.0f];
-}
-
-- (UIColor *)colorByAdding:(CGFloat)f {
-	return [self colorByMultiplyingByRed:f green:f blue:f alpha:0.0f];
-}
-
-- (UIColor *)colorByLighteningTo:(CGFloat)f {
-	return [self colorByLighteningToRed:f green:f blue:f alpha:0.0f];
-}
-
-- (UIColor *)colorByDarkeningTo:(CGFloat)f {
-	return [self colorByDarkeningToRed:f green:f blue:f alpha:1.0f];
-}
 
 - (UIColor *)colorByMultiplyingByColor:(UIColor *)color {
 	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmatic operations");

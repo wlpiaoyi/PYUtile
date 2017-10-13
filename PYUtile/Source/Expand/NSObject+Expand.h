@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * typeEncoding);
 /**
  归档实体数据
  由于Object-c的反射不支持泛型所以如果对数组进行归档和解析时必须使用(property_??/ivar_??)进行泛型的指定

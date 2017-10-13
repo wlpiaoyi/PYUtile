@@ -81,11 +81,14 @@
  * @endcode
  */
 #define strongify(...) \
-    ext_keywordify \
-    _Pragma("clang diagnostic push") \
-    _Pragma("clang diagnostic ignored \"-Wshado  w\"") \
-    metamacro_foreach(ext_strongify_,, __VA_ARGS__) \
-    _Pragma("clang diagnostic pop")
+ext_keywordify \
+metamacro_foreach(ext_strongify_,, __VA_ARGS__)
+//#define strongify(...) \
+//    ext_keywordify \
+//    _Pragma("clang diagnostic push") \
+//    _Pragma("clang diagnostic ignored \"-Wshado  w\"") \
+//    metamacro_foreach(ext_strongify_,, __VA_ARGS__) \
+//    _Pragma("clang diagnostic pop")
 
 /*** implementation details follow ***/
 typedef void (^ext_cleanupBlock_t)();

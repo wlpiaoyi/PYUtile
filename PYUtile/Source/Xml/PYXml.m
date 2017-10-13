@@ -11,9 +11,9 @@
 @interface PYXmlDom()
 @end
 @interface PYXml()<NSXMLParserDelegate>
-PYPNSNN PYXmlDom * xmlDom;
-PYPNA unsigned int deep;
-PYPNA unsigned int index;
+kPNSNN PYXmlDom * xmlDom;
+kPNA unsigned int deep;
+kPNA unsigned int index;
 @end
 
 @implementation PYXml
