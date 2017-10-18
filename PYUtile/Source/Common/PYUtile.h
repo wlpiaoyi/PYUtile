@@ -8,26 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-#ifndef IOS7_OR_LATER
-#define IOS7_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0)
-#endif
-
-#ifndef IOS8_OR_LATER
-#define IOS8_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0)
-#endif
-
-#ifndef IOS9_OR_LATER
-#define IOS9_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_9_0)
-#endif
-
-#ifndef IOS10_OR_LATER
-#define IOS10_OR_LATER (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_9_x_Max)
-#endif
-
 #define kRGB(R,G,B) [UIColor colorWithRed:(R)/255.0 green:(G)/255.0 blue:(B)/255.0 alpha:1.0]
 #define kRGBA(R,G,B,A) [UIColor colorWithRed:(R)/255.0 green:(G)/255.0 blue:(B)/255.0 alpha:(A)/255.0]
 
-#define kUTILE_STATIC_INLINE	static inline
+#define kUTILE_STATIC_INLINE    static inline
 
 #pragma mark APP版本号
 #define kAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
@@ -64,6 +48,8 @@
 #define kPNANN                        @property (nonatomic, assign, nonnull)
 #define kPNA                              @property (nonatomic, assign)
 #define kPNAR                            @property (nonatomic, assign, readonly)
+#define kPNARA                          @property (nonatomic, assign, readonly, nullable)
+#define kPNARN                          @property (nonatomic, assign, readonly, nonnull)
 
 
 #define is64BitArm  __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
@@ -82,10 +68,14 @@ typedef long long                           kInt64;
 
 #pragma mark UIResponder初始化自定义方法
 #define kINITPARAMS -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams];}return self;} -(void) initParams
+#define kINITPARAMSForType(type) -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams##type];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams##type];}return self;} -(void) initParams##type
 
 #define kSOULDLAYOUTP @property (nonatomic) CGSize __layoutSubviews_UseSize;
+#define kSOULDLAYOUTPForType(type) @property (nonatomic) CGSize __layoutSubviews_UseSize##type;
 #define kSOULDLAYOUTMSTART -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.bounds.size;return true;} -(void) layoutSubviews{ [super layoutSubviews]; if([self __layoutSubviews_Size_Compare ]){
+#define kSOULDLAYOUTMSTARTForType(type)  -(BOOL) __layoutSubviews_Size_Compare##type{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize##type, self.bounds.size)){return false;}self.__layoutSubviews_UseSize##type = self.bounds.size;return true;} -(void) layoutSubviews{ [super layoutSubviews]; if([self __layoutSubviews_Size_Compare##type]){
 #define kSOULDLAYOUTVMSTART -(BOOL) __layoutSubviews_Size_Compare{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize, self.view.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.view.bounds.size;return true;} -(void) viewDidLayoutSubviews{ [super viewDidLayoutSubviews]; if([self __layoutSubviews_Size_Compare ]){
+#define kSOULDLAYOUTVMSTARTForType(type) -(BOOL) __layoutSubviews_Size_Compare##type{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize##type, self.view.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.view.bounds.size;return true;} -(void) viewDidLayoutSubviews{ [super viewDidLayoutSubviews]; if([self __layoutSubviews_Size_Compare##type]){
 #define kSOULDLAYOUTMEND }}
 
 #pragma mark 格式化、拼接字符串
@@ -112,9 +102,9 @@ typedef long long                           kInt64;
 
 
 #pragma mark 弱引用/强引用
-#define kWeak(type)  __weak typeof(type) weak##type = type;
-#define kAssign(type)  __unsafe_unretained typeof(type) weak##type = type;
-#define kStrong(type)  __strong typeof(type) type = weak##type;
+#define kWeak(type)  __weak typeof(type) py_weak_or_assign_##type = type;
+#define kAssign(type)  __unsafe_unretained typeof(type) py_weak_or_assign_##type = type;
+#define kStrong(type)  __strong typeof(type) type = py_weak_or_assign_##type;
 
 #pragma mark 单例化一个类h
 #define SINGLETON_SYNTHESIZE_FOR_hCLASS(classname, superclassname, delegate)\
@@ -131,23 +121,28 @@ static classname *pyshared##classname = nil; \
 @implementation classname\
 \
 + (classname *)shared##classname { \
-    @synchronized(self) { \
-        if (pyshared##classname == nil) pyshared##classname = [[self alloc] init]; \
-    } \
-    return pyshared##classname; \
+@synchronized(self) { \
+if (pyshared##classname == nil){\
+pyshared##classname = [[self alloc] init]; \
+[pyshared##classname initShareParams];\
+}\
+} \
+return pyshared##classname; \
 } \
 \
 + (id)allocWithZone:(NSZone *)zone { \
-    @synchronized(self) { \
-        if (pyshared##classname == nil) { \
-            pyshared##classname = [super allocWithZone:zone]; \
-            return pyshared##classname; \
-        } \
-    } \
-    return nil; \
+@synchronized(self) { \
+if (pyshared##classname == nil) { \
+pyshared##classname = [super allocWithZone:zone]; \
+[pyshared##classname initShareParams];\
+return pyshared##classname; \
+} \
+} \
+return nil; \
 } \
 \
-- (id)copyWithZone:(NSZone *)zone {return self;}
+- (id)copyWithZone:(NSZone *)zone {return self;}\
+- (void) initShareParams
 
 #pragma mark 常用沙盒路径
 extern const NSString * _Nonnull documentDir;
@@ -260,3 +255,36 @@ float cpu_usage();
 +(BOOL) soundWithPath:(nullable NSString *) path isShake:(BOOL) isShake;
 
 @end
+
+#pragma mark 不建议使用的
+#ifndef IOS7_OR_LATER
+#define IOS7_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0)
+#endif
+#ifndef IOS8_OR_LATER
+#define IOS8_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_8_0)
+#endif
+#ifndef IOS9_OR_LATER
+#define IOS9_OR_LATER (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_9_0)
+#endif
+#ifndef IOS10_OR_LATER
+#define IOS10_OR_LATER (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_9_x_Max)
+#endif
+#define PYINITPARAMS kINITPARAMS
+#define PYSOULDLAYOUTP kSOULDLAYOUTP;
+#define PYSOULDLAYOUTMSTART kSOULDLAYOUTMSTART
+#define PYSOULDLAYOUTVMSTART kSOULDLAYOUTVMSTART
+#define PYSOULDLAYOUTMEND kSOULDLAYOUTMEND
+#define PYPNSNA kPNSNA
+#define PYPNSNN kPNSNN
+#define PYPNRNA kPNRNA
+#define PYPNRNN kPNRNN
+#define PYPNCNA kPNCNA
+#define PYPNCNN kPNCNN
+#define PYPNANA kPNANA
+#define PYPNANN kPNANN
+#define PYPNA kPNA
+#define PYPNAR kPNAR
+#define PYPNARA kPNARA
+#define PYPNARN kPNARN
+
+

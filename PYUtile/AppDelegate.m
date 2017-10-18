@@ -12,7 +12,9 @@
 #import "PYXml.h"
 SINGLETON_SYNTHESIZE_FOR_hCLASS(PyTest, NSObject, <NSObject>);
 @end
-SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest)
+SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
+    
+}
 @end
 
 @interface Test1:NSObject<UITextFieldDelegate>{
@@ -94,16 +96,17 @@ NSTimer * timer;
 ////    value = @"{\"ResultData\":[[\"\",\"最短停留:\n无限制 最长停留:无限制\"]]}";
 //    value = [value stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
 //    [[value toData] toDictionary];
-//    NSMutableString * xmlString = [NSMutableString new];
-//    [xmlString appendString:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"];
-//    [xmlString appendString:@"<string xmlns=\"http://tempuri.org/\">\n"];
-//    [xmlString appendString:@"<item a=\"b\">2</item>\n"];
-//    [xmlString appendString:@"<item a=\"b\">2</item>\n"];
-//    [xmlString appendString:@"</string>"];
-//    [xmlString appendString:@"</string>"];
+    NSMutableString * xmlString = [NSMutableString new];
+    [xmlString appendString:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"];
+    [xmlString appendString:@"\t<string xmlns=\"http://tempuri.org/\">\n"];
+    [xmlString appendString:@"\t\t<item a=\"b\">2</item>\n"];
+    [xmlString appendString:@"\t\t<item a=\"b\">2</item>\n"];
+    [xmlString appendString:@"\t</string>\n"];
+    [xmlString appendString:@"</xml>"];
     
-//    PYXml * xml = [PYXml instanceWithXmlString:xmlString];
-//    
+    PYXml * xml = [PYXml instanceWithXmlString:xmlString];
+    xml = xml;
+//
 //    [UITextField hookWithMethodNames:nil];
 //    [Test2 hookMethodWithName:@"textFieldShouldEndEditing:"];
 //    [Test3 new];

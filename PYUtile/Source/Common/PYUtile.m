@@ -213,11 +213,11 @@ float cpu_usage(){
  */
 +(nullable UIWindow *) getCurrenWindow{
     
-    UIWindow *topWindow = [[UIApplication sharedApplication] keyWindow];
+    UIWindow *topWindow = kKeyWindow;
     if (!topWindow)  return nil;
     
     if (topWindow.windowLevel != UIWindowLevelNormal) {
-        NSArray *windows = [[UIApplication sharedApplication] windows];
+        NSArray *windows = [kApplication windows];
         for(topWindow in windows){
             if (topWindow.windowLevel == UIWindowLevelNormal)break;
         }
