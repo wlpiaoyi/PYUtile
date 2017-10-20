@@ -40,4 +40,5 @@
 #import  "UIViewController+HookView.h"
 #import  "UIViewController+HookOrientation.h"
 
+#import "PYXml.h"
 #import  "EXTScope.h"

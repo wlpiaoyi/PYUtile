@@ -99,12 +99,25 @@ NSTimer * timer;
     NSMutableString * xmlString = [NSMutableString new];
     [xmlString appendString:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"];
     [xmlString appendString:@"\t<string xmlns=\"http://tempuri.org/\">\n"];
-    [xmlString appendString:@"\t\t<item a=\"b\">2</item>\n"];
-    [xmlString appendString:@"\t\t<item a=\"b\">2</item>\n"];
+    [xmlString appendString:@"\t\t<item1 a=\"b\">\n"];
+    [xmlString appendString:@"\t\t\t<item2_c0 a=\"b\">sldk<![CDATA[SomeText]]></item2_c0>\n"];
+    [xmlString appendString:@"\t\t</item1>\n"];
+    [xmlString appendString:@"\t\t<item1 a=\"b\">2</item1>\n"];
     [xmlString appendString:@"\t</string>\n"];
     [xmlString appendString:@"</xml>"];
-    
-    PYXml * xml = [PYXml instanceWithXmlString:xmlString];
+    /**
+    <?xml version="1.0" encoding="utf-8"?>
+         <string xmlns="http://tempuri.org/">
+             <item1 a="b">
+                 <item2_c0 a="b">sldk<![CDATA[SomeText]]></item2_c0>
+             </item1>
+         <item1 a="b">2</item1>
+         </string>
+     </xml>*/
+    NSError * error;
+//    xmlString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.w3school.com.cn/example/xmle/simple.xml"] encoding:NSUTF8StringEncoding error:&error];
+    PYXmlDocument * xml = [PYXmlDocument instanceWithXmlString:xmlString];
+//    xml = [PYXmlDocument instanceWithXmlString:[xml stringValue]];
     xml = xml;
 //
 //    [UITextField hookWithMethodNames:nil];
