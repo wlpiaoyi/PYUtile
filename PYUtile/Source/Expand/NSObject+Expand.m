@@ -16,13 +16,21 @@
 #import "PYUtile.h"
 static char * PYObjectParsedictFailedKey = "pyobj_parsed_failed";
 static NSArray * NSObjectToDictionaryPaserClasses;
-//static NSMutableArray * static_arry;
-static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * typeEncoding) = ^id (NSInvocation * _Nonnull invocatioin, const char * typeEncoding){
+static NSDictionary * NSObjectToDictionaryKeyPaseDict;
+static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = ^id (NSInvocation * _Nonnull invocatioin, const char * typeEncoding){
     return nil;
 };
 
 @implementation NSObject(toDictionary)
-+(NSArray *) objectParseClasses{
++(NSDictionary *) pyutile_objectKeyPaseDict{
+    if (NSObjectToDictionaryKeyPaseDict == nil) {
+        NSObjectToDictionaryKeyPaseDict = @{
+                                            @"id":@"keyId",@"keyId":@"id",
+                                            };
+    }
+    return NSObjectToDictionaryKeyPaseDict;
+}
++(NSArray *) pyutile_objectParseClasses{
     if (NSObjectToDictionaryPaserClasses == nil) {
         NSObjectToDictionaryPaserClasses = @[[NSURL class]
                                              ,[NSNumber class]
@@ -32,8 +40,8 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
     }
     return NSObjectToDictionaryPaserClasses;
 }
-+(BOOL) canParseClass:(Class) clazz{
-    for (Class c in [self objectParseClasses]) {
++(BOOL) pyutile_canParseClass:(Class) clazz{
+    for (Class c in [self pyutile_objectParseClasses]) {
         if (c == clazz ||  [clazz isSubclassOfClass:c]) {
             return true;
         }
@@ -45,6 +53,26 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
  */
 +(instancetype) objectWithDictionary:(NSObject*) dictionary{
     return [self objectWithDictionary:dictionary clazz:self];
+}
++(const char *) pyutile_getTypeEncodingForProperty:(objc_property_t) property ivar:(Ivar) ivar{
+    if(property){
+        unsigned int count;
+        objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
+        return attribute[0].value;
+    }else if(ivar){
+        return ivar_getTypeEncoding(ivar);
+    }
+    return "";
+}
++(Class) pyutile_getClassForTypeEncoding:(const char *) typeEncoding{
+    size_t tedl = strlen(typeEncoding);
+    if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+        if(strlen(typeEncoding)){
+            NSArray * classArgs = [[NSString stringWithUTF8String:typeEncoding] componentsSeparatedByString:@"\""];
+             return NSClassFromString(classArgs[1]);
+        }
+    }
+    return nil;
 }
 /**
  通过JSON初始化对象
@@ -61,8 +89,8 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
     if (target) {
         for (NSString *key in [((NSDictionary *)dictionary) allKeys]) {
             NSString * _key_ = key;
-            if ([key isEqual:@"id"]) {
-                _key_ = @"keyId";
+            if ([NSObject pyutile_objectKeyPaseDict][key]) {
+                _key_ = [NSObject pyutile_objectKeyPaseDict][key];
             }
             
             id value = ((NSDictionary *)dictionary)[key];
@@ -73,13 +101,9 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
             bool (^blockExcute)(NSString * key) = ^bool(NSString * key){
                 objc_property_t property = class_getProperty(clazz, key.UTF8String);
                 Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
-                if(property){
-                    unsigned int count;
-                    objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
-                    typeEncoding = attribute[0].value;
-                }else if(ivar){
-                    typeEncoding = ivar_getTypeEncoding(ivar);
-                }else{
+                if(property || ivar){
+                    typeEncoding = [NSObject pyutile_getTypeEncodingForProperty:property ivar:ivar];
+                } else {
                     kPrintLogln("the class [%s] has no ivar [%s]", NSStringFromClass(clazz).UTF8String, key.UTF8String);
                     return false;
                 }
@@ -98,37 +122,39 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
             }
             
             size_t tedl = strlen(typeEncoding);
-            if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){Class cClazz = nil;
-                if(strlen(typeEncoding)){
-                    NSArray * classArgs = [[NSString stringWithUTF8String:typeEncoding] componentsSeparatedByString:@"\""];
-                    cClazz = NSClassFromString(classArgs[1]);
-                }
+            if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+                Class cClazz = [NSObject pyutile_getClassForTypeEncoding:typeEncoding];
                 if(cClazz == nil){
                     value = nil;
                     continue;
                 }
                 
-                if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSArray class]]) {
+                if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
                     objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",_key_].UTF8String);
                     Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",_key_].UTF8String);
-                    if(!cproperty || !civar){
-                        value = nil;
-                        kPrintLogln("the class has no pattern for property_%s or ivar_%s", _key_.UTF8String, _key_.UTF8String);
-                        continue;
+                    Class arrayClazz = nil;
+                    if(cproperty || civar){
+                        const char * teding = [NSObject pyutile_getTypeEncodingForProperty:cproperty ivar:civar];
+                        arrayClazz = [NSObject pyutile_getClassForTypeEncoding:teding];
                     }
                     id objs = [cClazz isSubclassOfClass:[NSArray class]] ? [NSMutableArray new]: [NSMutableSet new];
                     for (NSObject * obj in value) {
-                        id cvalue = [cClazz objectWithDictionary:obj];
+                        id cvalue = nil;
+                        if(arrayClazz){
+                            cvalue = [arrayClazz objectWithDictionary:obj];
+                        }else if([NSObject pyutile_canParseClass:[obj class]]){
+                            cvalue = obj;
+                        }
                         if(cvalue){
-                            if([value isKindOfClass:[NSArray class]]){
+                            if([objs isKindOfClass:[NSArray class]]){
                                 [((NSMutableArray *)objs) addObject:cvalue];
                             }else{
                                 [((NSMutableSet *)objs) addObject:cvalue];
                             }
-                        };
+                        }
                     }
                     value = objs;
-                }else if([NSObject canParseClass:cClazz]){
+                }else if([NSObject pyutile_canParseClass:cClazz]){
                     value = [self dictParset:value clazz:cClazz];
                 }else{
                     Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
@@ -137,9 +163,9 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
             }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
                 NSData * tempData = [((NSString *) value) toData];
                 tempData = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
-                value = [NSValue valueWithBytes:((NSData*)tempData).bytes objCType:typeEncoding];
+                value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
             }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
-                NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[key uppercaseString] substringToIndex:1], [key substringFromIndex:1]];
+                NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[_key_ uppercaseString] substringToIndex:1], [_key_ substringFromIndex:1]];
                 NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
                 if (invocation
                     && [value isKindOfClass:[NSString class]]){
@@ -185,7 +211,7 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
         for (NSString * key in (NSDictionary *)object) {
             NSObject * value = ((NSDictionary *)object)[key];
             if(!value) continue;
-            if ([NSObject canParseClass:value.class]){
+            if ([NSObject pyutile_canParseClass:value.class]){
                 value = [NSObject objectParset:value];
             }else{
                 value = [NSObject objectToDictionaryWithObject:value deep:deep+1 hashStr:hashStr fliteries:fliteries];
@@ -321,6 +347,16 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
             [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
             NSUInteger size = invocation.methodSignature.methodReturnLength;
             returnValue = [NSData dataWithBytes:&ptr length:size];
+        }else if(strcasecmp(typeEncoding, @encode(UIEdgeInsets)) == 0){
+            UIEdgeInsets ptr;
+            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+            NSUInteger size = invocation.methodSignature.methodReturnLength;
+            returnValue = [NSData dataWithBytes:&ptr length:size];
+        }else if(strcasecmp(typeEncoding, @encode(UIOffset)) == 0){
+            UIOffset ptr;
+            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+            NSUInteger size = invocation.methodSignature.methodReturnLength;
+            returnValue = [NSData dataWithBytes:&ptr length:size];
         }else if(PYBlocktodictParsetStruct){
             returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
         }else return;
@@ -368,10 +404,13 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
     if(!returnValue){
         return;
     }
-    if([NSObject canParseClass:returnValue.class]){
+    if([NSObject pyutile_canParseClass:returnValue.class]){
         returnValue = [NSObject objectParset:returnValue];
     }
-    [dict setObject:returnValue forKey:key];
+    if([NSObject pyutile_objectKeyPaseDict][key])
+        [dict setObject:returnValue forKey:[NSObject pyutile_objectKeyPaseDict][key]];
+    else
+        [dict setObject:returnValue forKey:key];
 }
 +(NSObject *) objectCheck:(NSObject *) object deep:(int) deep hashStr:(nonnull NSMutableString *) hashStr fliteries:(nullable NSArray<Class> *) fliteries{
     
@@ -404,7 +443,7 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
     return nil;
 }
 +(NSObject *) objectParset:(NSObject *) object{
-    if ([NSObject canParseClass:object.class]){
+    if ([NSObject pyutile_canParseClass:object.class]){
         NSObject * returnValue = nil;
         if([object isKindOfClass:[NSData class]]){
             returnValue = [((NSData *) object) toBase64String];
@@ -427,7 +466,7 @@ static id (^PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, con
 }
 +(NSObject *) dictParset:(NSObject *) object clazz:(Class) clazz{
     NSObject * returnValue = nil;
-    if ([NSObject canParseClass:clazz]){
+    if ([NSObject pyutile_canParseClass:clazz]){
         if([clazz isSubclassOfClass:[NSData class]] && [object isKindOfClass:[NSString class]]){
             NSData * tempData = [((NSString *) object) toData];
             returnValue = [[NSData alloc] initWithBase64EncodedData:tempData options:0];

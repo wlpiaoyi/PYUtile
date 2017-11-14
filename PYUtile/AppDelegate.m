@@ -62,6 +62,7 @@ NSTimer * timer;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    BOOL falg = [NSString matchArg:@"picssdkidu]" regex:@"^(pics{1} ([a-zA-Z0-9_\\.\\-])+)$"];
     NSLog(kFORMAT(@"当前手机型号:%@", [PYUtile getDeviceInfo]));
     NSString * bankCard = @"6225768615095997";
     [bankCard matchBankNumber];

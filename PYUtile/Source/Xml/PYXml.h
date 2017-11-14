@@ -58,6 +58,7 @@ kPNSNA NSData * cData;
  xml文档
  */
 @interface PYXmlDocument : NSObject
+kPNRNN NSString * version;
 /**
  根节点元素
  */
