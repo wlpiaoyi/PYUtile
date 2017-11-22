@@ -13,7 +13,7 @@ static PYReachabilityNotification *xPYReachabilityNotification;
 @interface PYReachabilityNotification()
 
 @property (nonatomic, strong) NSHashTable<id<PYReachabilityNotification>> *tableListeners;
-@property (nonatomic, strong) Reachability *hostReach;
+@property (nonatomic, strong) PYReachability *hostReach;
 
 @end
 
@@ -29,10 +29,10 @@ static PYReachabilityNotification *xPYReachabilityNotification;
 -(instancetype) init{
     if (self = [super init]) {
         self.tableListeners = [NSHashTable<id<PYReachabilityNotification>> weakObjectsHashTable];
-        _status = ReachableViaWiFi;
+        _status = PYReachableViaWiFi;
         //开启网络状况的监听
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-        self.hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"] ;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kPYReachabilityChangedNotification object:nil];
+        self.hostReach = [PYReachability reachabilityWithHostName:@"www.baidu.com"] ;
         [self.hostReach startNotifier];  //开始监听，会启动一个run loop
         
     }
@@ -41,27 +41,27 @@ static PYReachabilityNotification *xPYReachabilityNotification;
 //网络链接改变时会调用的方法
 -(void)reachabilityChanged:(NSNotification *)note{
     @synchronized(self.tableListeners){
-        Reachability *currReach = [note object];
-        NSParameterAssert([currReach isKindOfClass:[Reachability class]]);
+        PYReachability *currReach = [note object];
+        NSParameterAssert([currReach isKindOfClass:[PYReachability class]]);
         //对连接改变做出响应处理动作
         _status = [currReach currentReachabilityStatus];
         for (id<PYReachabilityNotification> listener in self.tableListeners) {
             switch (self.status) {
-                case NotReachable:{
+                case PYNotReachable:{
                     if ([listener respondsToSelector:@selector(notReachable)]) {
                         [listener notReachable];
                     }
                 }
                     // 没有网络连接
                     break;
-                case ReachableViaWWAN:{
+                case PYReachableViaWWAN:{
                     if ([listener respondsToSelector:@selector(reachableViaWWAN)]) {
                         [listener reachableViaWWAN];
                     }
                 }
                     // 使用3G网络
                     break;
-                case ReachableViaWiFi:{
+                case PYReachableViaWiFi:{
                     if ([listener respondsToSelector:@selector(reachableViaWiFi)]) {
                         [listener reachableViaWiFi];
                     }

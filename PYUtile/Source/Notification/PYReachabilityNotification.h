@@ -8,7 +8,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "Reachability.h"
+#import "PYReachability.h"
 
 /**
  网络链接发生改变是对应要执行的协议方法
