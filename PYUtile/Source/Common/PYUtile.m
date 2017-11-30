@@ -103,17 +103,31 @@ NSString * _Nullable PYUUID(NSUInteger length){
         return nil;
     }
     static char * args;
-    static int argsLength;
+    static size_t argsLength;
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
-        args = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-        argsLength = 10 + 26 * 2 + 3;
+        args = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        argsLength = strlen(args);
     });
+    const size_t bufferLength = 64;
+    char bufferc[bufferLength + 1] = {};
     NSMutableString * uuid = [NSMutableString new];
-    for (int index = 0; index < length; index++) {
-        int _index_ = arc4random() % argsLength;
-        char arg = args[_index_];
-        [uuid appendString:[NSString stringWithFormat:@"%c",arg]];
+    NSUInteger index = 0;
+    for (NSUInteger i = 0; i < length; i++) {
+        int _i_ = arc4random() % argsLength;
+        char * arg = &(args[_i_]);
+        index = i % argsLength;
+        bufferc[index] = *arg;
+        if(index == bufferLength -1){
+            [uuid appendString:[NSString stringWithUTF8String:bufferc]];
+        }
+    }
+    if(index != bufferLength -1){
+        char bufferct[bufferLength + 1] = {};
+        for (NSUInteger i = 0; i <= index; i++) {
+            bufferct[i] = bufferc[i];
+        }
+        [uuid appendString:[NSString stringWithUTF8String:bufferct]];
     }
     return uuid;
 }
