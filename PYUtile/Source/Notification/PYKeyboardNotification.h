@@ -10,8 +10,11 @@
 
 #import <UIKit/UIKit.h>
 
+extern CGRect PYCurrentKeyboardFrame;
+
 typedef void (^BlockKeyboardAnimatedDoing)(UIResponder * _Nonnull responder, CGRect keyBoardFrame);
 typedef void (^BlockKeyboardAnimatedBE)(UIResponder * _Nonnull responder);
+
 /**
  键盘监听
  目标对象被回收时自动隐藏键盘

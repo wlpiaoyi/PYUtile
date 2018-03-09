@@ -109,8 +109,8 @@ NSString * _Nullable PYUUID(NSUInteger length){
         args = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         argsLength = strlen(args);
     });
-    const size_t bufferLength = 64;
-    char bufferc[bufferLength + 1] = {};
+    const size_t bufferMaxIndex = 63;
+    char bufferc[bufferMaxIndex + 2] = {};
     NSMutableString * uuid = [NSMutableString new];
     NSUInteger index = 0;
     for (NSUInteger i = 0; i < length; i++) {
@@ -118,16 +118,13 @@ NSString * _Nullable PYUUID(NSUInteger length){
         char * arg = &(args[_i_]);
         index = i % argsLength;
         bufferc[index] = *arg;
-        if(index == bufferLength -1){
+        if(index == bufferMaxIndex){
             [uuid appendString:[NSString stringWithUTF8String:bufferc]];
         }
     }
-    if(index != bufferLength -1){
-        char bufferct[bufferLength + 1] = {};
-        for (NSUInteger i = 0; i <= index; i++) {
-            bufferct[i] = bufferc[i];
-        }
-        [uuid appendString:[NSString stringWithUTF8String:bufferct]];
+    if(index != bufferMaxIndex){
+        bufferc[index+1] = '\0';
+        [uuid appendString:[NSString stringWithUTF8String:bufferc]];
     }
     return uuid;
 }

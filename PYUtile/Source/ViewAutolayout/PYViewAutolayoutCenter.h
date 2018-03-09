@@ -14,14 +14,16 @@ extern const CGFloat DisableConstrainsValueMAX;
 extern const CGFloat DisableConstrainsValueMIN;
 
 typedef struct PYEdgeInsetsItem {
-    void  * _Nullable top, * _Nullable left, * _Nullable bottom, * _Nullable right;  // specify amount to inset (positive) for each of the edges. values can be negative to 'outset'
+    void  * _Nullable top, * _Nullable left, * _Nullable bottom, * _Nullable right;
+    bool topActive, leftActive, bottomActive, rightActive;
+    // specify amount to inset (positive) for each of the edges. values can be negative to 'outset'
 } PYEdgeInsetsItem;
 kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemMake(void  * _Nullable top, void  * _Nullable left, void  * _Nullable bottom, void  * _Nullable right) {
-    PYEdgeInsetsItem insets = {top, left, bottom, right};
+    PYEdgeInsetsItem insets = {top, left, bottom, right, false, false, false, false};
     return insets;
 }
 kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
-    PYEdgeInsetsItem insets = {nil, nil, nil, nil};
+    PYEdgeInsetsItem insets = {nil, nil, nil, nil, false, false, false, false};
     return insets;
 }
 

@@ -20,9 +20,7 @@ const CGFloat DisableConstrainsValueMIN  = -DisableConstrainsValueMAX;
  */
 +(NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(UIView*) subView relationmargins:(UIEdgeInsets) margins relationToItems:(PYEdgeInsetsItem) toItems{
     subView.translatesAutoresizingMaskIntoConstraints = NO;
-    
     NSMutableDictionary<NSString *, NSLayoutConstraint *> * dictResult = [NSMutableDictionary new];
-    
     if ([self isValueEnable:margins.top]) {
         UIView *superView = toItems.top ? (__bridge UIView *)(toItems.top) : nil;
         NSLayoutAttribute superAtt = NSLayoutAttributeBottom;
@@ -30,22 +28,38 @@ const CGFloat DisableConstrainsValueMIN  = -DisableConstrainsValueMAX;
             superView = [subView superview];
             superAtt = NSLayoutAttributeTop;
         }
-        NSLayoutConstraint *marginsTop = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.top];
-        [[subView superview] addConstraint:marginsTop];
-        
+        NSLayoutConstraint * marginsTop = nil;
+        if (toItems.topActive && superView == [subView superview]){
+            if (@available(iOS 11.0, *)) {
+                marginsTop =[subView.topAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.topAnchor constant:margins.top];
+                marginsTop.active = true;
+            }
+        }
+        if(!marginsTop){
+          marginsTop = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.top];
+            [[subView superview] addConstraint:marginsTop];
+        }
         dictResult[@"superTop"] = marginsTop;
     }
     if ([self isValueEnable:margins.bottom]) {
         UIView *superView = toItems.bottom ? (__bridge UIView *)(toItems.bottom) : nil;
-        
         NSLayoutAttribute superAtt = NSLayoutAttributeTop;
         if (!superView) {
             superView = [subView superview];
             superAtt = NSLayoutAttributeBottom;
         }
-        NSLayoutConstraint *marginsBottom = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.bottom];
-        [[subView superview] addConstraint:marginsBottom];
-        
+        NSLayoutConstraint * marginsBottom = nil;
+        if (toItems.bottomActive && superView == [subView superview]){
+            if (@available(iOS 11.0, *)) {
+                marginsBottom =[subView.bottomAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.bottomAnchor constant:-margins.bottom];
+                marginsBottom.active = true;
+            }
+        }
+        if(!marginsBottom){
+             marginsBottom = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.bottom];
+            [[subView superview] addConstraint:marginsBottom];
+        }
+
         dictResult[@"superBottom"] = marginsBottom;
     }
     if ([self isValueEnable:margins.left]) {
@@ -55,9 +69,17 @@ const CGFloat DisableConstrainsValueMIN  = -DisableConstrainsValueMAX;
             superView = [subView superview];
             superAtt = NSLayoutAttributeLeft;
         }
-        NSLayoutConstraint *marginsLeft = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.left];
-        [[subView superview] addConstraint:marginsLeft];
-        
+        NSLayoutConstraint *marginsLeft = nil;
+        if (toItems.leftActive && superView == [subView superview]){
+            if (@available(iOS 11.0, *)) {
+                marginsLeft = [subView.leftAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.leftAnchor constant:margins.left];
+                marginsLeft.active = true;
+            }
+        }
+        if(!marginsLeft){
+             marginsLeft = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.left];
+            [[subView superview] addConstraint:marginsLeft];
+        }
         dictResult[@"superLeft"] = marginsLeft;
     }
     if ([self isValueEnable:margins.right]) {
@@ -67,12 +89,20 @@ const CGFloat DisableConstrainsValueMIN  = -DisableConstrainsValueMAX;
             superView = [subView superview];
             superAtt = NSLayoutAttributeRight;
         }
-        NSLayoutConstraint *marginsRight = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.right];
-        [[subView superview] addConstraint:marginsRight];
-        
+        NSLayoutConstraint *marginsRight = nil;
+        if (toItems.rightActive && superView == [subView superview]){
+            if (@available(iOS 11.0, *)) {
+                marginsRight = [subView.rightAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.rightAnchor constant:-margins.right];
+                marginsRight.active = true;
+            }
+        }
+        if(!marginsRight){
+            marginsRight = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.right];
+            [[subView superview] addConstraint:marginsRight];
+        }
+
         dictResult[@"superRight"] = marginsRight;
     }
-    
     return dictResult;
 }
 

@@ -72,6 +72,8 @@
  */
 -(BOOL) matchBankNumber;
 
+-(BOOL) mathMoneyCN;
+
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
 
 @end

@@ -16,6 +16,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIView * sv = [UIView new];
+    sv.backgroundColor =[UIColor clearColor];
+    [self.view addSubview:sv];
+    [sv setCornerRadiusAndBorder:2 borderWidth:2 borderColor:[UIColor greenColor]];
+    [PYViewAutolayoutCenter persistConstraint:sv relationmargins:UIEdgeInsetsMake(10, 10, 10, 10) relationToItems:PYEdgeInsetsItemNull()];
     
 }
 -(void) viewDidAppear:(BOOL)animated{

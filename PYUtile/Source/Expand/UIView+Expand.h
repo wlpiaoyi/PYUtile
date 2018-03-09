@@ -31,7 +31,7 @@
 /**
  添加单击事件
  */
--(UITapGestureRecognizer * _Nonnull) addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;
+-(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;
 /**
  图层的简单设置
  */

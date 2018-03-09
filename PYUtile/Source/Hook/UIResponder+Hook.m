@@ -11,6 +11,8 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+NSArray * PY_HOOK_RESPOINDER_CLASS_MS;
+
 void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 
 @implementation UIResponder(Hook)
@@ -33,8 +35,24 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 +(void) setDelegateBase:(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
     [self paramsDictForHookExpand][@"delegateBase"] = delegateBase;
 }
-
++(BOOL) M_PY_HOOK_RESPOINDER_CLASS_MS{
+    for (Class clazz in PY_HOOK_RESPOINDER_CLASS_MS) {
+        if(clazz == self){
+            return false;
+        }
+    }
+    return true;
+}
 -(void) exchangeDealloc{
+    if(kSystemVersion.floatValue < 9.0){
+        Class clazz = self.class;
+        NSBundle *b = [NSBundle bundleForClass:clazz];
+        if (b != [NSBundle mainBundle] && ![clazz M_PY_HOOK_RESPOINDER_CLASS_MS]) {
+            kPrintExceptionln("%s has skip dealloc delegate", NSStringFromClass(clazz).UTF8String);
+            [self exchangeDealloc];
+            return;
+        }
+    }
     NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
     for (id<UIResponderHookBaseDelegate> delegate in delegates){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
@@ -42,8 +60,7 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
         }
     }
     objc_removeAssociatedObjects(self);
-    if([self canResignFirstResponder])
-        [self resignFirstResponder];
+    if([self canResignFirstResponder]) [self resignFirstResponder];
     [self exchangeDealloc];
 }
 ///<== exchangeMethods
@@ -51,6 +68,7 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
     
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
+        PY_HOOK_RESPOINDER_CLASS_MS = @[[UISearchBar class]];
         SEL sel = sel_getUid("dealloc");
         Class responderClazz = [UIResponder class];
         IMP imp = class_getMethodImplementation(responderClazz, sel);

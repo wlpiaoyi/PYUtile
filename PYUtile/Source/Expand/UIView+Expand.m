@@ -105,7 +105,7 @@
     return origin;
 }
 
--(UITapGestureRecognizer*) addTarget:(id)target action:(SEL)action{
+-(UITapGestureRecognizer*) py_addTarget:(id)target action:(SEL)action{
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
     [self addGestureRecognizer:tapGesture];
     return tapGesture;

@@ -62,7 +62,16 @@ NSTimer * timer;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    PYUUID(1024);
+    [UIResponder hookWithMethodNames:nil];
+//    [NSString matchArg:@"//http://aldjlakjd.html" regex:@"^\\/[\\s\\S]*.html$"]
+    [@"33" mathMoneyCN];
+    BOOL flag = [@"6212264402056794542" matchBankNumber];
+    flag = [@"6225768615095997" matchBankNumber];
+    int index = 1024;
+    while (index > 0) {
+        NSLog(PYUUID(index));
+        index--;
+    }
     BOOL falg = [NSString matchArg:@"picssdkidu]" regex:@"^(pics{1} ([a-zA-Z0-9_\\.\\-])+)$"];
     NSLog(kFORMAT(@"当前手机型号:%@", [PYUtile getDeviceInfo]));
     NSString * bankCard = @"6225768615095997";

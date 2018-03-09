@@ -20,6 +20,7 @@ NSString * REGEX_HKMACCARD = @"^([a-zA-Z]\\d{8})$";
 NSString * REGEX_TWCARD = @"^[a-zA-Z0-9]{1,20}$";
 //护照
 NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
+NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,}元)$";
 
 @implementation NSString (Expand)
 -(BOOL) hasChinese:(nullable BOOL *) isAll{
@@ -136,7 +137,7 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
     const uint8_t* input = (const uint8_t*)[theData bytes];
     NSInteger length = [theData length];
     
-    static char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    static char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     
     NSMutableData* data = [NSMutableData dataWithLength:((length + 2) / 3) * 4];
     uint8_t* output = (uint8_t*)data.mutableBytes;
@@ -210,6 +211,10 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
 -(BOOL) matchPassport{
     return [NSString matchArg:self regex:REGEX_PASSPORT];
 }
+
+-(BOOL) mathMoneyCN{
+    return [NSString matchArg:self regex:REGEX_MONEYCN];
+}
 /**
  身份证
  */
@@ -233,30 +238,44 @@ NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
 
 /**
  * 银行卡验证
- * 从不含校验位的银行卡卡号采用 Luhm 校验算法获得校验位
- * 该校验的过程：
- * 1、从卡号最后一位数字开始，逆向将奇数位(1、3、5等等)相加。
- * 2、从卡号最后一位数字开始，逆向将偶数位数字，先乘以2（如果乘积为两位数，则将其减去9），再求和。
- * 3、将奇数位总和加上偶数位总和，结果应该可以被10整除。
  */
 -(BOOL) matchBankNumber{
-    if(self.length == 0
-       || ( ![NSString matchArg:self regex:@"^(\\d{15,18})$"])) {
+    if(self.length==0)
+    {
         return NO;
     }
-    
-    const char * chs = self.UTF8String;
-    int luhmSum = 0;
-    // 执行luh算法
-    for(NSInteger i = self.length - 1, j = 0; i >= 0; i--, j++) {
-        int k = chs[i] - '0';
-        if(j % 2 == 0) {  //偶数位处理
-            k *= 2;
-            k = k / 10 + k % 10;
+    NSString *digitsOnly = @"";
+    char c;
+    for (int i = 0; i < self.length; i++)
+    {
+        c = [self characterAtIndex:i];
+        if (isdigit(c))
+        {
+            digitsOnly =[digitsOnly stringByAppendingFormat:@"%c",c];
         }
-        luhmSum += k;
     }
-    return (luhmSum % 10 == 0) ? '0' : (char)((10 - luhmSum % 10) + '0');
+    int sum = 0;
+    int digit = 0;
+    int addend = 0;
+    BOOL timesTwo = false;
+    for (NSInteger i = digitsOnly.length - 1; i >= 0; i--)
+    {
+        digit = [digitsOnly characterAtIndex:i] - '0';
+        if (timesTwo)
+        {
+            addend = digit * 2;
+            if (addend > 9) {
+                addend -= 9;
+            }
+        }
+        else {
+            addend = digit;
+        }
+        sum += addend;
+        timesTwo = !timesTwo;
+    }
+    int modulus = sum % 10;
+    return modulus == 0;
 }
 
 +(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{

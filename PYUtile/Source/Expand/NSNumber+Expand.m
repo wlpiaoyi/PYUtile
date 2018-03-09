@@ -14,6 +14,9 @@
  @percision 精度控制
  */
 -(NSString*) stringValueWithPrecision:(int) precision{
+    if(self.doubleValue < 0.01){
+        return @"0";
+    }
     NSString *result = [self stringValue];
     NSArray *resultArray = [result componentsSeparatedByString:@"."];
     if (![resultArray count]) {

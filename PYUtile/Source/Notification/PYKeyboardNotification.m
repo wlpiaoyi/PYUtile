@@ -11,24 +11,28 @@
 #import "EXTScope.h"
 #import <objc/runtime.h>
 #import "UIResponder+Hook.h"
+#import "PYUtile.h"
 
-void * UIResponderKeyboardPointerContextPointer = &UIResponderKeyboardPointerContextPointer;
+CGRect PYCurrentKeyboardFrame;
 
-@interface UIResponderKeyboardPointerContext : NSObject
-@property BOOL hasHookKeyboard;
+void * PYKeyboardNotifyPointerContextPointer = &PYKeyboardNotifyPointerContextPointer;
+
+@interface PYKeyboardNotifyPointerContext : NSObject
 @property BOOL hasAddShowKeyboard;
 @property BOOL hasAddHiddenKeyboard;
-@property (nonatomic, nullable) BlockKeyboardAnimatedBE showBeginKeyboarAnimation;
-@property (nonatomic, nullable) BlockKeyboardAnimatedDoing showDoingKeyboarAnimation;
-@property (nonatomic, nullable) BlockKeyboardAnimatedBE showEndKeyboarAnimation;
-@property (nonatomic, nullable) BlockKeyboardAnimatedBE hiddenBeginKeyboarAnimation;
-@property (nonatomic, nullable) BlockKeyboardAnimatedDoing hiddenDoingKeyboarAnimation;
-@property (nonatomic, nullable) BlockKeyboardAnimatedBE hiddenEndKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedBE showBeginKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedDoing showDoingKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedBE showEndKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedBE hiddenBeginKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedDoing hiddenDoingKeyboarAnimation;
+@property (nonatomic, nullable, copy) BlockKeyboardAnimatedBE hiddenEndKeyboarAnimation;
 @end
 
 
 @interface UIResponder(Keyboard)
-@property (nonatomic, readonly) UIResponderKeyboardPointerContext * pykeyboroard_pointerContext;
+@property (nonatomic, readonly) PYKeyboardNotifyPointerContext * pykeyboroard_pointerContext;
+-(void)py_keybord_inputshow:(NSNotification *)notification;
+-(void)py_keybord_inputhidden:(NSNotification *)notification;
 @end
 @interface PYKeyboardNotification()
 @end
@@ -54,22 +58,12 @@ NSObject * syn_UIResponder_Keyboard;
 
 UIResponderHookBaseDelegateImp * xUIResponderHookBaseDelegateImp;
 
-@protocol PYNOtifactionProtocolTag <NSObject>@end
-
-
-const NSString * PYNotifactionTableKeyResponder = @"a";
-
-const NSString * PYNotifactionTableKeyBlockShowBegin = @"b";
-const NSString * PYNotifactionTableKeyBlockHiddenBegin = @"c";
-const NSString * PYNotifactionTableKeyBlockShowing = @"d";
-const NSString * PYNotifactionTableKeyBlockHiddening = @"e";
-const NSString * PYNotifactionTableKeyBlockShowEnd = @"f";
-const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
-
 
 @implementation PYKeyboardNotification
 +(void) initialize{
     syn_UIResponder_Keyboard = [NSObject new];
+    PYCurrentKeyboardFrame = CGRectZero;
+    [UIResponder hookWithMethodNames:nil];
 }
 /**
  键盘监听事件添加
@@ -81,14 +75,12 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
 +(BOOL)setKeyboardNotificationShowWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
         if(!responder.pykeyboroard_pointerContext.hasAddShowKeyboard){
-            SEL selInputShow = @selector(inputshow:);
+            SEL selInputShow = @selector(py_keybord_inputshow:);
             [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillShowNotification object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillChangeFrameNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector:selInputShow name:UIKeyboardWillShowNotification object:nil];
+            [[NSNotificationCenter defaultCenter]addObserver:responder selector:selInputShow name:UIKeyboardWillChangeFrameNotification object:nil];
             responder.pykeyboroard_pointerContext.hasAddShowKeyboard = true;
-        }
-        if(!responder.pykeyboroard_pointerContext.hasHookKeyboard){
-            responder.pykeyboroard_pointerContext.hasHookKeyboard = true;
-            [PYKeyboardNotification hookResponder:responder];
         }
         responder.pykeyboroard_pointerContext.showBeginKeyboarAnimation = begin;
         responder.pykeyboroard_pointerContext.showDoingKeyboarAnimation = doing;
@@ -106,19 +98,14 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
 +(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
     @synchronized(syn_UIResponder_Keyboard) {
         if(!responder.pykeyboroard_pointerContext.hasAddHiddenKeyboard){
-            SEL selInputHidden = @selector(inputhidden:);
+            SEL selInputHidden = @selector(py_keybord_inputhidden:);
             [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillHideNotification object:nil];
             [[NSNotificationCenter defaultCenter]addObserver:responder selector: selInputHidden name: UIKeyboardWillHideNotification object:nil];
             responder.pykeyboroard_pointerContext.hasAddHiddenKeyboard = true;
         }
-        if(!responder.pykeyboroard_pointerContext.hasHookKeyboard){
-            responder.pykeyboroard_pointerContext.hasHookKeyboard = true;
-            [PYKeyboardNotification hookResponder:responder];
-        }
         responder.pykeyboroard_pointerContext.hiddenBeginKeyboarAnimation = begin;
         responder.pykeyboroard_pointerContext.hiddenDoingKeyboarAnimation = doing;
         responder.pykeyboroard_pointerContext.hiddenEndKeyboarAnimation = end;
-    
     }
     return true;
 }
@@ -140,6 +127,7 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
         responder.pykeyboroard_pointerContext.hasAddShowKeyboard = responder.pykeyboroard_pointerContext.hasAddHiddenKeyboard = false;
         [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:responder name:UIKeyboardWillChangeFrameNotification object:nil];
     }
     return true;
 }
@@ -147,36 +135,30 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
    return  [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
 }
 
+@end
 
+@implementation UIResponder(Keyboard)
 
--(void)inputshow:(NSNotification *)notification{
+-(void)py_keybord_inputshow:(NSNotification *)notification{
     if (![self isKindOfClass:[UIResponder class]]) {
         return;
     }
     __weak UIResponder *responder = (UIResponder*)self;
-    
-    //如果对象没有获取到焦点就不执行事件
-    if (![responder isFirstResponder]) {
-        return;
-    }
+    PYCurrentKeyboardFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    if (PYCurrentKeyboardFrame.size.height == 0) return;
+    if(responder.pykeyboroard_pointerContext.hasAddShowKeyboard == false) return;
     
     BlockKeyboardAnimatedBE begin =  responder.pykeyboroard_pointerContext.showBeginKeyboarAnimation;
     BlockKeyboardAnimatedDoing doing = responder.pykeyboroard_pointerContext.showDoingKeyboarAnimation;
     BlockKeyboardAnimatedBE end = responder.pykeyboroard_pointerContext.showEndKeyboarAnimation;
     
-    if (!begin &&  !doing && !end) {
-        return;
-    }
+    if (!begin &&  !doing && !end) return;
     
     CGFloat animationTime = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    __block CGRect keyBoardFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    if (keyBoardFrame.size.height == 0) {
-        return;
-    }
     if(begin && responder)begin(responder);
-    [UIView animateWithDuration:animationTime>0?animationTime:0.25 animations:^{
+    [UIView animateWithDuration:animationTime > 0 ? animationTime : 0.25 animations:^{
         if (doing && responder) {
-            doing(responder,keyBoardFrame);
+            doing(responder,PYCurrentKeyboardFrame);
         }
     } completion:^(BOOL finished) {
         if (end && responder) {
@@ -187,30 +169,22 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
     
 }
 
--(void)inputhidden:(NSNotification *)notification{
+-(void)py_keybord_inputhidden:(NSNotification *)notification{
     if (![self isKindOfClass:[UIResponder class]]) {
         return;
     }
+    PYCurrentKeyboardFrame = CGRectZero;
     __weak UIResponder *responder = (UIResponder*)self;
-    
-    //如果对象没有获取到焦点就不执行事件
-    if (![responder isFirstResponder]) {
-        return;
-    }
+    if(responder.pykeyboroard_pointerContext.hasAddHiddenKeyboard == false) return;
     
     BlockKeyboardAnimatedBE begin = responder.pykeyboroard_pointerContext.hiddenBeginKeyboarAnimation;
     BlockKeyboardAnimatedDoing doing = responder.pykeyboroard_pointerContext.hiddenDoingKeyboarAnimation;
     BlockKeyboardAnimatedBE end = responder.pykeyboroard_pointerContext.hiddenEndKeyboarAnimation;
     
-    if (!begin &&  !doing && !end) {
-        return;
-    }
+    if (!begin &&  !doing && !end) return;
     
-    CGFloat animationTime = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     __block CGRect keyBoardFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    if (keyBoardFrame.size.height == 0) {
-        return;
-    }
+    CGFloat animationTime = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     if (begin && responder) begin(responder);
     [UIView animateWithDuration:animationTime>0?animationTime:0.25 animations:^{
         if (doing && responder) {
@@ -221,38 +195,14 @@ const NSString * PYNotifactionTableKeyBlockHiddenEnd = @"g";
             end(responder);
         }
     }];
-    
 }
-+(void) hookResponder:(UIResponder*) responder{
-    @synchronized(responder) {
-        SEL selInputShow = @selector(inputshow:);
-        SEL selInputHidden = @selector(inputhidden:);
-        if (![responder conformsToProtocol:@protocol(PYNOtifactionProtocolTag)]) {
-            [UIResponder hookWithMethodNames:nil];
-            if (xUIResponderHookBaseDelegateImp == nil) {
-                xUIResponderHookBaseDelegateImp = [UIResponderHookBaseDelegateImp new];
-            }
-            [[UIResponder delegateBase] addObject:xUIResponderHookBaseDelegateImp];
-            
-            Method mInputShow = class_getInstanceMethod(self, selInputShow);
-            Method mInputHidden = class_getInstanceMethod(self, selInputHidden);
-            class_addMethod(responder.class, selInputShow, method_getImplementation(mInputShow), method_getTypeEncoding(mInputShow));
-            class_addMethod(responder.class, selInputHidden, method_getImplementation(mInputHidden), method_getTypeEncoding(mInputHidden));
-            class_addProtocol(responder.class, @protocol(PYNOtifactionProtocolTag));
-        }
-    }
-}
-
-@end
-
-@implementation UIResponder(Keyboard)
--(UIResponderKeyboardPointerContext * _Nonnull) pykeyboroard_pointerContext{
-    UIResponderKeyboardPointerContext * rkpc = objc_getAssociatedObject(self, UIResponderKeyboardPointerContextPointer);
+-(PYKeyboardNotifyPointerContext * _Nonnull) pykeyboroard_pointerContext{
+    PYKeyboardNotifyPointerContext * rkpc = objc_getAssociatedObject(self, PYKeyboardNotifyPointerContextPointer);
     if(rkpc == nil){
-        rkpc = [UIResponderKeyboardPointerContext new];
-        objc_setAssociatedObject(self, UIResponderKeyboardPointerContextPointer, rkpc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        rkpc = [PYKeyboardNotifyPointerContext new];
+        objc_setAssociatedObject(self, PYKeyboardNotifyPointerContextPointer, rkpc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return rkpc;
 }
 @end
-@implementation UIResponderKeyboardPointerContext @end
+@implementation PYKeyboardNotifyPointerContext @end
