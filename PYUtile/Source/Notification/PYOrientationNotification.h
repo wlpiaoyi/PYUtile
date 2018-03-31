@@ -31,8 +31,9 @@
 +(nonnull instancetype) instanceSingle;
 /**
  旋转当前装置
+ 只有当iOS版本大于10才有Timer
  */
--(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^ _Nullable)(NSTimer * _Nonnull timer)) completion;
+-(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^ _Nullable)(NSTimer * _Nullable timer)) completion;
 -(void) addListener:(nonnull id<PYOrientationNotification>) listener;
 -(void) removeListenser:(nonnull id<PYOrientationNotification>) listener;
 /**

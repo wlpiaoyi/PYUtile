@@ -28,6 +28,14 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 /**
  通过对象生成JSON
  */
--(nullable NSObject*) objectToDictionaryWithFliteries:(nonnull NSArray<Class> *) fliteries;
+-(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries;
+/**
+ 通过对象生成JSON
+ */
+-(nullable NSObject*) objectToDictionaryWithDeepClass:(Class) deepClass;
+/**
+ 通过对象生成JSON
+ */
+-(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(Class) deepClass;
 
 @end

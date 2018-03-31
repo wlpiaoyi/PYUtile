@@ -14,6 +14,7 @@
 #import <UIKit/UIKit.h>
 #import "PYInvoke.h"
 #import "PYUtile.h"
+
 static char * PYObjectParsedictFailedKey = "pyobj_parsed_failed";
 static NSArray * NSObjectToDictionaryPaserClasses;
 static NSDictionary * NSObjectToDictionaryKeyPaseDict;
@@ -192,19 +193,49 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 }
 
 -(NSObject*) objectToDictionary{
-    return [NSObject objectToDictionaryWithObject:self deep:0 hashStr:[NSMutableString new] fliteries:nil];
+    return [self objectToDictionaryWithFliteries:nil];
 }
--(NSObject*) objectToDictionaryWithFliteries:(nonnull NSArray<Class> *) fliteries{
-    return [NSObject objectToDictionaryWithObject:self deep:0 hashStr:[NSMutableString new] fliteries:fliteries];
+-(NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries{
+    return [NSObject objectToDictionaryWithObject:self clazz:nil deep:0 hashStr:[NSMutableString new] fliteries:fliteries];
 }
 
-+(NSObject*) objectToDictionaryWithObject:(nonnull NSObject *) object deep:(int) deep hashStr:(nonnull NSMutableString *) hashStr fliteries:(nullable NSArray<Class> *) fliteries{
-    
+/**
+ 通过对象生成JSON
+ */
+-(nullable NSObject*) objectToDictionaryWithDeepClass:(Class) deepClass{
+    return [self objectToDictionaryWithFliteries:nil deepClass:deepClass];
+}
+/**
+ 通过对象生成JSON
+ */
+-(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(Class) deepClass{
+    NSMutableDictionary *  result = [NSMutableDictionary new];
+    Class clazz = [self class];
+    while (true)  {
+        if(clazz == [NSObject class]) break;
+        NSDictionary * dict = (NSDictionary *)[NSObject objectToDictionaryWithObject:self clazz:clazz deep:0 hashStr:[NSMutableString new] fliteries:fliteries];
+        if([dict isKindOfClass:[NSDictionary class]]){
+            for (NSString * key in dict) {
+                result[key] = dict[key];
+            }
+        }else if(result.count > 0){
+            continue;
+        }else{
+            return dict;
+        }
+        if(clazz == deepClass) break;
+        clazz = class_getSuperclass(clazz);
+    }
+    return result ;
+}
+
++(NSObject*) objectToDictionaryWithObject:(nonnull NSObject *) object clazz:(Class) clazz deep:(int) deep hashStr:(nonnull NSMutableString *) hashStr fliteries:(nullable NSArray<Class> *) fliteries{
     id result = [self objectParset:object];
     if(result) return result;
     
     result = [self objectCheck:object deep:deep hashStr:hashStr fliteries:fliteries];
     if(result) return result;
+    clazz = clazz ? : [object class];
     
     if([object isKindOfClass:[NSDictionary class]]){
         NSMutableDictionary * tempDict = [NSMutableDictionary new];
@@ -214,7 +245,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
             if ([NSObject pyutile_canParseClass:value.class]){
                 value = [NSObject objectParset:value];
             }else{
-                value = [NSObject objectToDictionaryWithObject:value deep:deep+1 hashStr:hashStr fliteries:fliteries];
+                value = [NSObject objectToDictionaryWithObject:value clazz:clazz deep:deep+1 hashStr:hashStr fliteries:fliteries];
             }
             if(!value) continue;
             tempDict[key] = value;
@@ -230,9 +261,9 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     
     NSMutableDictionary *dict = [NSMutableDictionary new];
     unsigned int outCount;
-    objc_property_t *properties = class_copyPropertyList([object class], &outCount);
+    objc_property_t *properties = class_copyPropertyList(clazz, &outCount);
     unsigned int outCount2;
-    Ivar *ivars = class_copyIvarList([object class], &outCount2);
+    Ivar *ivars = class_copyIvarList(clazz, &outCount2);
     @try {
         NSMutableString * removePName = [NSMutableString new];
         for (int i = 0; i < outCount; i++) {
@@ -268,7 +299,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
                        }
                    }
                }
-            if(flagCanExcute) [self PYObjectToDictionarySetkeyvalueWithDict:dict obj:object key:propertyName typeEncoding:typeEncoding deep:deep hashStr:hashStr fliteries:fliteries];
+            if(flagCanExcute) [self PYObjectToDictionarySetkeyvalueWithDict:dict clazz:clazz obj:object key:propertyName typeEncoding:typeEncoding deep:deep hashStr:hashStr fliteries:fliteries];
             else{
                 kPrintLogln("the property '%s' type '%s' is assign, we can't archived it", propertyName.UTF8String, typeEncoding);
             }
@@ -282,7 +313,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
             }
             if([dict valueForKey:ivarName] != nil) continue;
             const char * typeEncoding = ivar_getTypeEncoding(ivar);
-            [self PYObjectToDictionarySetkeyvalueWithDict:dict obj:object key:ivarName typeEncoding:typeEncoding deep:deep hashStr:hashStr fliteries:fliteries];
+            [self PYObjectToDictionarySetkeyvalueWithDict:dict clazz:clazz obj:object key:ivarName typeEncoding:typeEncoding deep:deep hashStr:hashStr fliteries:fliteries];
         }
     }
     @finally {
@@ -299,7 +330,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 }
 
 #pragma mark 归档数据
-+(void) PYObjectToDictionarySetkeyvalueWithDict:(NSMutableDictionary *) dict obj:(NSObject *) obj key:(NSString *) key typeEncoding:(const char *) typeEncoding
++(void) PYObjectToDictionarySetkeyvalueWithDict:(NSMutableDictionary *) dict clazz:(Class) clazz obj:(NSObject *) obj key:(NSString *) key typeEncoding:(const char *) typeEncoding
                                            deep:(int) deep hashStr:(nonnull NSMutableString *) hashStr fliteries:(nullable NSArray<Class> *) fliteries{
     static NSDictionary *PYObjectSuperPropertNameDict;
     static dispatch_once_t onceToken;
@@ -381,24 +412,24 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     if ([returnValue isKindOfClass:[NSArray class]]) {
         NSMutableArray * objs = [NSMutableArray new];
         for (id obj in (NSArray*)returnValue) {
-            id value = [NSObject objectToDictionaryWithObject:obj deep:deep+1 hashStr:hashStr fliteries:fliteries];
+            id value = [NSObject objectToDictionaryWithObject:obj clazz:clazz deep:deep+1 hashStr:hashStr fliteries:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
     }else if ([returnValue isKindOfClass:[NSSet class]]) {
         NSMutableArray * objs = [NSMutableArray new];
         for (NSObject * obj in (NSSet*)returnValue) {
-            NSObject * value =  [NSObject objectToDictionaryWithObject:obj deep:deep+1 hashStr:hashStr fliteries:fliteries];
+            NSObject * value =  [NSObject objectToDictionaryWithObject:obj clazz:clazz deep:deep+1 hashStr:hashStr fliteries:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
     }else if ([returnValue isKindOfClass:[NSDictionary class]]) {
-        returnValue = [NSObject objectToDictionaryWithObject:returnValue deep:deep+1 hashStr:hashStr fliteries:fliteries];
+        returnValue = [NSObject objectToDictionaryWithObject:returnValue clazz:nil deep:deep+1 hashStr:hashStr fliteries:fliteries];
     }else {
         id tempValue = [NSObject objectParset:returnValue];
         if(tempValue) returnValue = tempValue;
         else{
-            returnValue = [NSObject objectToDictionaryWithObject:returnValue deep:deep+1 hashStr:hashStr fliteries:fliteries];
+            returnValue = [NSObject objectToDictionaryWithObject:returnValue clazz:nil deep:deep+1 hashStr:hashStr fliteries:fliteries];
         }
     }
     if(!returnValue){

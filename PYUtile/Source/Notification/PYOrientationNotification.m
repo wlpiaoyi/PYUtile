@@ -66,7 +66,7 @@ static PYOrientationNotification *xPYOrientationNotification;
 /**
  旋转当前装置
  */
--(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^)(NSTimer * _Nonnull timer)) completion{
+-(nullable NSTimer *) attemptRotationToDeviceOrientation:(UIDeviceOrientation) deviceOrientation completion:(void (^)(NSTimer * _Nullable timer)) completion{
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
         SEL selector = NSSelectorFromString(@"setOrientation:");
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
@@ -76,16 +76,19 @@ static PYOrientationNotification *xPYOrientationNotification;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
         [UIViewController attemptRotationToDeviceOrientation];//这句是关键
-        return completion ? [NSTimer scheduledTimerWithTimeInterval:self.duration repeats:NO block:completion] : nil;
-//        NSTimeInterval duration = self.duration;
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            [NSThread sleepForTimeInterval:duration];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                if (completion) {
-//                    completion();
-//                }
-//            });
-//        });
+        if(systemVersion.floatValue >= 10.)
+            return completion ? [NSTimer scheduledTimerWithTimeInterval:self.duration repeats:NO block:completion] : nil;
+        else{
+            NSTimeInterval duration = self.duration;
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [NSThread sleepForTimeInterval:duration];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completion) {
+                        completion(nil);
+                    }
+                });
+            });
+        }
     }
     return nil;
 }

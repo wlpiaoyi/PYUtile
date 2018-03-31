@@ -20,7 +20,7 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 @interface Test1:NSObject<UITextFieldDelegate>{
 @public int _pvalue0;
 }
-@property (nonatomic, copy) void (^block) (int i);
+@property (nonatomic, strong) NSString * name1;
 @property (nonatomic) SEL action;
 @property (nonatomic, assign) CGSize value0;
 @property (nonatomic, strong) NSArray * value1;
@@ -31,27 +31,15 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 @property (nonatomic, strong) Test1 * t1;
 @end
 @implementation Test1
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    return false;
-}
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
-    return YES;
-}
-- (BOOL)exchangeTextFieldShouldEndEditing:(UITextField *)textField{
-    [self exchangeTextFieldShouldEndEditing:textField];
-    return YES;
-}
 @end
 @interface Test2:Test1
-
+@property (nonatomic) NSString * name2;
 @end
 @implementation Test2
 @end
 @interface Test3:NSObject
 @end
 @implementation Test3
-//-(void) dealloc{
-//}
 @end
 
 NSTimer * timer;
@@ -63,46 +51,14 @@ NSTimer * timer;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [UIResponder hookWithMethodNames:nil];
-//    [NSString matchArg:@"//http://aldjlakjd.html" regex:@"^\\/[\\s\\S]*.html$"]
-    [@"33" mathMoneyCN];
-    BOOL flag = [@"6212264402056794542" matchBankNumber];
-    flag = [@"6225768615095997" matchBankNumber];
-    int index = 1024;
-    while (index > 0) {
-        NSLog(PYUUID(index));
-        index--;
-    }
-    BOOL falg = [NSString matchArg:@"picssdkidu]" regex:@"^(pics{1} ([a-zA-Z0-9_\\.\\-])+)$"];
-    NSLog(kFORMAT(@"当前手机型号:%@", [PYUtile getDeviceInfo]));
-    NSString * bankCard = @"6225768615095997";
-    [bankCard matchBankNumber];
-    Test1 * t1 = [Test1 new];
-    t1.block = ^(int i) {
-        
-    };
-    t1.action = @selector(appendString:);
-    t1.value0 = CGSizeMake(20, 20);
-    t1.value1 = [NSArray arrayWithObjects:[Test1 new], @"adfa",nil];
-    t1.value2 = [NSDate date];
-    t1.value3 = [@"adfadsf" toData];
-    t1->_pvalue0 = 4;
-    t1.url = [NSURL URLWithString:@"http://www.baidu.com"];
-    Test1 * t2 = [Test1 new];
-    t1.value4 = @{@"key333":[Test1 new], @"key2":@"ddd"};
-    t2.action = @selector(appendString:);
-    t2.value0 = CGSizeMake(20, 20);
-    t2.value1 = nil;
-    t2.value2 = [NSDate date];
-    t2.value3 = [@"adfadsf" toData];
-    t1.t1 = t2;
-    NSDictionary * json = @{@"a" : @"a", @"b" : t1};
-    json = [json objectToDictionary];
-    json = [[json toData] toDictionary];
-    t2 = [Test1 objectWithDictionary:json[@"b"]];
-    NSArray * datas =  [PYInvoke getInstanceMethodInfosWithClass:[UIApplication sharedApplication].class];
-    datas = datas;
-    PyTest * py = [PyTest sharedPyTest];
-    py = py;
+    Test2 * t2 = [Test2 new];
+    t2.name1 = @"name1";
+    t2.name2 = @"name2";
+    t2.action = @selector(appendFormat:);
+    t2.value0 = CGSizeMake(3, 3);
+    [t2 objectToDictionary];
+    [t2 objectToDictionaryWithDeepClass:[Test1 class]];
+
 //    NSString * value = @"{\"T\":{\"S1\":{\"MinStay\":[[\"\",\"无限制\"]],\"MaxStay\":[[\"\",\"无限制。\"]],\"Penalties\":[[\"Cancel/Refund\",\"允许，收取手续费500人民币。\"],[\"Change\",\"允许。\"],[\"Noshow\",\"退票：收取手续费500人民币。\n\n更改：不允许。\"]],\"ResultData\":[[\"\",\"最短停留:\n无限制\n\n最长停留:\n无限制。\n\n退改规定:\n1.退票:\n允许，收取手续费500人民币。\n2.更改:允许。\n3.误机:退票：收取手续费500人民币。更改：不允许。\r\n\n\n\"]]}}}";
 ////    value = @"{\"ResultData\":[[\"\",\"最短停留:\n无限制 最长停留:无限制\"]]}";
 //    value = [value stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];

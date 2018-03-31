@@ -91,7 +91,7 @@ typedef long long                           kInt64;
 #pragma mark 通知
 #define kNOTIF_ADD(obs, n, f)          [[NSNotificationCenter defaultCenter] addObserver:obs selector:@selector(f) name:n object:nil]
 #define kNOTIF_POST(n, o)               [[NSNotificationCenter defaultCenter] postNotificationName:n object:o]
-#define kNOTIF_REMV(obs)             [[NSNotificationCenter defaultCenter] removeObserver:obs]
+#define kNOTIF_REMV(obs, n)             [[NSNotificationCenter defaultCenter] removeObserver:obs name:n object:nil]
 
 #pragma mark GCD - 切入主线程
 #define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), mainQueueBlock);
