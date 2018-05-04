@@ -13,10 +13,6 @@
 #import <mach/mach.h>
 
 
-//extern OSStatus
-//AudioServicesCreateSystemSoundID(   CFURLRef                    inFileURL,
-//                                 SystemSoundID*              outSystemSoundID){
-//}
 NSString * documentDir;
 NSString * cachesDir;
 NSString * bundleDir;
@@ -27,10 +23,31 @@ double EARTH_RADIUS = 6378.137;//地球半径
 
 NSObject *synProgressObj;
 
-float boundsWidth(){
+void threadJoinMain(dispatch_block_t block){
+    dispatch_async(dispatch_get_main_queue(), block);
+}
+void threadJoinGlobal(dispatch_block_t block){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
+}
+
+void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore){
+    threadJoinGlobal(^{
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        block();
+        dispatch_semaphore_signal(semaphore);
+    });
+}
+
+void lockForDefault(dispatch_block_t block){
+    static dispatch_semaphore_t semaphore;
+    kDISPATCH_ONCE_BLOCK(^{semaphore = dispatch_semaphore_create(1);});
+    lockForSemaphore(block, semaphore);
+}
+
+float boundsWidth(void){
     return CGRectGetWidth([UIScreen mainScreen].bounds);
 }
-float boundsHeight(){
+float boundsHeight(void){
     return CGRectGetHeight([UIScreen mainScreen].bounds);
 }
 
@@ -243,7 +260,7 @@ float cpu_usage(){
 +(nullable UIViewController*) getCurrentController{
     UIViewController *result = nil;
     
-    UIWindow *topWindow = [self getCurrenWindow];
+    UIWindow *topWindow = [UIApplication sharedApplication].delegate.window;
     if (!topWindow)  return nil;
     
     UIView *rootView = [topWindow subviews].firstObject;
@@ -273,7 +290,9 @@ float cpu_usage(){
     if(parentVc.childViewControllers
        && parentVc.childViewControllers.count > 0){
         childVc = [self getCurrentController:parentVc.childViewControllers.lastObject];
-    }else if ([parentVc isKindOfClass:[UINavigationController class]]
+    }else if(parentVc.presentedViewController){
+        childVc = parentVc.presentedViewController;
+    } else if ([parentVc isKindOfClass:[UINavigationController class]]
          && ((UINavigationController*)parentVc).viewControllers
         && ((UINavigationController*)parentVc).viewControllers.count > 0) {
         childVc =  ((UINavigationController*)parentVc).viewControllers.lastObject;

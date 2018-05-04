@@ -69,13 +69,16 @@ typedef long                                  kInt32;
 typedef long long                           kInt64;
 #endif
 
+#pragma mark GCD - 一次性执行
+#define kDISPATCH_ONCE_BLOCK(onceBlock) static dispatch_once_t onceToken; dispatch_once(&onceToken, onceBlock);
+
 #pragma mark UIResponder初始化自定义方法
 #define kINITPARAMSForType(type) -(instancetype) initWithFrame:(CGRect)frame{if(self = [super initWithFrame:frame]){[self initParams##type];}return self;} -(instancetype) initWithCoder:(NSCoder *)aDecoder{ if(self = [super initWithCoder:aDecoder]){ [self initParams##type];}return self;} -(void) initParams##type
 
 #pragma mark autolayout回调
 #define kSOULDLAYOUTPForType(type) @property (nonatomic) CGSize __layoutSubviews_UseSize##type;
 #define kSOULDLAYOUTMSTARTForType(type)  -(BOOL) __layoutSubviews_Size_Compare##type{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize##type, self.bounds.size)){return false;}self.__layoutSubviews_UseSize##type = self.bounds.size;return true;} -(void) layoutSubviews{ [super layoutSubviews]; if([self __layoutSubviews_Size_Compare##type]){
-#define kSOULDLAYOUTVMSTARTForType(type) -(BOOL) __layoutSubviews_Size_Compare##type{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize##type, self.view.bounds.size)){return false;}self.__layoutSubviews_UseSize = self.view.bounds.size;return true;} -(void) viewDidLayoutSubviews{ [super viewDidLayoutSubviews]; if([self __layoutSubviews_Size_Compare##type]){
+#define kSOULDLAYOUTVMSTARTForType(type) -(BOOL) __layoutSubviews_Size_Compare##type{ if(CGSizeEqualToSize(self.__layoutSubviews_UseSize##type, self.view.bounds.size)){return false;}self.__layoutSubviews_UseSize##type = self.view.bounds.size;return true;} -(void) viewDidLayoutSubviews{ [super viewDidLayoutSubviews]; if([self __layoutSubviews_Size_Compare##type]){
 #define kSOULDLAYOUTMEND }}
 
 #pragma mark 格式化、拼接字符串
@@ -93,10 +96,6 @@ typedef long long                           kInt64;
 #define kNOTIF_POST(n, o)               [[NSNotificationCenter defaultCenter] postNotificationName:n object:o]
 #define kNOTIF_REMV(obs, n)             [[NSNotificationCenter defaultCenter] removeObserver:obs name:n object:nil]
 
-#pragma mark GCD - 切入主线程
-#define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), mainQueueBlock);
-#pragma mark GCD - 开启异步线程
-#define kDISPATCH_GLOBAL_QUEUE_DEFAULT(globalQueueBlock) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), globalQueueBlock);
 #pragma mark GCD - 一次性执行
 #define kDISPATCH_ONCE_BLOCK(onceBlock) static dispatch_once_t onceToken; dispatch_once(&onceToken, onceBlock);
 
@@ -154,9 +153,20 @@ extern double EARTH_RADIUS;
 
 //==>
 #pragma mark 窗口大小
-float boundsWidth();
-float boundsHeight();
+float boundsWidth(void);
+float boundsHeight(void);
 ///<==
+
+//==================================>
+#pragma mark 线程操作
+void threadJoinMain(dispatch_block_t block);
+void threadJoinGlobal(dispatch_block_t block);
+///<==================================
+
+//==================================>
+void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore);
+void lockForDefault(dispatch_block_t block);
+///<==================================
 
 UIDeviceOrientation parseInterfaceOrientationToDeviceOrientation(UIInterfaceOrientation interfaceOrientation);
 UIInterfaceOrientation parseDeviceOrientationToInterfaceOrientation(UIDeviceOrientation deviceOrientation);

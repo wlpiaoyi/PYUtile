@@ -12,7 +12,7 @@
  hook Controller method 的基础实体
  */
 @interface UIViewController(hook)
-
++(BOOL) canExcuHookMethod:(UIViewController *) target;
 +(BOOL) hookMethodWithName:(NSString*) name;
 
 @end

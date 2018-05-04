@@ -9,29 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PYUtile/Source/Expand/NSObject+Expand.m"
-            timestampString = "544179094.450105"
+            filePath = "PYUtile/Source/Notification/PYReachabilityNotification.m"
+            timestampString = "544281598.64566"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
-            landmarkName = "+objectToDictionaryWithObject:clazz:deep:hashStr:fliteries:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PYUtile/AppDelegate.m"
-            timestampString = "544179094.450201"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "-application:didFinishLaunchingWithOptions:"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "-reachabilityChanged:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

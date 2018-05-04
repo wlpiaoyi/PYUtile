@@ -11,6 +11,8 @@
 #include <libkern/OSAtomic.h>
 #include <execinfo.h>
 #import "PYUtile.h"
+#import "NSData+Expand.h"
+
 NSString * PYUncaughtExceptionHandlerLogUrl;
 
 PYUncaughtExceptionHandler * xPYUncaughtExceptionHandler;
@@ -69,13 +71,21 @@ const int32_t UncaughtExceptionMaximum = 10;
     if(self.blockExceptionHandle){
         self.blockExceptionHandle(exception, &dismissed);
     }else{
+        NSMutableString * callStackSymbolMutable = [NSMutableString stringWithFormat:@"%@:%@\n{\n",exception.name, exception.reason];
+        for (NSString * callStackSymbol in exception.callStackSymbols) {
+            [callStackSymbolMutable appendString:callStackSymbol];
+            [callStackSymbolMutable appendString:@"\n"];
+        }
+        [callStackSymbolMutable appendString:@"}"];
+        kPrintErrorln("%s",callStackSymbolMutable.UTF8String);
+        NSString * message = [NSString stringWithFormat:NSLocalizedString(
+                                                                          @"非常抱歉您可以继续使用，但是程序可能出问题\n\n原因如下:\n%@\n%@", nil),
+                              callStackSymbolMutable,
+                              [[exception userInfo] objectForKey:PYUncaughtExceptionHandlerAddressesKey]];
         UIAlertView *alert =
         [[UIAlertView alloc]
          initWithTitle:NSLocalizedString(@"程序异常", nil)
-         message:[NSString stringWithFormat:NSLocalizedString(
-                                                              @"非常抱歉您可以继续使用，但是程序可能出问题\n\n原因如下:\n%@\n%@", nil),
-                  [exception reason],
-                  [[exception userInfo] objectForKey:PYUncaughtExceptionHandlerAddressesKey]]
+         message: message
          delegate:self
          cancelButtonTitle:NSLocalizedString(@"退出", nil)
          otherButtonTitles:NSLocalizedString(@"继续", nil), nil];
@@ -122,7 +132,6 @@ void PYHandleException(NSException *exception){
         [callStackSymbolMutable appendString:@"\n"];
     }
     [callStackSymbolMutable appendString:@"}"];
-    
     NSString *logUrl = [NSString stringWithFormat:@"%@/%@_Detail.log",PYUncaughtExceptionHandlerLogUrl, [NSString stringWithFormat:@"crash%@",[NSDate date]]];
     FILE *f = fopen(logUrl.UTF8String,"wb+");
     const char * callStackSymbolChars = callStackSymbolMutable.UTF8String;

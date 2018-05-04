@@ -17,20 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vP5-cZ-RYw">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="vP5-cZ-RYw" firstAttribute="bottom" secondItem="i7k-tO-rYJ" secondAttribute="bottom" id="8M1-BC-jgh"/>
-                            <constraint firstItem="vP5-cZ-RYw" firstAttribute="leading" secondItem="i7k-tO-rYJ" secondAttribute="leading" id="Wn0-UK-dYa"/>
-                            <constraint firstItem="vP5-cZ-RYw" firstAttribute="trailing" secondItem="i7k-tO-rYJ" secondAttribute="trailing" id="dVx-E1-s7W"/>
-                            <constraint firstItem="vP5-cZ-RYw" firstAttribute="top" secondItem="i7k-tO-rYJ" secondAttribute="top" id="ip3-4l-XZh"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="i7k-tO-rYJ"/>
                     </view>
                 </viewController>

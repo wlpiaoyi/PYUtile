@@ -7,9 +7,28 @@
 //
 
 #import "UIViewController+Hook.h"
+#import "PYUtile.h"
 #import <objc/runtime.h>
 
+static NSArray<Class> * PYCanExcuHookMethodVCS;
+
 @implementation UIViewController(hook)
+
++(BOOL) canExcuHookMethod:(UIViewController *) target{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if(!PYCanExcuHookMethodVCS.count){
+            PYCanExcuHookMethodVCS = @[
+                                       NSClassFromString(@"PYPopupController"),
+                                       NSClassFromString(@"UIInputWindowController")
+                                       ];
+        }
+    });
+    for (Class vcClazz in PYCanExcuHookMethodVCS) {
+        if([target isKindOfClass:vcClazz]) return false;
+    }
+    return true;
+}
 
 +(BOOL) hookMethodWithName:(NSString*) name{
     SEL orgSel = sel_getUid(name.UTF8String);

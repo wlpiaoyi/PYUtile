@@ -29,7 +29,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewDidLoad:target:)]) {
             [delegate beforeExcuteViewDidLoad:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewDidLoad];
@@ -38,7 +38,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewDidLoadWithTarget:)]) {
             [delegate afterExcuteViewDidLoadWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewWillAppear:(BOOL) animated{
     __block BOOL isExcute = true;
@@ -47,7 +47,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewWillAppear:target:)]) {
             [delegate beforeExcuteViewWillAppear:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewWillAppear:animated];
@@ -57,7 +57,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewWillAppearWithTarget:)]) {
             [delegate afterExcuteViewWillAppearWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewDidAppear:(BOOL) animated{
     __block BOOL isExcute = true;
@@ -67,7 +67,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewDidAppear:target:)]) {
             [delegate beforeExcuteViewDidAppear:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewDidAppear:animated];
@@ -77,7 +77,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewDidAppearWithTarget:)]) {
             [delegate afterExcuteViewDidAppearWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewWillDisappear:(BOOL) animated{
     __block BOOL isExcute = true;
@@ -87,7 +87,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewWillDisappear:target:)]) {
             [delegate beforeExcuteViewWillDisappear:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewWillDisappear:animated];
@@ -97,7 +97,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewWillDisappearWithTarget:)]) {
             [delegate afterExcuteViewWillDisappearWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewDidDisappear:(BOOL) animated{
     __block BOOL isExcute = true;
@@ -106,7 +106,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewDidDisappear:target:)]) {
             [delegate beforeExcuteViewDidDisappear:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewDidDisappear:animated];
@@ -116,7 +116,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewDidDisappearWithTarget:)]) {
             [delegate afterExcuteViewDidDisappearWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewWillLayoutSubviews{
     __block __block BOOL isExcute = true;
@@ -125,7 +125,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewWillLayoutSubviews:target:)]) {
             [delegate beforeExcuteViewWillLayoutSubviews:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewDidLayoutSubviews];
@@ -135,7 +135,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewWillLayoutSubviewsWithTarget:)]) {
             [delegate afterExcuteViewWillLayoutSubviewsWithTarget:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeViewDidLayoutSubviews{
     __block __block BOOL isExcute = true;
@@ -144,7 +144,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewDidLayoutSubviews:target:)]) {
             [delegate beforeExcuteViewDidLayoutSubviews:&isExcute target:self];
         }
-    }];
+    } target:self];
 
     if (isExcute) {
         [self exchangeViewDidLayoutSubviews];
@@ -154,7 +154,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewDidLayoutSubviewsWithTarget:)]) {
             [delegate afterExcuteViewDidLayoutSubviewsWithTarget:self];
         }
-    }];
+    } target:self];
 }
 
 
@@ -166,7 +166,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcutePreferredStatusBarStyle:target:)]) {
             [delegate beforeExcutePreferredStatusBarStyle:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     __block UIStatusBarStyle result = UIStatusBarStyleLightContent;
     if (isExcute) {
@@ -177,7 +177,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:)]) {
             result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self];
         }
-    }];
+    } target:self];
     
     return result;
 }
@@ -190,7 +190,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcutePreferredStatusBarStyle:target:)]) {
             [delegate beforeExcutePreferredStatusBarStyle:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     __block UIStatusBarStyle result = UIStatusBarStyleLightContent;
     if (isExcute) {
@@ -200,7 +200,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:)]) {
             result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self];
         }
-    }];
+    } target:self];
     
     return result;
 }
@@ -213,7 +213,8 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
     objc_setAssociatedObject([UIViewController class], UIViewControllerHookViewDelegatePointer, delegateViews, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-+(void) hookViewIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block{
++(void) hookViewIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block target:(nonnull UIViewController *) target{
+    if(![UIViewController canExcuHookMethod:target]) return;
     @synchronized (HookViewSynTag) {
         HookViewIsIteritor = YES;
         for (id sub in table) {

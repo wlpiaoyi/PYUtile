@@ -83,13 +83,11 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 }
 + (UIImage *)imageWithSize:(CGSize) size blockDraw:(void (^ _Nonnull) (CGContextRef context, CGRect rect)) blockDraw{
     CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
-    
-    UIGraphicsBeginImageContext(rect.size);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     blockDraw(context, rect);
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
     return image;
 }
 

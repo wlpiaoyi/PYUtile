@@ -10,6 +10,7 @@
 #import "pyutilea.h"
 #import <objc/runtime.h>
 #import "PYXml.h"
+#import "PYNetworkReachabilityNotification.h"
 SINGLETON_SYNTHESIZE_FOR_hCLASS(PyTest, NSObject, <NSObject>);
 @end
 SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
@@ -22,11 +23,13 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 }
 @property (nonatomic, strong) NSString * name1;
 @property (nonatomic) SEL action;
-@property (nonatomic, assign) CGSize value0;
+@property (nonatomic, strong) NSNumber * value0;
+@property (nonatomic, strong) NSNumber * value00;
 @property (nonatomic, strong) NSArray * value1;
 @property (nonatomic, strong) NSDate * value2;
 @property (nonatomic, retain) NSData * value3;
 @property (nonatomic, retain) NSDictionary * value4;
+@property (nonatomic, strong) NSArray * value5;
 @property (nonatomic, strong) NSURL * url;
 @property (nonatomic, strong) Test1 * t1;
 @end
@@ -43,21 +46,64 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 @end
 
 NSTimer * timer;
-@interface AppDelegate ()
+@interface AppDelegate (){
+    PYNetworkReachabilityNotification * nrn;
+}
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    lockForDefault(^{
+        NSLog(@"001 ====>");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"001 <====");
+    });
+    lockForDefault(^{
+        NSLog(@"002 ====>");
+        [NSThread sleepForTimeInterval:2];
+        NSLog(@"002 <====");
+    });
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+    lockForSemaphore(^{
+        NSLog(@"011 ====>");
+        [NSThread sleepForTimeInterval:0.2];
+        NSLog(@"011 <====");
+    }, semaphore);
+    lockForSemaphore(^{
+        NSLog(@"012 ====>");
+        [NSThread sleepForTimeInterval:0.2];
+        NSLog(@"012 <====");
+    }, semaphore);
+    
+    NSTimeInterval t = [NSDate date].timeIntervalSince1970;
+    NSLog(@"%f",[NSDate date].timeIntervalSince1970 - t);
+    for (int i = 0; i < 1000; i++) {
+        Class clazz = [UISearchBar class];
+        if([NSBundle bundleForClass:clazz] != [NSBundle mainBundle] && clazz != [UIView class]){
+//            NSLog(@"=====>");
+        }
+    }
+    NSLog(@"%f",[NSDate date].timeIntervalSince1970 - t);
     [UIResponder hookWithMethodNames:nil];
     Test2 * t2 = [Test2 new];
     t2.name1 = @"name1";
     t2.name2 = @"name2";
     t2.action = @selector(appendFormat:);
-    t2.value0 = CGSizeMake(3, 3);
-    [t2 objectToDictionary];
-    [t2 objectToDictionaryWithDeepClass:[Test1 class]];
+    t2.value0 = @(2);
+    t2.value00 = @(2.2);
+    t2.value4 = @{@"adfa":@"sdf"};
+    t2.value5 = @[@{@"v2":@(3), @"v1":@(1.2)}];
+    t2.value1 = @[@"asdfad"];
+    NSDictionary * tempdict =  [t2 objectToDictionaryWithDeepClass:[Test1 class]];
+    [NSObject dictionaryAnalysisForClass:tempdict];
+    nrn = [PYNetworkReachabilityNotification sharedManager];
+    [nrn setReachabilityStatusChangeBlock:^(PYNetworkReachabilityStatus status) {
+        
+    }];
+    [nrn startMonitoring];
 
 //    NSString * value = @"{\"T\":{\"S1\":{\"MinStay\":[[\"\",\"无限制\"]],\"MaxStay\":[[\"\",\"无限制。\"]],\"Penalties\":[[\"Cancel/Refund\",\"允许，收取手续费500人民币。\"],[\"Change\",\"允许。\"],[\"Noshow\",\"退票：收取手续费500人民币。\n\n更改：不允许。\"]],\"ResultData\":[[\"\",\"最短停留:\n无限制\n\n最长停留:\n无限制。\n\n退改规定:\n1.退票:\n允许，收取手续费500人民币。\n2.更改:允许。\n3.误机:退票：收取手续费500人民币。更改：不允许。\r\n\n\n\"]]}}}";
 ////    value = @"{\"ResultData\":[[\"\",\"最短停留:\n无限制 最长停留:无限制\"]]}";

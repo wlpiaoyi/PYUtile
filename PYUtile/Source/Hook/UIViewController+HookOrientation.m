@@ -26,7 +26,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteShouldAutorotate:target:)]) {
             [delegate beforeExcuteShouldAutorotate:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     __block BOOL result = false;
     if (isExcute) {
@@ -37,7 +37,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(aftlerExcuteShouldAutorotateWithTarget:)]) {
             result = [delegate aftlerExcuteShouldAutorotateWithTarget:self];
         }
-    }];
+    } target:self];
     return result;
 }
 
@@ -50,7 +50,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteSupportedInterfaceOrientations:target:)]) {
             [delegate beforeExcuteSupportedInterfaceOrientations:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     __block NSUInteger result = 0;
     if (isExcute) {
@@ -61,7 +61,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteSupportedInterfaceOrientationsWithTarget:)]) {
             result = [delegate afterExcuteSupportedInterfaceOrientationsWithTarget:self];
         }
-    }];
+    } target:self];
     
     return result;
 }
@@ -74,7 +74,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcutePreferredInterfaceOrientationForPresentation:target:)]) {
             [delegate beforeExcutePreferredInterfaceOrientationForPresentation:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     __block UIInterfaceOrientation result = UIInterfaceOrientationUnknown;
     if (isExcute) {
@@ -85,7 +85,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredInterfaceOrientationForPresentationWithTarget:)]) {
             result = [delegate afterExcutePreferredInterfaceOrientationForPresentationWithTarget:self];
         }
-    }];
+    } target:self];
     
     return result;
 }
@@ -97,7 +97,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteViewWillTransitionToSize:withTransitionCoordinator:isExcute:target:)]) {
             [delegate beforeExcuteViewWillTransitionToSize:size withTransitionCoordinator:coordinator isExcute:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeViewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -107,7 +107,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteViewWillTransitionToSize:withTransitionCoordinator:target:)]) {
             [delegate afterExcuteViewWillTransitionToSize:size withTransitionCoordinator:coordinator target:self];
         }
-    }];
+    } target:self];
 }
 //⇒ 重写父类方法旋转开始和结束
 -(void) exchangeWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration{
@@ -118,7 +118,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteWillRotateToInterfaceOrientation:duration:isExcute:target:)]) {
             [delegate beforeExcuteWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration isExcute:&isExcute target:self];
         }
-    }];
+    } target:self];
     
     if (isExcute) {
         [self exchangeWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -128,7 +128,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteWillRotateToInterfaceOrientation:duration:target:)]) {
             [delegate afterExcuteWillRotateToInterfaceOrientation:toInterfaceOrientation duration:duration target:self];
         }
-    }];
+    } target:self];
 }
 -(void) exchangeDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation{
     __block BOOL isExcute = true;
@@ -137,7 +137,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDidRotateFromInterfaceOrientation:isExcute:target:)]) {
             [delegate beforeExcuteDidRotateFromInterfaceOrientation:fromInterfaceOrientation isExcute:&isExcute target:self];
         }
-    }];
+    } target:self];
     if (isExcute) {
         [self exchangeDidRotateFromInterfaceOrientation:fromInterfaceOrientation];
     }
@@ -145,7 +145,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(afterExcuteDidRotateFromInterfaceOrientation:target:)]) {
             [delegate afterExcuteDidRotateFromInterfaceOrientation:fromInterfaceOrientation target:self];
         }
-    }];
+    } target:self];
 }
 //⇐
 
@@ -155,7 +155,8 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
 +(void) setDelegateOrientations:(nullable NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> *) delegateOrientations{
     [self paramsDictForHookExpand][@"delegateOrientations"] = delegateOrientations;
 }
-+(void) hookOrientationIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block{
++(void) hookOrientationIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block target:(nonnull UIViewController *) target{
+    if(![UIViewController canExcuHookMethod:target]) return;
     @synchronized (HookOrientationSynTag) {
         HookOrientationIsIteritor = YES;
         for (id sub in table) {
