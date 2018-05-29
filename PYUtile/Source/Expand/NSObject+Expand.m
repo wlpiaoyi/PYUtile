@@ -27,7 +27,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  是否是本地库的Class
  */
 +(BOOL) isNativelibraryClass{
-   return  [NSBundle bundleForClass:self] == [NSBundle mainBundle];
+   return  [NSBundle bundleForClass:self] != [NSBundle mainBundle];
 }
 
 +(NSDictionary *) pyutile_objectKeyPaseDict{

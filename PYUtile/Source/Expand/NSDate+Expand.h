@@ -21,16 +21,19 @@
 -(int) firstWeekDayInMonth;
 -(int) year;
 -(int) month;
--(int)weekday;
+-(int) weekday;
 -(int) day;
 -(int) hour;
 -(int) minute;
--(int)second;
--(NSString*) dateFormateDate:(NSString*) formatePattern;
+-(int) second;
+-(int) nanosecond;
 /**
- 0b111111：年月日时分秒，1：保持原值，0：置为0；
+ 0b1111111：年月日时分秒毫，1：保持原值，0：置为0；
+ 毫秒会自动被清除
  */
--(NSDate *) setCompentsWithBinary:(int) binary;
+-(NSDate *) clearedWithBinary:(int) binary;
+-(NSString*) dateFormateDate:(NSString*) formatePattern;
+
 +(NSDate *) dateStartOfDay:(NSDate *)date;
 +(NSDate *) monthStartOfDay:(NSDate *)date;
 +(NSDate *) monthEndOfDay:(NSDate *)date;
@@ -38,4 +41,5 @@
 +(NSDate *) dateEndOfWeek;
 +(NSDate *) getTodayZero;
 
+-(NSDate *) setCompentsWithBinary:(int) binary NS_DEPRECATED_IOS(2_0, 7_0, "Use clearedWithBinary");
 @end

@@ -14,7 +14,7 @@
 @optional
 //重写父类方法判断是否可以旋转
 -(void) beforeExcuteShouldAutorotate:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
--(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target;
+-(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target result:(BOOL) result;
 
 //重写父类方法判断支持的旋转方向
 -(void) beforeExcuteSupportedInterfaceOrientations:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
@@ -31,6 +31,9 @@
 -(void) afterExcuteWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration target:(nonnull UIViewController *) target;
 -(void) beforeExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
 -(void) afterExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation target:(nonnull UIViewController *) target;
+
+#pragma 废弃的方法
+-(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0, 7_0, "Use aftlerExcuteShouldAutorotateWithTarget:result");
 @end
 /**
  hook 转屏的实体

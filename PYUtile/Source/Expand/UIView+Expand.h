@@ -25,6 +25,15 @@
 @property (nonatomic) CGFloat frameHeight;
 
 /**
+ x,y 距离中心点的距离
+ w,h 宽度和高度
+ top,left,bottom,right 边框距离
+ topActive,leftActive,bottomActive,rightActive 是否在安全区
+ topPoint,leftPoint,bottomPoint,rightPoint 边距参照对象
+ */
+-(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, NSNumber *> *) autoLayoutDict;
+
+/**
  获取相对于目标视图的位置
  */
 -(CGPoint) getAbsoluteOrigin:(UIView * _Nonnull) superView;
@@ -50,5 +59,5 @@
 +(instancetype _Nullable) loadXib;
 -(UIImage * _Nullable) drawView;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds;
--(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(CGFloat) scale;
+-(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale;
 @end

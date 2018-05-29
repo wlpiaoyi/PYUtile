@@ -112,6 +112,7 @@ static PYOrientationNotification *xPYOrientationNotification;
         BOOL isSupportOrientation = [PYOrientationNotification isSupportDeviceOrientation:_deviceOrientation_];
         _deviceOrientation = _deviceOrientation_;
         for (id<PYOrientationNotification> listener in self.tableListeners) {
+            if([listener respondsToSelector:@selector(deviceOrientation:isSupport:)])[listener deviceOrientation:_deviceOrientation isSupport:isSupportOrientation];
             if (isSupportOrientation) {
                 switch (_deviceOrientation) {
                     // Device oriented vertically, home button on the bottom
@@ -138,8 +139,6 @@ static PYOrientationNotification *xPYOrientationNotification;
                     }
                         break;
                 }
-            }else{
-                if([listener respondsToSelector:@selector(deviceOrientationNotSupport:)])[listener deviceOrientationNotSupport:_deviceOrientation_];
             }
         }
     }

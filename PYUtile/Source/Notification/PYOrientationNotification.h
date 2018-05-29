@@ -19,7 +19,7 @@
 // Device oriented horizontally, home button on the left
 -(void) deviceOrientationLandscapeRight;
 // Device oriented horizontally, home button not support
--(void) deviceOrientationNotSupport:(UIDeviceOrientation) deviceOrientation;
+-(void) deviceOrientation:(UIDeviceOrientation) deviceOrientation isSupport:(BOOL)isSupport;
 @end
 @interface PYOrientationNotification : NSObject
 //当前旋转方向

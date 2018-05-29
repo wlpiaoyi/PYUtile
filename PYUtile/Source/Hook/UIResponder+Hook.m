@@ -7,7 +7,6 @@
 //
 
 #import "UIResponder+Hook.h"
-#import "UIResponder+pydealloc.h"
 #import "PYUtile.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -17,6 +16,27 @@ NSArray * PY_HOOK_RESPOINDER_CLASS_MS;
 void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 
 @implementation UIResponder(Hook)
+
+-(void) myDealloc{
+    
+}
+
+-(void) exchangeDealloc{
+    Class clazz = self.class;
+    if([NSBundle bundleForClass:clazz] != [NSBundle mainBundle] && clazz != [UIView class]) {
+        [self exchangeDealloc];
+        return;
+    }
+    NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
+    for (id<UIResponderHookBaseDelegate> delegate in delegates){
+        if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
+            [delegate beforeExcuteDeallocWithTarget:self];
+        }
+    }
+    objc_removeAssociatedObjects(self);
+    if([self canResignFirstResponder]) [self resignFirstResponder];
+    [self exchangeDealloc];
+}
 
 
 +(nonnull NSMutableDictionary *) paramsDictForHookExpand{

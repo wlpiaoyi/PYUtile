@@ -45,6 +45,12 @@
     NSDateComponents *components = [gregorian components:NSMinuteCalendarUnit fromDate:self];
     return (int)[components minute];
 }
+-(int)nanosecond {
+    NSCalendar *gregorian = [[NSCalendar alloc]
+                             initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *components = [gregorian components:NSCalendarUnitNanosecond fromDate:self];
+    return (int)[components nanosecond];
+}
 -(int)second {
     NSCalendar *gregorian = [[NSCalendar alloc]
                              initWithCalendarIdentifier:NSGregorianCalendar];
@@ -71,7 +77,7 @@
     
     NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
     [offsetComponents setYear:numYears];
-    //[offsetComponents setHour:1];
+//    [offsetComponents setHour:1];
     //[offsetComponents setMinute:30];
     return [gregorian dateByAddingComponents:offsetComponents
                                       toDate:self options:0];
@@ -169,29 +175,26 @@
     [dft setDateFormat:formatePattern==nil?@"yyyy-MM-dd HH:mm:ss":formatePattern];
     return [dft stringFromDate:self];
 }
+
 /**
- 0b111111：年月日时分秒，1：保持原值，0：置为0；
+ 0b11111111：年月日时分秒毫，1：保持原值，0：置为0；
  */
--(NSDate *) setCompentsWithBinary:(int) binary{
-    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
-    if(!(binary & 0b1)){
-        [offsetComponents setSecond:-self.second];
-    }
-    if (!(binary & 0b10)) {
-        [offsetComponents setMinute:-self.minute];
-    }
-    if (!(binary & 0b100)) {
-        [offsetComponents setHour:-self.hour];
-    }
-    if (!(binary & 0b1000)) {
-        [offsetComponents setDay:-self.day + 1];
-    }
-    if (!(binary & 0b10000)) {
-        [offsetComponents setMonth:-self.month + 1];
-    }
-    if (!(binary & 0b100000)) {
-        [offsetComponents setMonth:-self.year + 1];
-    }
+-(NSDate *) clearedWithBinary:(int) binary{
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];;
+    int tb = 0b1;
+    if(!(binary & tb)) [offsetComponents setNanosecond:-self.nanosecond];
+    tb  = tb << 1;
+    if(!(binary & tb)) [offsetComponents setSecond:-self.second];
+    tb  = tb << 1;
+    if (!(binary & tb)) [offsetComponents setMinute:-self.minute];
+    tb  = tb << 1;
+    if (!(binary & tb)) [offsetComponents setHour:-self.hour];
+    tb  = tb << 1;
+    if (!(binary & tb)) [offsetComponents setDay:-self.day + 1];
+    tb  = tb << 1;
+    if (!(binary & tb)) [offsetComponents setMonth:-self.month + 1];
+    tb  = tb << 1;
+    if (!(binary & tb)) [offsetComponents setMonth:-self.year + 1];
     
     NSCalendar *gregorian = [[NSCalendar alloc]
                              initWithCalendarIdentifier:NSGregorianCalendar];
@@ -275,4 +278,12 @@
     return endOfWeek;
 }
 
+
+
+/**
+ 0b111111：年月日时分秒，1：保持原值，0：置为0；
+ */
+-(NSDate *) setCompentsWithBinary:(int) binary{
+    return [self clearedWithBinary:(binary<<1) + 1];
+}
 @end

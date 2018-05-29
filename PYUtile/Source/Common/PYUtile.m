@@ -159,7 +159,7 @@ double parseCoordinateToDistance(double lat1, double lng1, double lat2, double l
     return s;
 }
 
-float cpu_usage(){
+float cpu_usage(void){
     kern_return_t			kr = { 0 };
     task_info_data_t		tinfo = { 0 };
     mach_msg_type_number_t	task_info_count = TASK_INFO_MAX;

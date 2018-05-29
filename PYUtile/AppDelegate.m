@@ -55,6 +55,11 @@ NSTimer * timer;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSDate * date =[NSDate date];
+    date = [date setCompentsWithBinary:0b111111];
+    
+    [UIResponder hookWithMethodNames:nil];
+    [UIView new];
     lockForDefault(^{
         NSLog(@"001 ====>");
         [NSThread sleepForTimeInterval:3];

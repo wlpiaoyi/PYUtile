@@ -17,7 +17,16 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
+	<key>DevelopBundleVersion</key>
+	<dict>
+		<key>users</key>
+		<array>
+			<string>wlpiaoyi</string>
+		</array>
+		<key>wlpiaoyi</key>
+		<string>2</string>
+	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

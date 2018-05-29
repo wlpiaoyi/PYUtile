@@ -196,7 +196,7 @@ NSString * _Nullable PYUUID(NSUInteger length);
 /**
  cup使用率
  */
-float cpu_usage();
+float cpu_usage(void);
 
 @interface PYUtile : NSObject
 

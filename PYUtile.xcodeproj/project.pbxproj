@@ -19,8 +19,6 @@
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */; };
-		158D8F3820946BE4008B0055 /* UIResponder+pydealloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 158D8F3720946BE4008B0055 /* UIResponder+pydealloc.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		158D8F3920946C99008B0055 /* UIResponder+pydealloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 158D8F3720946BE4008B0055 /* UIResponder+pydealloc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		15BFDEB01DF4FFF20044EDAA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEAF1DF4FFF20044EDAA /* main.m */; };
 		15BFDEB31DF4FFF20044EDAA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEB21DF4FFF20044EDAA /* AppDelegate.m */; };
 		15BFDEB61DF4FFF20044EDAA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEB51DF4FFF20044EDAA /* ViewController.m */; };
@@ -174,8 +172,6 @@
 		155D7810207117FC00B2CDDB /* PYNetworkReachabilityNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYNetworkReachabilityNotification.h; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
-		158D8F3620946BE4008B0055 /* UIResponder+pydealloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+pydealloc.h"; sourceTree = "<group>"; };
-		158D8F3720946BE4008B0055 /* UIResponder+pydealloc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+pydealloc.m"; sourceTree = "<group>"; };
 		15BFDEAB1DF4FFF20044EDAA /* PYUtile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PYUtile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15BFDEAF1DF4FFF20044EDAA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		15BFDEB11DF4FFF20044EDAA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -385,8 +381,6 @@
 				15242A741DF6592400C361E4 /* PYInvoke.m */,
 				1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */,
 				1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */,
-				158D8F3620946BE4008B0055 /* UIResponder+pydealloc.h */,
-				158D8F3720946BE4008B0055 /* UIResponder+pydealloc.m */,
 				15BFDEEB1DF5034A0044EDAA /* UIView+Hook.h */,
 				15BFDEEC1DF5034A0044EDAA /* UIView+Hook.m */,
 				15BFDEED1DF5034A0044EDAA /* UIViewController+Hook.h */,
@@ -453,6 +447,7 @@
 				15BFDEA81DF4FFF20044EDAA /* Frameworks */,
 				15BFDEA91DF4FFF20044EDAA /* Resources */,
 				15242A831DF65ABB00C361E4 /* Embed Frameworks */,
+				15B0388120BD5F2D00949F95 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -533,6 +528,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		15B0388120BD5F2D00949F95 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./bundle_version.sh `whoami`";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		15BFDEA71DF4FFF20044EDAA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -562,7 +573,6 @@
 				15C5FB351DF66C3B00FF2C75 /* PYGraphicsDraw.m in Sources */,
 				15BFDF141DF5034A0044EDAA /* UIViewController+HookOrientation.m in Sources */,
 				15BFDF1A1DF5034A0044EDAA /* PYKeyboardNotification.m in Sources */,
-				158D8F3820946BE4008B0055 /* UIResponder+pydealloc.m in Sources */,
 				15242A751DF6592400C361E4 /* PYInvoke.m in Sources */,
 				15BFDF0C1DF5034A0044EDAA /* UIImage+Expand.m in Sources */,
 				15C5FB361DF66C3B00FF2C75 /* PYGraphicsThumb.m in Sources */,
@@ -579,7 +589,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				158D8F3920946C99008B0055 /* UIResponder+pydealloc.m in Sources */,
 				152AB3D62078F9390047F1AE /* PYNetworkReachabilityNotification.m in Sources */,
 				15799F9B1F99DB54001A7276 /* PYXml.m in Sources */,
 				1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */,

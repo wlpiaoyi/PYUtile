@@ -28,7 +28,10 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 
 @implementation UIImage (Expand)
 -(UIImage*) setImageSize:(CGSize) size{
-    UIGraphicsBeginImageContextWithOptions(size, NO, 2);
+    return [self setImageSize:size scale:[UIScreen mainScreen].scale];
+}
+-(UIImage*) setImageSize:(CGSize) size scale:(short) scale{
+    UIGraphicsBeginImageContextWithOptions(size, NO, scale);
     [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -93,28 +96,30 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 
 
 //==>滤镜功能
-+ (UIImage*)imageWithImage:(UIImage*)inImage colorMatrix:(NSString*) colorMatrix {
-    CGRect rectMatix = CGRectMake(0, 0, 0, 0);
-    rectMatix.size = inImage.size;
-    return [self imageWithImage:inImage colorMatrix:colorMatrix rectMatrix:rectMatix];
+- (nullable UIImage*) fliterMatrixWithColor:(NSString*) color{
+    CGRect rect = CGRectMake(0, 0, 0, 0);
+    rect.size = self.size;
+    return [self fliterMatrixWithColor:color rect:rect];
 }
-//可以打印出所有的过滤器以及支持的属性
-//NSArray *filters = [CIFilter filterNamesInCategory:kCICategoryBuiltIn];
-//for (NSString *filterName in filters) {
-//    CIFilter *filter = [CIFilter filterWithName:filterName];
-//    NSLog(@"%@,%@",filterName,[filter attributes]);
-//}
-+ (UIImage*)imageWithImage:(UIImage*)inImage colorMatrix:(NSString*) colorMatrix rectMatrix:(CGRect) rectMatrix{
+/*可以打印出所有的过滤器以及支持的属性
+ NSArray *filters = [CIFilter filterNamesInCategory:kCICategoryBuiltIn];
+ for (NSString *filterName in filters) {
+ CIFilter *filter = [CIFilter filterWithName:filterName];
+ NSLog(@"%@,%@",filterName,[filter attributes]);
+ 
+ }
+ */
+- (nullable UIImage *)fliterMatrixWithColor:(nonnull NSString*) color rect:(CGRect) rect{
     @try {
-        CIImage *ciImage = [[CIImage alloc] initWithImage:inImage];
         
-        CIFilter *filter = [CIFilter filterWithName:colorMatrix];
+        CIImage *ciImage = [[CIImage alloc] initWithImage:self];
+        CIFilter *filter = [CIFilter filterWithName:color];
         [filter setValue:ciImage forKey:kCIInputImageKey];
         [filter setDefaults];
         //创建基于GPU的CIContext
         CIContext *context = [CIContext contextWithOptions:nil];
         CIImage *outputImage = [filter outputImage];
-        CGImageRef cgImage = [context createCGImage:outputImage fromRect:rectMatrix];
+        CGImageRef cgImage = [context createCGImage:outputImage fromRect:rect];
         UIImage *image = [UIImage imageWithCGImage:cgImage];
         CGImageRelease(cgImage);
         return image;
@@ -128,6 +133,21 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
  毛玻璃
  @blur 透明度
  @tintColor 毛玻璃颜色
+ 
+ //创建基于 GPU 的 CIContext 对象
+ EAGLContext *eaglctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+ CIContext * context = [CIContext contextWithEAGLContext:eaglctx];
+ 
+ CIImage *inputImage= [CIImage imageWithCGImage:image.CGImage];
+ //设置filter
+ CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+ [filter setValue:inputImage forKey:kCIInputImageKey];
+ [filter setValue:@(2) forKey:kCIInputRadiusKey];
+ //模糊图片
+ CIImage *result=[filter valueForKey:kCIOutputImageKey];
+ CGImageRef outImage=[context createCGImage:result fromRect:[result extent]];
+ image = [UIImage imageWithCGImage:outImage];
+ CGImageRelease(outImage);
  */
 -(UIImage * _Nonnull) applyEffect:(CGFloat)blur tintColor:(nullable UIColor *) tintColor{
     
@@ -216,6 +236,13 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
     
     
     return returnImage;
+}
+
++ (UIImage*)imageWithImage:(UIImage*)inImage colorMatrix:(NSString*) colorMatrix {
+    return [inImage fliterMatrixWithColor:colorMatrix];
+}
++ (UIImage*)imageWithImage:(UIImage*)inImage colorMatrix:(NSString*) colorMatrix rectMatrix:(CGRect) rectMatrix{
+    return [inImage fliterMatrixWithColor:colorMatrix rect:rectMatrix];
 }
 
 

@@ -6,6 +6,8 @@
 //
 
 #import "UIView+Expand.h"
+#import "PYViewAutolayoutCenter.h"
+
 @interface UIView(){
 }
 @end
@@ -117,6 +119,60 @@
     if(color)self.layer.borderColor = color.CGColor;
     [self setClipsToBounds:YES];
 }
+
+/**
+ x,y 距离中心点的距离
+ w,h 宽度和高度
+ top,left,bottom,right 边框距离
+ topActive,leftActive,bottomActive,rightActive 是否在安全区
+ topPoint,leftPoint,bottomPoint,rightPoint 边距参照对象
+ */
+-(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, NSNumber *> *) autoLayoutDict{
+    NSNumber * x = autoLayoutDict[@"x"];
+    NSNumber * y = autoLayoutDict[@"y"];
+    NSNumber * w = autoLayoutDict[@"w"];
+    NSNumber * h = autoLayoutDict [@"h"];
+    
+    NSNumber * top = autoLayoutDict [@"top"];
+    NSNumber * topActive = autoLayoutDict [@"topActive"];
+    NSNumber * topPoint = autoLayoutDict [@"topPoint"];
+    NSNumber * left = autoLayoutDict [@"left"];
+    NSNumber * leftActive = autoLayoutDict [@"leftActive"];
+    NSNumber * leftPoint = autoLayoutDict [@"leftPoint"];
+    NSNumber * bottom = autoLayoutDict [@"bottom"];
+    NSNumber * bottomActive = autoLayoutDict [@"bottomActive"];
+    NSNumber * bottomPoint = autoLayoutDict [@"bottomPoint"];
+    NSNumber * right = autoLayoutDict [@"right"];
+    NSNumber * rightActive = autoLayoutDict [@"rightActive"];
+    NSNumber * rightPoint = autoLayoutDict [@"rightPoint"];
+    
+    NSDictionary * point = [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(x ? x.doubleValue : DisableConstrainsValueMAX, y ? y.doubleValue : DisableConstrainsValueMAX)];
+    
+    NSDictionary * size =[PYViewAutolayoutCenter persistConstraint:self size:CGSizeMake(w ? w.doubleValue : DisableConstrainsValueMAX, h ? h.doubleValue : DisableConstrainsValueMAX)];
+    
+    UIEdgeInsets e = UIEdgeInsetsZero;
+    e.top = top ? top.doubleValue : DisableConstrainsValueMAX;
+    e.left = left ? left.doubleValue : DisableConstrainsValueMAX;
+    e.bottom = bottom ? bottom.doubleValue : DisableConstrainsValueMAX;
+    e.right = right ? right.doubleValue : DisableConstrainsValueMAX;
+    PYEdgeInsetsItem ei = PYEdgeInsetsItemNull();
+    ei.top = topPoint ? ((__bridge void *)topPoint) : nil;
+    ei.topActive = topActive ? topActive.boolValue : false;
+    ei.left = leftPoint ? ((__bridge void *)leftPoint) : nil;
+    ei.leftActive = leftActive ? leftActive.boolValue : false;
+    ei.bottom = bottomPoint ? ((__bridge void *)bottomPoint) : nil;
+    ei.bottomActive = bottomActive ? bottomActive.boolValue : false;
+    ei.right = rightPoint ? ((__bridge void *)rightPoint) : nil;
+    ei.rightActive = rightActive ? rightActive.boolValue : false;
+    NSDictionary * margin = [PYViewAutolayoutCenter persistConstraint:self relationmargins:e relationToItems:ei];
+    
+    NSMutableDictionary * result = [NSMutableDictionary new];
+    if(point.count) result[@"point"] = point;
+    if(size.count) result[@"size"] = size;
+    if(margin.count) result[@"margin"] = margin;
+    
+    return result;
+}
 /**
  设置阴影层
  */
@@ -188,9 +244,9 @@
     return [self drawViewWithBounds:self.bounds];
 }
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds{
-    return [self drawViewWithBounds:bounds scale:2];
+    return [self drawViewWithBounds:bounds scale:[[UIScreen mainScreen] scale]];
 }
--(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(CGFloat) scale{
+-(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale{
     UIGraphicsBeginImageContextWithOptions(bounds.size, NO, scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y);

@@ -37,6 +37,9 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         if (delegate && [delegate respondsToSelector:@selector(aftlerExcuteShouldAutorotateWithTarget:)]) {
             result = [delegate aftlerExcuteShouldAutorotateWithTarget:self];
         }
+        if (delegate && [delegate respondsToSelector:@selector(aftlerExcuteShouldAutorotateWithTarget:result:)]) {
+            result = [delegate aftlerExcuteShouldAutorotateWithTarget:self result:result];
+        }
     } target:self];
     return result;
 }
@@ -240,6 +243,9 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
     *isExcute = false;
 }
 -(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target{
+    return true;
+}
+-(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target result:(BOOL) result{
     return true;
 }
 

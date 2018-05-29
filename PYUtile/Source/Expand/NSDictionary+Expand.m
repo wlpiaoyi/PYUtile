@@ -15,7 +15,9 @@ static char * NSDictionaryExpandWeakKey = "weakkey_";
     if(!value) return nil;
     
     if([value isKindOfClass:[NSString class]]
-       || [value isKindOfClass:[NSNumber class]]){
+       || [value isKindOfClass:[NSNumber class]]
+       || [value isKindOfClass:[NSDate class]]
+       || [value isKindOfClass:[NSData class]]){
         return value;
     }
     
