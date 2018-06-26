@@ -86,117 +86,118 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 /**
  通过JSON初始化对象
  */
-+(id) objectWithDictionary:(NSObject*) dictionary clazz:(Class) clazz{
++(nullable id) objectWithDictionary:(NSObject*) dictionary clazz:(Class) clazz{
     
     id result = [self dictParset:dictionary clazz:clazz];
     if(result) return result;
     
     if(![dictionary isKindOfClass:[NSDictionary class]]) return nil;
-    if([clazz isSubclassOfClass:[NSDictionary class]]) return dictionary;
+    if([clazz isKindOfClass:[NSDictionary class]] || [clazz isSubclassOfClass:[NSDictionary class]]) return dictionary;
     
     id target = [[clazz alloc] init];
-    if (target) {
-        for (NSString *key in [((NSDictionary *)dictionary) allKeys]) {
-            NSString * _key_ = key;
-            if ([NSObject pyutile_objectKeyPaseDict][key]) {
-                _key_ = [NSObject pyutile_objectKeyPaseDict][key];
+    if (!target)  return nil;
+    
+    for (NSString *key in [((NSDictionary *)dictionary) allKeys]) {
+        NSString * fieldKey = key;
+        if ([NSObject pyutile_objectKeyPaseDict][key]) {
+            fieldKey = [NSObject pyutile_objectKeyPaseDict][key];
+        }
+        
+        id value = ((NSDictionary *)dictionary)[key];
+        if (value == nil || value == [NSNull null]) {
+            continue;
+        }
+        __block const char * typeEncoding = "";
+        bool (^blockExcute)(NSString * key) = ^bool(NSString * key){
+            objc_property_t property = class_getProperty(clazz, key.UTF8String);
+            Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
+            if(property || ivar){
+                typeEncoding = [NSObject pyutile_getTypeEncodingForProperty:property ivar:ivar];
+            } else {
+                return false;
             }
-            
-            id value = ((NSDictionary *)dictionary)[key];
-            if (value == nil || value == [NSNull null]) {
+            return true;
+        };
+        if(!blockExcute(fieldKey)){
+            fieldKey = [NSString stringWithFormat:@"_%@",fieldKey];
+            if(!blockExcute(fieldKey)){
+                kPrintLogln("the class [%s] has no ivar [%s] type [%s]", NSStringFromClass(clazz).UTF8String, fieldKey.UTF8String, NSStringFromClass([value class]).UTF8String);
                 continue;
             }
-            __block const char * typeEncoding = "";
-            bool (^blockExcute)(NSString * key) = ^bool(NSString * key){
-                objc_property_t property = class_getProperty(clazz, key.UTF8String);
-                Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
-                if(property || ivar){
-                    typeEncoding = [NSObject pyutile_getTypeEncodingForProperty:property ivar:ivar];
-                } else {
-                    kPrintLogln("the class [%s] has no ivar [%s]", NSStringFromClass(clazz).UTF8String, key.UTF8String);
-                    return false;
-                }
-                return true;
-            };
-            if(!blockExcute(_key_)){
-                _key_ = [NSString stringWithFormat:@"_%@",_key_];
-                if(!blockExcute(_key_)){
-                    continue;
-                }
-            }
-            
-            if(strlen(typeEncoding) <= 0){
-                kPrintExceptionln("the class [%s]'s ivar [%s] has not found typeEncoding", NSStringFromClass(clazz).UTF8String, _key_.UTF8String);
-                continue;
-            }
-            
-            size_t tedl = strlen(typeEncoding);
-            if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-                Class cClazz = [NSObject pyutile_getClassForTypeEncoding:typeEncoding];
-                if(cClazz == nil){
-                    value = nil;
-                    continue;
-                }
-                
-                if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
-                    objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",_key_].UTF8String);
-                    Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",_key_].UTF8String);
-                    Class arrayClazz = nil;
-                    if(cproperty || civar){
-                        const char * teding = [NSObject pyutile_getTypeEncodingForProperty:cproperty ivar:civar];
-                        arrayClazz = [NSObject pyutile_getClassForTypeEncoding:teding];
-                    }
-                    id objs = [cClazz isSubclassOfClass:[NSArray class]] ? [NSMutableArray new]: [NSMutableSet new];
-                    for (NSObject * obj in value) {
-                        id cvalue = nil;
-                        if(arrayClazz){
-                            cvalue = [arrayClazz objectWithDictionary:obj];
-                        }else if([NSObject pyutile_canParseClass:[obj class]]){
-                            cvalue = obj;
-                        }
-                        if(cvalue){
-                            if([objs isKindOfClass:[NSArray class]]){
-                                [((NSMutableArray *)objs) addObject:cvalue];
-                            }else{
-                                [((NSMutableSet *)objs) addObject:cvalue];
-                            }
-                        }
-                    }
-                    value = objs;
-                }else if([NSObject pyutile_canParseClass:cClazz]){
-                    value = [self dictParset:value clazz:cClazz];
-                }else{
-                    Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
-                    value = [cClazz objectWithDictionary:value];
-                }
-            }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
-                NSData * tempData = [((NSString *) value) toData];
-                tempData = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
-                value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
-            }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
-                NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[_key_ uppercaseString] substringToIndex:1], [_key_ substringFromIndex:1]];
-                NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
-                if (invocation
-                    && [value isKindOfClass:[NSString class]]){
-                    NSData * tempData = [((NSString *) value) toData];
-                    value = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
-                    value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];
-                    SEL v;
-                    [value getValue:&v];
-                    [PYInvoke setInvoke:&v index:2 invocation:invocation];
-                    [PYInvoke excuInvoke:nil returnType:nil invocation:invocation];
-                }
+        }
+        
+        if(strlen(typeEncoding) <= 0){
+            kPrintExceptionln("the class [%s]'s ivar [%s] has not found typeEncoding", NSStringFromClass(clazz).UTF8String, fieldKey.UTF8String);
+            continue;
+        }
+        
+        size_t tedl = strlen(typeEncoding);
+        if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+            Class cClazz = [NSObject pyutile_getClassForTypeEncoding:typeEncoding];
+            if(cClazz == nil){
                 value = nil;
+                continue;
             }
-            if(value){
-                @try {
-                    [target setValue:value forKey:_key_];
-                } @catch (NSException *exception) {
-                    kPrintExceptionln("%s:%s",exception.name.UTF8String, exception.reason.UTF8String);
+            
+            if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
+                objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",fieldKey].UTF8String);
+                Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",fieldKey].UTF8String);
+                Class arrayClazz = nil;
+                if(cproperty || civar){
+                    const char * teding = [NSObject pyutile_getTypeEncodingForProperty:cproperty ivar:civar];
+                    arrayClazz = [NSObject pyutile_getClassForTypeEncoding:teding];
                 }
+                id objs = [cClazz isSubclassOfClass:[NSArray class]] ? [NSMutableArray new]: [NSMutableSet new];
+                for (NSObject * obj in value) {
+                    id cvalue = nil;
+                    if(arrayClazz){
+                        cvalue = [arrayClazz objectWithDictionary:obj];
+                    }else if([NSObject pyutile_canParseClass:[obj class]]){
+                        cvalue = obj;
+                    }
+                    if(cvalue){
+                        if([objs isKindOfClass:[NSArray class]]){
+                            [((NSMutableArray *)objs) addObject:cvalue];
+                        }else{
+                            [((NSMutableSet *)objs) addObject:cvalue];
+                        }
+                    }
+                }
+                value = objs;
+            }else if([NSObject pyutile_canParseClass:cClazz]){
+                value = [self dictParset:value clazz:cClazz];
+            }else{
+                Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
+                value = [cClazz objectWithDictionary:value];
+            }
+        }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
+            NSData * tempData = [((NSString *) value) toData];
+            tempData = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
+            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
+        }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
+            NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
+            NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
+            if (invocation
+                && [value isKindOfClass:[NSString class]]){
+                NSData * tempData = [((NSString *) value) toData];
+                value = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
+                value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];
+                SEL v;
+                [value getValue:&v];
+                [PYInvoke setInvoke:&v index:2 invocation:invocation];
+                [PYInvoke excuInvoke:nil returnType:nil invocation:invocation];
+            }
+            value = nil;
+        }
+        if(value){
+            @try {
+                [target setValue:value forKey:fieldKey];
+            } @catch (NSException *exception) {
+                kPrintExceptionln("%s:%s [key:%@ value:%@]",exception.name.UTF8String, exception.reason.UTF8String, fieldKey, value);
             }
         }
     }
+    
     return target;
 }
 
@@ -292,7 +293,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     
     result = [self objectCheck:object deep:deep fliteries:fliteries];
     if(result) return result;
-    clazz = clazz ? : [object class];
+    if(!clazz) clazz = [object class];
     
     if([object isKindOfClass:[NSDictionary class]]){
         NSMutableDictionary * tempDict = [NSMutableDictionary new];

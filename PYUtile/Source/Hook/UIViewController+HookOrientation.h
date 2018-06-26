@@ -18,7 +18,7 @@
 
 //重写父类方法判断支持的旋转方向
 -(void) beforeExcuteSupportedInterfaceOrientations:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
--(NSUInteger) afterExcuteSupportedInterfaceOrientationsWithTarget:(nonnull UIViewController *) target;
+-(UIInterfaceOrientationMask) afterExcuteSupportedInterfaceOrientationsWithTarget:(nonnull UIViewController *) target;
 
 //重写父类方法返回当前方向
 -(void) beforeExcutePreferredInterfaceOrientationForPresentation:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;

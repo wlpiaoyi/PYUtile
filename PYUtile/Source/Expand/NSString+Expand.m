@@ -58,7 +58,7 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
         int a = [self characterAtIndex:i];
         if( a > 0xFF && (a < 0x4e00 || a > 0x9fff)){
             hasUnkown = true;
-            if(isAll)break;;
+            if(isAll)break;
         }else if(isAll){
             *isAll = false;
         }
@@ -212,9 +212,6 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
     return [NSString matchArg:self regex:REGEX_PASSPORT];
 }
 
--(BOOL) mathMoneyCN{
-    return [NSString matchArg:self regex:REGEX_MONEYCN];
-}
 /**
  身份证
  */
@@ -278,8 +275,44 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
     return modulus == 0;
 }
 
+/**
+ 通过正则表达式找出所以匹配的String
+ */
+-(nullable NSArray<NSString *> *) stringsForRegex:(nonnull NSString *) regexstr{
+    
+    NSArray<NSTextCheckingResult *> * matches = [self matchesForRegex:regexstr];
+    
+    //match: 所有匹配到的字符,根据() 包含级
+    NSMutableArray<NSString *> * array = [NSMutableArray array];
+    for (NSTextCheckingResult *match in matches) {
+        if([match numberOfRanges] < 1) continue;
+        //以正则中的(),划分成不同的匹配部分
+        NSRange range = [match rangeAtIndex:0];
+        NSString *component = [self substringWithRange:range];
+        [array addObject:component];
+    }
+    
+    return array;
+}
+
+/**
+ 通过正则表达式找出所以匹配的Ranges
+ */
+-(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr{
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexstr options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    return [regex matchesInString:self options:0 range:NSMakeRange(0, [self length])];
+}
+
+
 +(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{
     NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     return [pred evaluateWithObject:arg];
+}
+
+#warning 待定的功能
+-(BOOL) mathMoneyCN{
+    return [NSString matchArg:self regex:REGEX_MONEYCN];
 }
 @end

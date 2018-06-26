@@ -20,10 +20,11 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 
 @interface Test1:NSObject<UITextFieldDelegate>{
 @public int _pvalue0;
+@private NSDictionary * _dict;
 }
 @property (nonatomic, strong) NSString * name1;
 @property (nonatomic) SEL action;
-@property (nonatomic, strong) NSNumber * value0;
+@property (nonatomic, readonly, getter=isValue0) NSNumber * value0;
 @property (nonatomic, strong) NSNumber * value00;
 @property (nonatomic, strong) NSArray * value1;
 @property (nonatomic, strong) NSDate * value2;
@@ -34,6 +35,12 @@ SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
 @property (nonatomic, strong) Test1 * t1;
 @end
 @implementation Test1
+-(instancetype) init{
+    self = [super init];
+    _dict =@{@"a":@"ba"};
+    _value0 = @(4);
+    return self;
+}
 @end
 @interface Test2:Test1
 @property (nonatomic) NSString * name2;
@@ -55,6 +62,32 @@ NSTimer * timer;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    lockForDefault(^{
+        NSLog(@"0");
+        lockForDefault(^{
+            NSLog(@"01");
+        });
+        lockForDefault(^{
+            NSLog(@"02");
+        });
+    });
+    threadJoinGlobal(^{
+        sleep(3);
+        float v = app_cpu_usage();
+//        vm_size_t v1 = app_memory_usage();
+//        int64_t v2 = device_memory_usage();
+//        int64_t v3 = device_memory();
+        NSLog(@"");
+    });
+    Test1 * t1 = [Test1 new];
+    t1.t1 = [Test1 new];
+    id a = [t1 objectToDictionary];
+    t1 = [Test1 objectWithDictionary:a];
+    
+//    [@"aalf[sdf]sd[asd]" stringsForRegex:@"(\\[[a-zA-Z]{1,100}\\])"];
+    id va1 = [@(33.33003846) stringValueWithPrecision:12];
+    id va2 = [@(3487.0035) stringValueWithPrecision:3];
+    id va3 = [@(25) stringValueWithPrecision:0];
     NSDate * date =[NSDate date];
     date = [date setCompentsWithBinary:0b111111];
     
@@ -97,7 +130,6 @@ NSTimer * timer;
     t2.name1 = @"name1";
     t2.name2 = @"name2";
     t2.action = @selector(appendFormat:);
-    t2.value0 = @(2);
     t2.value00 = @(2.2);
     t2.value4 = @{@"adfa":@"sdf"};
     t2.value5 = @[@{@"v2":@(3), @"v1":@(1.2)}];

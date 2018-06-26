@@ -72,7 +72,15 @@
  */
 -(BOOL) matchBankNumber;
 
--(BOOL) mathMoneyCN;
+/**
+ 通过正则表达式找出所以匹配的String
+ */
+-(nullable NSArray<NSString *> *) stringsForRegex:(nonnull NSString *) regexstr;
+
+/**
+ 通过正则表达式找出所以匹配的Ranges
+ */
+-(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr;
 
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
 

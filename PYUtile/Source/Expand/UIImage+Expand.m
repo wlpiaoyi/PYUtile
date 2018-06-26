@@ -111,7 +111,8 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
  */
 - (nullable UIImage *)fliterMatrixWithColor:(nonnull NSString*) color rect:(CGRect) rect{
     @try {
-        
+        rect.size.width *= self.scale;
+        rect.size.height *= self.scale;
         CIImage *ciImage = [[CIImage alloc] initWithImage:self];
         CIFilter *filter = [CIFilter filterWithName:color];
         [filter setValue:ciImage forKey:kCIInputImageKey];
@@ -120,7 +121,7 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
         CIContext *context = [CIContext contextWithOptions:nil];
         CIImage *outputImage = [filter outputImage];
         CGImageRef cgImage = [context createCGImage:outputImage fromRect:rect];
-        UIImage *image = [UIImage imageWithCGImage:cgImage];
+        UIImage *image = [UIImage imageWithCGImage:cgImage scale:self.scale orientation:UIImageOrientationUp];
         CGImageRelease(cgImage);
         return image;
     }

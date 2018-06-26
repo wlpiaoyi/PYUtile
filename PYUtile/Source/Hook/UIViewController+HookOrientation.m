@@ -45,7 +45,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
 }
 
 //重写父类方法判断支持的旋转方向
--(NSUInteger) exchangeSupportedInterfaceOrientations{
+-(UIInterfaceOrientationMask) exchangeSupportedInterfaceOrientations{
     __block BOOL isExcute = true;
     NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> * delegates = [self.class delegateOrientations];
     
@@ -55,7 +55,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         }
     } target:self];
     
-    __block NSUInteger result = 0;
+    __block UIInterfaceOrientationMask result = 0;
     if (isExcute) {
         result = [self exchangeSupportedInterfaceOrientations];
     }
@@ -83,7 +83,6 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
     if (isExcute) {
         result = [self exchangePreferredInterfaceOrientationForPresentation];
     }
-    
     [UIViewController hookOrientationIteratorTable:delegates block:^(id delegate){
         if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredInterfaceOrientationForPresentationWithTarget:)]) {
             result = [delegate afterExcutePreferredInterfaceOrientationForPresentationWithTarget:self];

@@ -7,6 +7,7 @@
 //
 
 #import "NSNumber+Expand.h"
+#import "NSString+Expand.h"
 
 @implementation NSNumber(Expand)
 /**
@@ -14,68 +15,50 @@
  @percision 精度控制
  */
 -(NSString*) stringValueWithPrecision:(int) precision{
-    if(self.doubleValue < 0.01){
-        return @"0";
-    }
-    NSString *result = [self stringValue];
-    NSArray *resultArray = [result componentsSeparatedByString:@"."];
-    if (![resultArray count]) {
-        return @"0";
+    
+    if(precision == 0){
+        return [NSString stringWithFormat:@"%ld", self.integerValue];
     }
     
-    result = resultArray.firstObject;
+    NSMutableString * format = [NSMutableString new];
+    [format appendString:@"%."];
+    [format appendFormat:@"%if", precision];
     
-    if ([result isEqualToString:@""]) {
-        return @"0";
+    NSString * value = [NSString stringWithFormat:format, self.doubleValue];
+    NSArray<NSTextCheckingResult *> * matches = [value matchesForRegex:@"\\.[0-9]{1,}"];
+    
+    if(matches.count != 1) return value;
+    if(matches.firstObject.numberOfRanges < 1) return value;
+    
+    
+    NSRange range = [matches.firstObject rangeAtIndex:0];
+    NSString * component = [value substringWithRange:range];
+    
+    if([NSString matchArg:component regex:@"^\\.0{0,}$"]){
+        value = [value stringByReplacingCharactersInRange:range withString:@""];
+        return value;
     }
     
-    if ([resultArray count]==1) {
-        return result;
-    }
+    NSArray<NSTextCheckingResult *> * cmatches = [component matchesForRegex:@"[1-9]{1,}0{1,}$"];
     
-    result = resultArray.firstObject;
-    NSString *precisionStr = resultArray.lastObject;
-    if ([precisionStr isEqualToString:@""]||precisionStr==nil) {
-        return result;
-    }
+    if(cmatches.count != 1) return value;
+    if(cmatches.firstObject.numberOfRanges < 1) return value;
+    
+    NSRange crange = [cmatches.firstObject rangeAtIndex:0];
+    NSString * ccomponent = [component substringWithRange:crange];
     
     
-    const char *precisionChar = [precisionStr UTF8String];
+    NSArray<NSTextCheckingResult *> * ccmatches = [ccomponent matchesForRegex:@"0{1,}$"];
     
-    int strlenght = (int)strlen(precisionChar);
-    if (precision>0) {
-        int zeroCount = strlenght;
-        for (int index = strlenght; index > 0 ;index--) {
-            if (precisionChar[index]!='0') {
-                break;
-            }
-            zeroCount--;
-        }
-        
-        for (int index = 0; index < strlen(precisionChar); index++) {
-            if (index>=zeroCount) {
-                break;
-            }
-            if (index>=precision) {
-                break;
-            }
-            if (index == 0) {
-                result = [result stringByAppendingString:@"."];
-            }
-            result = [result stringByAppendingFormat:@"%c",precisionChar[index]];
-        }
-    }else if(precision<0){
-        const char *values = [result UTF8String];
-        result = @"";
-        int lengthValues = (int)strlen(values)+precision;
-        for (int index = 0; index < strlen(values); index++) {
-            if (index>=lengthValues) {
-                result = [result stringByAppendingString:@"0"];
-            }else{
-                result = [result stringByAppendingFormat:@"%c",values[index]];
-            }
-        }
-    }
-    return  result;
+    if(ccmatches.count != 1) return value;
+    if(ccmatches.firstObject.numberOfRanges < 1) return value;
+    
+    NSRange ccrange = [ccmatches.firstObject rangeAtIndex:0];
+    
+    ccomponent = [ccomponent stringByReplacingCharactersInRange:ccrange withString:@""];
+    component = [component stringByReplacingCharactersInRange:crange withString:ccomponent];
+    value = [value stringByReplacingCharactersInRange:range withString:component];
+    
+    return  value;
 }
 @end

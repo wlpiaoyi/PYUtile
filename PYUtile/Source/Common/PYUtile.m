@@ -11,6 +11,9 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <sys/utsname.h>
 #import <mach/mach.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <mach/machine.h>
 
 
 NSString * documentDir;
@@ -31,11 +34,9 @@ void threadJoinGlobal(dispatch_block_t block){
 }
 
 void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore){
-    threadJoinGlobal(^{
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        block();
-        dispatch_semaphore_signal(semaphore);
-    });
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    block();
+    dispatch_semaphore_signal(semaphore);
 }
 
 void lockForDefault(dispatch_block_t block){
@@ -158,8 +159,10 @@ double parseCoordinateToDistance(double lat1, double lng1, double lat2, double l
     s =  round(s * 10000) / 10000;
     return s;
 }
-
-float cpu_usage(void){
+/**
+ app cup使用率
+ */
+float app_cpu_usage(void){
     kern_return_t			kr = { 0 };
     task_info_data_t		tinfo = { 0 };
     mach_msg_type_number_t	task_info_count = TASK_INFO_MAX;

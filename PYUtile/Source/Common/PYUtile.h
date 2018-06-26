@@ -194,9 +194,9 @@ double parseCoordinateToDistance(double lat1, double lng1, double lat2, double l
 NSString * _Nullable PYUUID(NSUInteger length);
 
 /**
- cup使用率
+ app cup使用率
  */
-float cpu_usage(void);
+float app_cpu_usage(void);
 
 @interface PYUtile : NSObject
 

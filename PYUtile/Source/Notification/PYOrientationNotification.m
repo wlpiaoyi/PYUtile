@@ -76,10 +76,10 @@ static PYOrientationNotification *xPYOrientationNotification;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
         [UIViewController attemptRotationToDeviceOrientation];//这句是关键
-        if(systemVersion.floatValue >= 10.)
-            return completion ? [NSTimer scheduledTimerWithTimeInterval:self.duration repeats:NO block:completion] : nil;
-        else{
-            NSTimeInterval duration = self.duration;
+        if (@available(iOS 10.0, *)) {
+            return completion ? [NSTimer scheduledTimerWithTimeInterval:.25 repeats:NO block:completion] : nil;
+        } else {
+            NSTimeInterval duration = 2.5;
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [NSThread sleepForTimeInterval:duration];
                 dispatch_async(dispatch_get_main_queue(), ^{
