@@ -61,9 +61,21 @@ UIResponderHookBaseDelegateImp * xUIResponderHookBaseDelegateImp;
 
 @implementation PYKeyboardNotification
 +(void) initialize{
-    syn_UIResponder_Keyboard = [NSObject new];
+    static dispatch_once_t onceToken; dispatch_once(&onceToken, ^{
+        syn_UIResponder_Keyboard = [NSObject new];
+        PYCurrentKeyboardFrame = CGRectZero;
+        [UIResponder hookWithMethodNames:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(PY_KEYBOARD_SHOW:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(PY_KEYBOARD_HIDDEN:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    });
+}
++(void) PY_KEYBOARD_SHOW:(NSNotification *)notification{
+    PYCurrentKeyboardFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+}
++(void) PY_KEYBOARD_HIDDEN:(NSNotification *)notification{
     PYCurrentKeyboardFrame = CGRectZero;
-    [UIResponder hookWithMethodNames:nil];
 }
 /**
  键盘监听事件添加

@@ -127,7 +127,7 @@
  topActive,leftActive,bottomActive,rightActive 是否在安全区
  topPoint,leftPoint,bottomPoint,rightPoint 边距参照对象
  */
--(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, NSNumber *> *) autoLayoutDict{
+-(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, id> *) autoLayoutDict{
     NSNumber * x = autoLayoutDict[@"x"];
     NSNumber * y = autoLayoutDict[@"y"];
     NSNumber * w = autoLayoutDict[@"w"];
@@ -135,16 +135,16 @@
     
     NSNumber * top = autoLayoutDict [@"top"];
     NSNumber * topActive = autoLayoutDict [@"topActive"];
-    NSNumber * topPoint = autoLayoutDict [@"topPoint"];
+    UIResponder * topPoint = autoLayoutDict [@"topPoint"];
     NSNumber * left = autoLayoutDict [@"left"];
     NSNumber * leftActive = autoLayoutDict [@"leftActive"];
-    NSNumber * leftPoint = autoLayoutDict [@"leftPoint"];
+    UIResponder * leftPoint = autoLayoutDict [@"leftPoint"];
     NSNumber * bottom = autoLayoutDict [@"bottom"];
     NSNumber * bottomActive = autoLayoutDict [@"bottomActive"];
-    NSNumber * bottomPoint = autoLayoutDict [@"bottomPoint"];
+    UIResponder * bottomPoint = autoLayoutDict [@"bottomPoint"];
     NSNumber * right = autoLayoutDict [@"right"];
     NSNumber * rightActive = autoLayoutDict [@"rightActive"];
-    NSNumber * rightPoint = autoLayoutDict [@"rightPoint"];
+    UIResponder * rightPoint = autoLayoutDict [@"rightPoint"];
     
     NSDictionary * point = [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(x ? x.doubleValue : DisableConstrainsValueMAX, y ? y.doubleValue : DisableConstrainsValueMAX)];
     
