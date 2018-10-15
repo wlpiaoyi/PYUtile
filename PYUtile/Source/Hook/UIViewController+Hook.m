@@ -19,7 +19,7 @@ static NSArray<Class> * PYCanExcuHookMethodVCS;
     dispatch_once(&onceToken, ^{
         if(!PYCanExcuHookMethodVCS.count){
             PYCanExcuHookMethodVCS = @[
-                                       NSClassFromString(@"PYPopupController"),
+                                       NSClassFromString(@"PYInterflowController"),
                                        NSClassFromString(@"UIInputWindowController")
                                        ];
         }
