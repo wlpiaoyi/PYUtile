@@ -7,14 +7,13 @@
 //
 
 #import "NSData+Expand.h"
+#import "PYUtile.h"
 
 @implementation NSData(Expand)
 -(id _Nullable) toDictionary{
     NSError *error;
     id obj = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingMutableContainers error:&error];
-    if (error) {
-        NSAssert(NO, error.domain);
-    }
+    if (error) kPrintErrorln("Data to Dict erro:[%@]",error.debugDescription.UTF8String);
     return obj;
 }
 -(nullable NSString *) toString{

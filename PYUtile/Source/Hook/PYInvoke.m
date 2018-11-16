@@ -96,8 +96,9 @@
 /**
  获取指定成员属性描述
  */
-+(nonnull NSDictionary*) getPropertyInfoWithClass:(nonnull Class) clazz propertyName:(nonnull NSString*) propertyName{
++(nullable NSDictionary *) getPropertyInfoWithClass:(nonnull Class) clazz propertyName:(nonnull NSString*) propertyName{
     objc_property_t property = class_getProperty(clazz, [propertyName UTF8String]);
+    if(property == nil) return nil;
     return [self getPropertyInfoWithProperty:property];
 }
 

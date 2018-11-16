@@ -20,7 +20,7 @@
 /**
  获取指定成员属性描述
  */
-+(nonnull NSDictionary*) getPropertyInfoWithClass:(nonnull Class) clazz propertyName:(nonnull NSString*) propertyName;
++(nullable NSDictionary*) getPropertyInfoWithClass:(nonnull Class) clazz propertyName:(nonnull NSString*) propertyName;
 /**
  获取所有成员属性描述
  */

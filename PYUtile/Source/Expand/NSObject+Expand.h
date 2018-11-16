@@ -39,6 +39,20 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  通过对象生成JSON
  */
 -(nullable NSObject*) objectToDictionaryWithDeepClass:(nullable Class) deepClass;
+
+/**
+ 将当前对象装换成form表单
+ 如果数组需要index, 这要使用has_index_{propertyname}标记
+ @param suffix 表单前缀
+ */
+-(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix;
+/**
+ 将当前对象装换成form表单
+ 如果数组需要index, 这要使用has_index_{propertyname}标记
+ @param suffix 表单前缀
+ @param clazz 类型
+ */
+-(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix clazz:(nullable Class) clazz;
 /**
  通过对象生成JSON
  #param fliteries 过滤标识

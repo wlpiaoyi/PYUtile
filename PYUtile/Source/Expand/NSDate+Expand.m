@@ -8,7 +8,53 @@
 #import "NSDate+Expand.h"
 
 @implementation NSDate (Expand)
-
+/**
+ 友好的日期描述
+ */
+-(nonnull NSString *) dateDescribe{
+    
+    NSInteger offday = ([self clearedWithBinary:0b1110000].timeIntervalSince1970 - [[NSDate date] clearedWithBinary:0b1110000].timeIntervalSince1970)/(3600 * 24);
+    switch (offday) {
+        case 0:
+            return @"今天";
+        case 1:
+            return @"明天";
+        case 2:
+            return @"后天";
+        case -2:
+            return @"前天";
+        case -1:
+            return @"昨天";
+        default:
+            break;
+    }
+    
+    NSString * weekDay;
+    switch (self.weekday) {
+        case 1:
+            weekDay = @"周日";
+            break;
+        case 2:
+            weekDay = @"周一";
+            break;
+        case 3:
+            weekDay = @"周二";
+            break;
+        case 4:
+            weekDay = @"周三";
+            break;
+        case 5:
+            weekDay = @"周四";
+            break;
+        case 6:
+            weekDay = @"周五";
+            break;
+        default:
+            weekDay = @"周六";
+            break;
+    }
+    return [NSString stringWithFormat:@"%@ %@", [self dateFormateDate:@"yyyy-MM-dd"],weekDay];
+}
 -(int)year {
     NSCalendar *gregorian = [[NSCalendar alloc]
                              initWithCalendarIdentifier:NSGregorianCalendar];

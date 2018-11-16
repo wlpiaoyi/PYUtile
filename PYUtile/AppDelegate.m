@@ -11,45 +11,24 @@
 #import <objc/runtime.h>
 #import "PYXml.h"
 #import "PYNetworkReachabilityNotification.h"
-SINGLETON_SYNTHESIZE_FOR_hCLASS(PyTest, NSObject, <NSObject>);
-@end
-SINGLETON_SYNTHESIZE_FOR_mCLASS(PyTest){
-    
-}
-@end
 
-@interface Test1:NSObject<UITextFieldDelegate>{
-@public int _pvalue0;
-@private NSDictionary * _dict;
+@interface Test1:NSObject{
+@public int _pint;
+@private NSDictionary * _pdict;
 }
-@property (nonatomic, strong) NSString * name1;
-@property (nonatomic) SEL action;
-@property (nonatomic, readonly, getter=isValue0) NSNumber * value0;
-@property (nonatomic, strong) NSNumber * value00;
-@property (nonatomic, strong) NSArray * value1;
-@property (nonatomic, strong) NSDate * value2;
-@property (nonatomic, retain) NSData * value3;
-@property (nonatomic, retain) NSDictionary * value4;
-@property (nonatomic, strong) NSArray * value5;
-@property (nonatomic, strong) NSURL * url;
-@property (nonatomic, strong) Test1 * t1;
+@property (nonatomic, strong) NSString * keyNewP1;
+@property (nonatomic, strong) NSNumber * keyId;
+@property (nonatomic, strong) NSArray<NSArray <Test1 *> *> * parray1;
+@property (nonatomic, strong) NSArray<Test1 *> * parray2;
+@property (nonatomic, strong) Test1 * property_parray1;
+@property (nonatomic, strong) Test1 * property_parray2;
+@property (nonatomic, strong) id has_index_parray1;
 @end
 @implementation Test1
 -(instancetype) init{
     self = [super init];
-    _dict =@{@"a":@"ba"};
-    _value0 = @(4);
     return self;
 }
-@end
-@interface Test2:Test1
-@property (nonatomic) NSString * name2;
-@end
-@implementation Test2
-@end
-@interface Test3:NSObject
-@end
-@implementation Test3
 @end
 
 NSTimer * timer;
@@ -62,8 +41,20 @@ NSTimer * timer;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    NSString * a = [PYUtile MD5ForLower32Bate:@"adfasdf39847$%"];
+    Test1 * t1 = [Test1 new];
+    t1->_pint = 2;
+    t1.keyNewP1 = @"str";
+    t1.keyId = @(3);
+    NSDictionary * dict1 = [t1 objectToDictionary];
+    t1.parray1 = @[@[[Test1 objectWithDictionary:dict1], [Test1 objectWithDictionary:dict1]],@[[Test1 objectWithDictionary:dict1]]];
+    t1.parray2 = @[[Test1 objectWithDictionary:dict1],[Test1 objectWithDictionary:dict1]];
+    dict1 = [t1 objectToDictionary];
+    t1 = [Test1 objectWithDictionary:dict1];
+    [NSObject dictionaryAnalysisForClass:dict1];
+    NSLog([NSObject dictionaryAnalysisForClass:dict1]);
+    NSLog([t1 objectToFormWithSuffix:@"param"]);
+    NSLog([t1 objectToFormWithSuffix:nil]);
+//    NSString * a = [PYUtile MD5ForLower32Bate:@"adfasdf39847$%"];
 
     return YES;
 }

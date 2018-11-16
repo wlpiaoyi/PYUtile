@@ -7,17 +7,21 @@
 //
 
 #import "NSObject+Expand.h"
-#import "NSData+Expand.h"
-#import "NSString+Expand.h"
 #import <objc/runtime.h>
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
 #import "PYInvoke.h"
 #import "PYUtile.h"
+#import "NSString+Expand.h"
+#import "NSNumber+Expand.h"
+#import "NSDictionary+Expand.h"
+#import "NSData+Expand.h"
+#import "NSDate+Expand.h"
 
 static char * PYObjectParsedictFailedKey = "pyobj_parsed_failed";
-static NSArray * NSObjectToDictionaryPaserClasses;
-static NSDictionary * NSObjectToDictionaryKeyPaseDict;
+static NSArray * __PY_OBJ_TO_DICT_CLASS;
+static NSDictionary * __PY_FIELD_KEY_NAME;
+static NSDictionary * __PY_FIELD_HEAD_NAME;
 static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = ^id (NSInvocation * _Nonnull invocatioin, const char * typeEncoding){
     return nil;
 };
@@ -30,65 +34,20 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
    return  [NSBundle bundleForClass:self] != NSBundle.mainBundle;
 }
 
-+(NSDictionary *) pyutile_objectKeyPaseDict{
-    if (NSObjectToDictionaryKeyPaseDict == nil) {
-        NSObjectToDictionaryKeyPaseDict = @{
-                                            @"id":@"keyId",@"keyId":@"id",
-                                            @"description":@"keyDescription", @"keyDescription":@"description"
-                                            };
-    }
-    return NSObjectToDictionaryKeyPaseDict;
-}
-+(NSArray *) pyutile_objectParseClasses{
-    if (NSObjectToDictionaryPaserClasses == nil) {
-        NSObjectToDictionaryPaserClasses = @[[NSURL class]
-                                             ,[NSNumber class]
-                                             ,[NSString class]
-                                             ,[NSDate class]
-                                             ,[NSData class]];
-    }
-    return NSObjectToDictionaryPaserClasses;
-}
-+(BOOL) pyutile_canParseClass:(Class) clazz{
-    for (Class c in [self pyutile_objectParseClasses]) {
-        if (c == clazz ||  [clazz isSubclassOfClass:c]) {
-            return true;
-        }
-    }
-    return false;
-}
 /**
  通过JSON初始化对象
  */
 +(instancetype) objectWithDictionary:(NSObject*) dictionary{
     return [self objectWithDictionary:dictionary clazz:self];
 }
-+(const char *) pyutile_getTypeEncodingForProperty:(objc_property_t) property ivar:(Ivar) ivar{
-    if(property){
-        unsigned int count;
-        objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
-        return attribute[0].value;
-    }else if(ivar){
-        return ivar_getTypeEncoding(ivar);
-    }
-    return "";
-}
-+(Class) pyutile_getClassForTypeEncoding:(const char *) typeEncoding{
-    size_t tedl = strlen(typeEncoding);
-    if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-        if(strlen(typeEncoding)){
-            NSArray * classArgs = [[NSString stringWithUTF8String:typeEncoding] componentsSeparatedByString:@"\""];
-             return NSClassFromString(classArgs[1]);
-        }
-    }
-    return nil;
-}
 /**
  通过JSON初始化对象
  */
 +(nullable id) objectWithDictionary:(NSObject*) dictionary clazz:(Class) clazz{
     
-    id result = [self dictParset:dictionary clazz:clazz];
+    if(dictionary == nil) return nil;
+    
+    id result = [self __PY_DICT_PASET:dictionary _CLAZZ:clazz];
     if(result) return result;
     
     if(![dictionary isKindOfClass:[NSDictionary class]]) return nil;
@@ -98,11 +57,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     if (!target)  return nil;
     
     for (NSString *key in [((NSDictionary *)dictionary) allKeys]) {
-        NSString * fieldKey = key;
-        if ([NSObject pyutile_objectKeyPaseDict][key]) {
-            fieldKey = [NSObject pyutile_objectKeyPaseDict][key];
-        }
-        
+        NSString * fieldKey = [NSObject __PY_OBJ_FIELD_KEY_CHECK:key];
         id value = ((NSDictionary *)dictionary)[key];
         if (value == nil || value == [NSNull null]) {
             continue;
@@ -112,7 +67,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
             objc_property_t property = class_getProperty(clazz, key.UTF8String);
             Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
             if(property || ivar){
-                typeEncoding = [NSObject pyutile_getTypeEncodingForProperty:property ivar:ivar];
+                typeEncoding = [NSObject __PY_GET_TYPEENCODING_FOR_PROPERTY:property IVAR:ivar];
             } else {
                 return false;
             }
@@ -138,34 +93,21 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
                 value = nil;
                 continue;
             }
-            
             if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
                 objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",fieldKey].UTF8String);
                 Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",fieldKey].UTF8String);
-                Class arrayClazz = nil;
+                Class valuesClazz = nil;
                 if(cproperty || civar){
-                    const char * teding = [NSObject pyutile_getTypeEncodingForProperty:cproperty ivar:civar];
-                    arrayClazz = [NSObject pyutile_getClassForTypeEncoding:teding];
+                    const char * teding = [NSObject __PY_GET_TYPEENCODING_FOR_PROPERTY:cproperty IVAR:civar];
+                    valuesClazz = [NSObject pyutile_getClassForTypeEncoding:teding];
                 }
-                id objs = [cClazz isSubclassOfClass:[NSArray class]] ? [NSMutableArray new]: [NSMutableSet new];
-                for (NSObject * obj in value) {
-                    id cvalue = nil;
-                    if(arrayClazz){
-                        cvalue = [arrayClazz objectWithDictionary:obj];
-                    }else if([NSObject pyutile_canParseClass:[obj class]]){
-                        cvalue = obj;
-                    }
-                    if(cvalue){
-                        if([objs isKindOfClass:[NSArray class]]){
-                            [((NSMutableArray *)objs) addObject:cvalue];
-                        }else{
-                            [((NSMutableSet *)objs) addObject:cvalue];
-                        }
-                    }
+                if(valuesClazz){
+                    value = [NSObject __PY_VALUE_FOREACH:value CLAZZ:valuesClazz];
+                }else{
+                    value = value;
                 }
-                value = objs;
-            }else if([NSObject pyutile_canParseClass:cClazz]){
-                value = [self dictParset:value clazz:cClazz];
+            }else if([NSObject __PY_CAN_PARSET_CLASS:cClazz]){
+                value = [self __PY_DICT_PASET:value _CLAZZ:cClazz];
             }else{
                 Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
                 value = [cClazz objectWithDictionary:value];
@@ -205,7 +147,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     return [self objectToDictionaryWithFliteries:nil];
 }
 -(NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries{
-    return [NSObject objectToDictionaryWithObject:self clazz:nil deep:0 fliteries:fliteries];
+    return [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:self CLAZZ:nil DEEP:0 FLITERIES:fliteries];
 }
 
 /**
@@ -222,7 +164,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     Class clazz = [self class];
     while (true)  {
         if(clazz == [NSObject class]) break;
-        NSDictionary * dict = (NSDictionary *)[NSObject objectToDictionaryWithObject:self clazz:clazz deep:0 fliteries:fliteries];
+        NSDictionary * dict = (NSDictionary *)[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:self CLAZZ:clazz DEEP:0 FLITERIES:fliteries];
         if([dict isKindOfClass:[NSDictionary class]]){
             for (NSString * key in dict) {
                 result[key] = dict[key];
@@ -237,34 +179,103 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     }
     return result ;
 }
+/**
+ 将当前对象装换成form表单
+ 如果数组需要index, 这要使用has_index_{propertyname}标记
+ @param suffix 表单前缀
+ */
+-(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix{
+    return [NSObject __PY_FORM_WITH_SUFFIX:suffix OBJ:self CLAZZ:[self class] HASINDEX:NO];
+}
+/**
+ 将当前对象装换成form表单
+ 如果数组需要index, 这要使用has_index_{propertyname}标记
+ @param suffix 表单前缀
+ @param clazz 类型
+ */
+-(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix clazz:(nullable Class) clazz{
+    return [NSObject __PY_FORM_WITH_SUFFIX:suffix OBJ:self CLAZZ:clazz HASINDEX:NO];
+}
 
 /**
  通过dictionary解析出实体结构
- 参考
  */
 +(nullable NSString *) dictionaryAnalysisForClass:(nonnull NSDictionary*) dictionary{
     NSMutableArray * otherStructs = [NSMutableArray new];
-    [self py_dictionaryAnalysis:dictionary key:nil className:@"BASE" otherStructs:otherStructs];
+    [self __PY_DICT_ANALYSIS:dictionary KEY:nil CLASSNAME:@"BASE" otherStructs:otherStructs];
     NSMutableString * structStr = [NSMutableString new];
     for (NSString * oss in otherStructs) {
         [structStr appendString:oss];
     }
     return structStr;
 }
-+(nullable NSString *) py_dictionaryAnalysis:(nonnull NSObject *) obj key:(nullable NSString *) key className:(nullable NSString *) className otherStructs:(nullable NSMutableArray *) otherStructs{
+
++(nullable NSString *) __PY_FORM_WITH_SUFFIX:(nullable NSString *) suffix OBJ:(nonnull NSObject *) object CLAZZ:(nullable Class) clazz HASINDEX:(BOOL) hasIndex{
+    if(suffix && suffix.length > 0){
+        if([NSObject __PY_CAN_PARSET_CLASS:[object class]]){
+            return kFORMAT(@"&%@=%@", suffix, [object objectToDictionary]);
+        }else if([object isKindOfClass:[NSArray class]] && hasIndex){
+            NSMutableString * form = [NSMutableString new];
+            NSUInteger index = 0;
+            for (NSObject * value in (NSArray *)object) {
+                [form appendString:[self __PY_FORM_WITH_SUFFIX:kFORMAT(@"%@[%ld]", suffix, index) OBJ:value CLAZZ:nil HASINDEX:YES] ];
+                index++;
+            }
+            return form;
+        }else if([object isKindOfClass:[NSArray class]] && !hasIndex){
+            NSMutableString * form = [NSMutableString new];
+            for (NSObject * value in (NSArray *)object) {
+                [form appendString:[self __PY_FORM_WITH_SUFFIX:kFORMAT(@"%@[]", suffix) OBJ:value CLAZZ:nil HASINDEX:NO]];
+            }
+            return form;
+        }
+    }
+    
+    if([NSObject __PY_CAN_PARSET_CLASS:[object class]]){
+        kPrintErrorln("formWithSuffix[%s] erro!!\n", NSStringFromClass([object class]).UTF8String);
+        return nil;
+    }
+    
+    if(!clazz) clazz = [object class];
+    NSMutableString * form = [NSMutableString new];
+    NSArray<NSDictionary*>* properties = [PYInvoke getPropertyInfosWithClass:clazz];
+    for (NSDictionary * property in properties) {
+        NSString * name = property[@"name"];//
+        NSObject * value = [object valueForKey:name];
+        if(value == nil) continue;
+        NSString * keySuffix = nil;
+        if(suffix && suffix.length > 0){
+            keySuffix = kFORMAT(@"%@[%@]", suffix, [NSObject __PY_OBJ_FIELD_KEY_CHECK:name]);
+        }else keySuffix = [NSObject __PY_OBJ_FIELD_KEY_CHECK:name];
+        BOOL __hasIndex = NO;
+        if([value isKindOfClass:[NSArray class]]){
+            __hasIndex = [PYInvoke getPropertyInfoWithClass:[object class] propertyName:kFORMAT(@"has_index_%@", name)] != nil;
+        }
+        [form appendString:[self __PY_FORM_WITH_SUFFIX:keySuffix OBJ:value CLAZZ:nil  HASINDEX:__hasIndex]];
+    }
+    
+    return form;
+
+}
+
++(nullable NSString *) __PY_DICT_ANALYSIS:(nonnull NSObject *) obj KEY:(nullable NSString *) key CLASSNAME:(nullable NSString *) className otherStructs:(nullable NSMutableArray *) otherStructs{
     if(!key && className){
         if([obj isKindOfClass:[NSDictionary class]]){
             NSMutableString * structStr = [NSMutableString new];
             [structStr appendFormat:@"@interface PYDA%@ : NSObject\n\n", className];
             for (NSString * k in (NSDictionary *)obj) {
                 id value = ((NSDictionary *)obj)[k];
-                [structStr appendString:[self py_dictionaryAnalysis:value key:k className:nil otherStructs:otherStructs]];
+                [structStr appendString:[self __PY_DICT_ANALYSIS:value KEY:k CLASSNAME:nil otherStructs:otherStructs]];
             }
             [structStr appendString:@"\n@end\n\n\n"];
             [otherStructs addObject:structStr];
+        }else if([obj isKindOfClass:[NSArray class]] || [obj isKindOfClass:[NSSet class]]){
+            if(((NSArray *)obj).count > 0){
+                [self __PY_DICT_ANALYSIS:((NSArray *)obj).firstObject KEY:nil CLASSNAME:className otherStructs:otherStructs];
+            }
         }
     }else if (key){
-        key = NSObjectToDictionaryKeyPaseDict[key] ? : key;
+        key = [NSObject __PY_OBJ_FIELD_KEY_CHECK:key];
         if([obj isKindOfClass:[NSString class]]){
             return kFORMAT(@"kPNSNA NSString * %@;//%@\n", key, [obj description]);
         }else if([obj isKindOfClass:[NSNumber class]]){
@@ -273,13 +284,13 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
             }else{
                 return kFORMAT(@"kPNA NSInteger %@;//%@\n", key, [obj description]);
             }
-        }else if ([obj isKindOfClass:[NSArray class]]){
+        }else if ([obj isKindOfClass:[NSArray class]] || [obj isKindOfClass:[NSSet class]]){
             if(((NSArray *)obj).count > 0){
-                [self py_dictionaryAnalysis:((NSArray *)obj).firstObject key:nil className:key otherStructs:otherStructs];
+                [self __PY_DICT_ANALYSIS:((NSArray *)obj).firstObject KEY:nil CLASSNAME:key otherStructs:otherStructs];
             }
             return kFORMAT(@"kPNSNA NSArray * %@;\nkPNSNA PYDA%@ * property_%@;\n", key, key, key);
         }else if([obj isKindOfClass:[NSDictionary class]]){
-            [self py_dictionaryAnalysis:obj key:nil className:key otherStructs:otherStructs];
+            [self __PY_DICT_ANALYSIS:obj KEY:nil CLASSNAME:key otherStructs:otherStructs];
             return kFORMAT(@"kPNSNA PYDA%@ * %@;\n", key, key);
         }
     }
@@ -287,11 +298,11 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 }
 
 
-+(NSObject*) objectToDictionaryWithObject:(nonnull NSObject *) object clazz:(Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
-    id result = [self objectParset:object];
++(NSObject*) __PY_OBJ_TO_DICT_WITH_OBJ:(nonnull NSObject *) object CLAZZ:(Class) clazz DEEP:(int) deep FLITERIES:(nullable NSArray<Class> *) fliteries{
+    id result = [self __PY_OBJECT_PARSET:object];
     if(result) return result;
     
-    result = [self objectCheck:object deep:deep fliteries:fliteries];
+    result = [self __PY_OBJ_CHECK:object DEEP:deep FILTERIRES:fliteries];
     if(result) return result;
     if(!clazz) clazz = [object class];
     
@@ -300,10 +311,10 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
         for (NSString * key in (NSDictionary *)object) {
             NSObject * value = ((NSDictionary *)object)[key];
             if(!value) continue;
-            if ([NSObject pyutile_canParseClass:value.class]){
-                value = [NSObject objectParset:value];
+            if ([NSObject __PY_CAN_PARSET_CLASS:value.class]){
+                value = [NSObject __PY_OBJECT_PARSET:value];
             }else{
-                value = [NSObject objectToDictionaryWithObject:value clazz:clazz deep:deep+1 fliteries:fliteries];
+                value = [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:value CLAZZ:clazz DEEP:deep+1 FLITERIES:fliteries];
             }
             if(!value) continue;
             tempDict[key] = value;
@@ -369,7 +380,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
                        }
                    }
                }
-            if(flagCanExcute) [self PYObjectToDictionarySetkeyvalueWithDict:dict clazz:clazz obj:object key:propertyName typeEncoding:typeEncoding deep:deep  fliteries:fliteries];
+            if(flagCanExcute) [self __PY_OBJ_TO_DICT_KEYVALUE_WITH_DICT:dict CLAZZ:clazz OBJ:object KEY:propertyName TYPE_ENCODING:typeEncoding deep:deep  fliteries:fliteries];
             else{
                 kPrintLogln("the property '%s' type '%s' is assign, we can't archived it", propertyName.UTF8String, typeEncoding);
             }
@@ -383,7 +394,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
             }
             if([dict valueForKey:ivarName] != nil) continue;
             const char * typeEncoding = ivar_getTypeEncoding(ivar);
-            [self PYObjectToDictionarySetkeyvalueWithDict:dict clazz:clazz obj:object key:ivarName typeEncoding:typeEncoding deep:deep fliteries:fliteries];
+            [self __PY_OBJ_TO_DICT_KEYVALUE_WITH_DICT:dict CLAZZ:clazz OBJ:object KEY:ivarName TYPE_ENCODING:typeEncoding deep:deep fliteries:fliteries];
         }
     }
     @finally {
@@ -400,7 +411,7 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 }
 
 #pragma mark 归档数据
-+(void) PYObjectToDictionarySetkeyvalueWithDict:(NSMutableDictionary *) dict clazz:(Class) clazz obj:(NSObject *) obj key:(NSString *) key typeEncoding:(const char *) typeEncoding
++(void) __PY_OBJ_TO_DICT_KEYVALUE_WITH_DICT:(NSMutableDictionary *) dict CLAZZ:(Class) clazz OBJ:(NSObject *) obj KEY:(NSString *) key TYPE_ENCODING:(const char *) typeEncoding
                                            deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
     static NSDictionary *PYObjectSuperPropertNameDict;
     static dispatch_once_t onceToken;
@@ -482,38 +493,57 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     if ([returnValue isKindOfClass:[NSArray class]]) {
         NSMutableArray * objs = [NSMutableArray new];
         for (id obj in (NSArray*)returnValue) {
-            id value = [NSObject objectToDictionaryWithObject:obj clazz:[obj class] deep:deep+1 fliteries:fliteries];
+            id value = [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
     }else if ([returnValue isKindOfClass:[NSSet class]]) {
         NSMutableArray * objs = [NSMutableArray new];
         for (NSObject * obj in (NSSet*)returnValue) {
-            NSObject * value =  [NSObject objectToDictionaryWithObject:obj clazz:[obj class] deep:deep+1 fliteries:fliteries];
+            NSObject * value =  [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
     }else if ([returnValue isKindOfClass:[NSDictionary class]]) {
-        returnValue = [NSObject objectToDictionaryWithObject:returnValue clazz:nil deep:deep+1 fliteries:fliteries];
+        returnValue = [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1 FLITERIES:fliteries];
     }else {
-        id tempValue = [NSObject objectParset:returnValue];
+        id tempValue = [NSObject __PY_OBJECT_PARSET:returnValue];
         if(tempValue) returnValue = tempValue;
         else{
-            returnValue = [NSObject objectToDictionaryWithObject:returnValue clazz:nil deep:deep+1  fliteries:fliteries];
+            returnValue = [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1  FLITERIES:fliteries];
         }
     }
     if(!returnValue){
         return;
     }
-    if([NSObject pyutile_canParseClass:returnValue.class]){
-        returnValue = [NSObject objectParset:returnValue];
+    if([NSObject __PY_CAN_PARSET_CLASS:returnValue.class]){
+        returnValue = [NSObject __PY_OBJECT_PARSET:returnValue];
     }
-    if([NSObject pyutile_objectKeyPaseDict][key])
-        [dict setObject:returnValue forKey:[NSObject pyutile_objectKeyPaseDict][key]];
-    else
-        [dict setObject:returnValue forKey:key];
+    [dict setObject:returnValue forKey:[NSObject __PY_OBJ_FIELD_KEY_CHECK:key]];
 }
-+(NSObject *) objectCheck:(NSObject *) object deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
+
++(const char *) __PY_GET_TYPEENCODING_FOR_PROPERTY:(objc_property_t) property IVAR:(Ivar) ivar{
+    if(property){
+        unsigned int count;
+        objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
+        return attribute[0].value;
+    }else if(ivar){
+        return ivar_getTypeEncoding(ivar);
+    }
+    return "";
+}
++(Class) pyutile_getClassForTypeEncoding:(const char *) typeEncoding{
+    size_t tedl = strlen(typeEncoding);
+    if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+        if(strlen(typeEncoding)){
+            NSArray * classArgs = [[NSString stringWithUTF8String:typeEncoding] componentsSeparatedByString:@"\""];
+            return NSClassFromString(classArgs[1]);
+        }
+    }
+    return nil;
+}
+
++(NSObject *) __PY_OBJ_CHECK:(NSObject *) object DEEP:(int) deep FILTERIRES:(nullable NSArray<Class> *) fliteries{
     
     if(fliteries && fliteries.count > 0 && [fliteries containsObject:object.class]){
         NSMutableString * key = [NSMutableString new];
@@ -530,11 +560,11 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     }
     return nil;
 }
-+(NSObject *) objectParset:(NSObject *) object{
-    if ([NSObject pyutile_canParseClass:object.class]){
++(NSObject *) __PY_OBJECT_PARSET:(NSObject *) object{
+    if ([NSObject __PY_CAN_PARSET_CLASS:object.class]){
         NSObject * returnValue = nil;
         if([object isKindOfClass:[NSData class]]){
-            returnValue = [((NSData *) object) toBase64String];
+            returnValue = [((NSData *) object) toString];
         }else if([object isKindOfClass:[NSDate class]]){
             returnValue = @([((NSDate *) object) timeIntervalSince1970]);
         }else if([object isKindOfClass:[NSURL class]]){
@@ -552,9 +582,9 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
     }
     return nil;
 }
-+(NSObject *) dictParset:(NSObject *) object clazz:(Class) clazz{
++(NSObject *) __PY_DICT_PASET:(NSObject *) object _CLAZZ:(Class) clazz{
     NSObject * returnValue = nil;
-    if ([NSObject pyutile_canParseClass:clazz]){
+    if ([NSObject __PY_CAN_PARSET_CLASS:clazz]){
         if([clazz isSubclassOfClass:[NSData class]] && [object isKindOfClass:[NSString class]]){
             NSData * tempData = [((NSString *) object) toData];
             returnValue = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
@@ -571,6 +601,79 @@ static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
         }
     }
     return returnValue;
+}
+
++(nonnull NSString *) __PY_OBJ_FIELD_KEY_CHECK:(nonnull NSString *) name{
+    if (__PY_FIELD_KEY_NAME == nil) {
+        __PY_FIELD_KEY_NAME = @{
+                              @"id":@"keyId",@"keyId":@"id",
+                              @"description":@"keyDescription", @"keyDescription":@"description"
+                                            };
+    }
+    if(__PY_FIELD_HEAD_NAME == nil){
+        __PY_FIELD_HEAD_NAME = @{
+                               @"new":@"keyNew",@"keyNew":@"new"
+                               };
+    }
+    
+    NSString * pname = __PY_FIELD_KEY_NAME[name];
+    if(pname) return pname;
+    
+    for (NSString * key in __PY_FIELD_HEAD_NAME) {
+        NSRange range = [name rangeOfString:key];
+        if(range.length > 0 && range.location == 0){
+            pname = [name stringByReplacingCharactersInRange:range withString:__PY_FIELD_HEAD_NAME[key]];
+            break;
+        }
+    }
+    if(pname) return pname;
+    
+    return name;
+    
+}
++(NSArray *) __PY_OBJ_PARSET_CLASSES{
+    if (__PY_OBJ_TO_DICT_CLASS == nil) {
+        __PY_OBJ_TO_DICT_CLASS = @[[NSURL class]
+                                             ,[NSNumber class]
+                                             ,[NSString class]
+                                             ,[NSDate class]
+                                             ,[NSData class]];
+    }
+    return __PY_OBJ_TO_DICT_CLASS;
+}
++(BOOL) __PY_CAN_PARSET_CLASS:(Class) clazz{
+    for (Class c in [self __PY_OBJ_PARSET_CLASSES]) {
+        if (c == clazz ||  [clazz isSubclassOfClass:c]) {
+            return true;
+        }
+    }
+    return false;
+}
+
++(NSObject *) __PY_VALUE_FOREACH:(NSObject *) value CLAZZ:(Class) clazz{
+    
+    if(value == nil) return nil;
+    
+    if([value isKindOfClass:[NSArray class]]){
+        NSMutableArray * result = [NSMutableArray new];
+        for (NSObject * obj in (NSArray *)value) {
+            id addObj = [NSObject __PY_VALUE_FOREACH:obj CLAZZ:clazz];
+            if(addObj)[result addObject: addObj];
+            else kPrintExceptionln("the add value is null obj:[%@] class:[%@]", obj, NSStringFromClass(clazz));
+        }
+        return result;
+    }else if([value isKindOfClass:[NSSet class]]){
+        NSMutableSet * result = [NSMutableSet new];
+        for (NSObject * obj in (NSSet *)value) {
+            id addObj = [NSObject __PY_VALUE_FOREACH:obj CLAZZ:clazz];
+            if(addObj)[result addObject: addObj];
+            else kPrintExceptionln("the add value is null obj:[%@] class:[%@]", obj, NSStringFromClass(clazz));
+        }
+        return result;
+    }else{
+        return [NSObject objectWithDictionary:value clazz:clazz];
+    }
+    
 }
 
 @end

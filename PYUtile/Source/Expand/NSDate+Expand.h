@@ -11,6 +11,10 @@
 
 @interface NSDate (Expand)
 
+/**
+ 友好的日期描述
+ */
+-(nonnull NSString *) dateDescribe;
 -(NSDate *) offsetYear:(int)numYears;
 -(NSDate *) offsetMonth:(int)numMonths;
 -(NSDate *) offsetDay:(int)numDays;

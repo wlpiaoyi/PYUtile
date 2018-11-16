@@ -97,7 +97,6 @@
             origin.x -= offset.x;
             origin.y -= offset.y;
         }
-        
         sv = sv.superview;
         if (sv==superView) {
             sv = nil;
