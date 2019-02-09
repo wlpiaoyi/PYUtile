@@ -38,9 +38,9 @@
  */
 -(CGPoint) getAbsoluteOrigin:(UIView * _Nonnull) superView;
 /**
- 添加单击事件
+ 添加触控事件
  */
--(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;
+-(UITapGestureRecognizer*) addTapGestureWithTarget:(id)target action:(SEL)action;
 /**
  图层的简单设置
  */
@@ -60,4 +60,7 @@
 -(UIImage * _Nullable) drawView;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale;
+
+
+-(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;NS_DEPRECATED_IOS(2_0, 7_0, "Use addTapGestureWithTarget:action");
 @end

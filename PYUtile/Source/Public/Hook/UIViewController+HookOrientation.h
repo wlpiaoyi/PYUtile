@@ -24,13 +24,16 @@
 -(void) beforeExcutePreferredInterfaceOrientationForPresentation:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
 -(UIInterfaceOrientation) afterExcutePreferredInterfaceOrientationForPresentationWithTarget:(nonnull UIViewController *) target;
 
-//⇒ 重写父类方法旋转开始和结束
+// ==> 重写父类方法旋转开始和结束
 -(void) beforeExcuteViewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(nullable id<UIViewControllerTransitionCoordinator>)coordinator isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *)target;
 -(void) afterExcuteViewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(nullable id<UIViewControllerTransitionCoordinator>)coordinator target:(nonnull UIViewController *)target;
--(void) beforeExcuteWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
--(void) afterExcuteWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration target:(nonnull UIViewController *) target;
--(void) beforeExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
--(void) afterExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation target:(nonnull UIViewController *) target;
+
+-(void) beforeExcuteWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0,8_0, "Implement beforeExcuteViewWillTransitionToSize:withTransitionCoordinator: instead") __TVOS_PROHIBITED;
+-(void) afterExcuteWillRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval)duration target:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0,8_0, "Implement afterExcuteViewWillTransitionToSize:withTransitionCoordinator: instead") __TVOS_PROHIBITED;
+-(void) beforeExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation isExcute:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0,8_0) __TVOS_PROHIBITED;
+-(void) afterExcuteDidRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation target:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0,8_0) __TVOS_PROHIBITED;
+
+// <== 重写父类方法旋转开始和结束
 
 #pragma 废弃的方法
 -(BOOL) aftlerExcuteShouldAutorotateWithTarget:(nonnull UIViewController *) target NS_DEPRECATED_IOS(2_0, 7_0, "Use aftlerExcuteShouldAutorotateWithTarget:result");

@@ -94,8 +94,19 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
     return NSOrderedSame;
 }
 -(NSDate*) dateFormateString:(NSString*) formatePattern{
+    if(formatePattern == nil || formatePattern.length == 0){
+        if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2})$"]){
+            formatePattern = @"yyyy-MM-dd";
+        }else if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2} \\d{2})$"]){
+            formatePattern = @"yyyy-MM-dd HH";
+        }else if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2})$"]){
+            formatePattern = @"yyyy-MM-dd HH:mm";
+        }else if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2})$"]){
+            formatePattern = @"yyyy-MM-dd HH:mm:ss";
+        }else return nil;
+    }
     NSDateFormatter *dft = [[NSDateFormatter alloc]init];
-    [dft setDateFormat:formatePattern==nil?@"yyyy-MM-dd HH:mm:ss":formatePattern];
+    [dft setDateFormat:formatePattern];
     return [dft dateFromString:self];
 }
 +(bool) isEnabled:(nullable id) target{
@@ -299,7 +310,7 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
  通过正则表达式找出所以匹配的Ranges
  */
 -(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr{
-    
+
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexstr options:NSRegularExpressionCaseInsensitive error:nil];
     
     return [regex matchesInString:self options:0 range:NSMakeRange(0, [self length])];

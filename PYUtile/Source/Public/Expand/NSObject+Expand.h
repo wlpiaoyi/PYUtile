@@ -8,13 +8,21 @@
 
 
 #import <Foundation/Foundation.h>
-static id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
+
+extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
 
 /**
  归档实体数据
  由于Object-c的反射不支持泛型所以如果对数组进行归档和解析时必须使用(property_??/ivar_??)进行泛型的指定
  */
 @interface NSObject(toDictionary)
+/**
+ 当前Class是否是指定的class
+ 0：不是
+ 1：同类型
+ 2：子类
+ */
++(int) isMemberForClazz:(nonnull Class) memberForClazz;
 /**
  是否是本地库的Class
  */

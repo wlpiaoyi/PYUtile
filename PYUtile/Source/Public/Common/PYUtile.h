@@ -28,6 +28,7 @@
 #else
 #    define NSLog(...) {}
 #endif
+
 #define kPrintLogln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(log)[%s]\n",f].UTF8String, ## __VA_ARGS__)
 #define kPrintExceptionln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(exception)[%s]\n",f].UTF8String, ## __VA_ARGS__)
 #define kPrintErrorln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(error)[%s]\n",f].UTF8String, ## __VA_ARGS__)

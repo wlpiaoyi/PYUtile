@@ -105,8 +105,10 @@
     }
     return origin;
 }
-
--(UITapGestureRecognizer*) py_addTarget:(id)target action:(SEL)action{
+/**
+ 添加触控事件
+ */
+-(UITapGestureRecognizer*) addTapGestureWithTarget:(id)target action:(SEL)action{
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:target action:action];
     [self addGestureRecognizer:tapGesture];
     return tapGesture;
@@ -255,6 +257,7 @@
     NSData *imageData = UIImageJPEGRepresentation(image, 1);
     return [UIImage imageWithData:imageData];
 }
+
 #pragma undefined
 -(BOOL) containsSubView:(UIView *)subView
 {
@@ -274,6 +277,10 @@
         }
     }
     return NO;
+}
+
+-(UITapGestureRecognizer*) py_addTarget:(id)target action:(SEL)action{
+    return [self addTapGestureWithTarget:target action:action];
 }
 
 

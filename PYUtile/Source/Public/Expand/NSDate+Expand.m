@@ -55,6 +55,15 @@
     }
     return [NSString stringWithFormat:@"%@ %@", [self dateFormateDate:@"yyyy-MM-dd"],weekDay];
 }
+
+/**
+ 友好的时间描述
+ */
+-(nonnull NSString *) timeDescribe{
+    return [NSString stringWithFormat:@"%@ %@", [self dateDescribe],[self dateFormateDate:@"HH:mm"]];
+}
+
+
 -(int)year {
     NSCalendar *gregorian = [[NSCalendar alloc]
                              initWithCalendarIdentifier:NSGregorianCalendar];
