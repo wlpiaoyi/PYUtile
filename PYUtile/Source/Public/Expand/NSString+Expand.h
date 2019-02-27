@@ -32,6 +32,12 @@
  */
 -(nullable NSData *) toData;
 /**
+ 0b10001,
+ 0xFFFFFF33,
+ 10001
+ */
+-(NSInteger) toInteger;
+/**
  整数验证
  */
 -(BOOL) matchInteger;

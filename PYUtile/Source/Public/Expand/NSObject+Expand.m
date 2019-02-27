@@ -195,6 +195,8 @@ id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull in
         }else if([obj isKindOfClass:[NSDictionary class]]){
             [self __PY_DICT_ANALYSIS:obj KEY:nil CLASSNAME:key otherStructs:otherStructs];
             return kFORMAT(@"kPNSNA PYDA%@ * %@;\n", key, key);
+        }else{
+            return kFORMAT(@"kPNSNA id %@;\n", key);
         }
     }
     return nil;

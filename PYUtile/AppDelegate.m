@@ -75,6 +75,7 @@ kPNSNA NSString * needPayDate;
 //kPNSNA NSString * keyDescription;
 kPNA int keyId;
 kPNA CGRect pRect;
+kPNSNA NSDate * date;
 kPNSNA NSString * keyDescription;
 kPNSNA PYParseTest * pTest;
 kPNSNA NSArray<PYParseTest *> * pTests;
@@ -101,6 +102,10 @@ NSTimer * timer;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [NSObject dictionaryAnalysisForClass:@{@"bb":@"adfa",@"aa":[NSNull null]}];
+    NSLog(@"%ld %ld", [@"0xabcdef48733" toInteger] ,0xabcdef48733);
+    NSLog(@"%ld %ld", [@"0b100100101111" toInteger] ,0b100100101111);
+    
     NSLog(@"%@", [@"1999-08-08" dateFormateString:nil]);
     NSLog(@"%@", [@"1999-08-08 02:02" dateFormateString:nil]);
     NSLog(@"%@", [@"1999-08-08 02:02:02" dateFormateString:nil]);
@@ -117,6 +122,7 @@ NSTimer * timer;
         t.pRect = CGRectMake(4, 5, 6, 7);
         t.keyDescription = @"adfaf";
         NSDictionary * dict = [t objectToDictionary];
+        ((NSMutableDictionary *)dict)[@"date"] = @(1515747850);
         t.pTest = [PYParseTest objectWithDictionary:dict];
         dict = [t objectToDictionary];
         t.pTests = @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]];

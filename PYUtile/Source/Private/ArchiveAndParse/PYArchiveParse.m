@@ -42,7 +42,12 @@ static NSDictionary * __PY_VAR_HEAD_NAME;
     if([value isKindOfClass:[NSDate class]]){
         return value;
     }else if([value isKindOfClass:[NSNumber class]]){
-        return [NSDate dateWithTimeIntervalSince1970:[((NSNumber *)value) doubleValue]];
+        NSTimeInterval timeInterval =  [((NSNumber *)value) doubleValue];
+        if(timeInterval > 9999999999.0){
+            return [NSDate dateWithTimeIntervalSince1970:timeInterval/1000.0];
+        }else{
+            return [NSDate dateWithTimeIntervalSince1970:timeInterval];
+        }
     }else if([value isKindOfClass:[NSString class]]){
         return [((NSString *)value) dateFormateString:nil];
     }

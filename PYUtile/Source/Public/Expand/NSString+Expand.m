@@ -7,7 +7,7 @@
 //
 
 #import "NSString+Expand.h"
-
+#import "py_data_function.h"
 
 NSString * REGEX_HOMEHONE = @"^((\\d{2,4}\\-){0,1}\\d{7,9})$";
 NSString * REGEX_MOBILEPHONE = @"^(\\+(\\d{2})){0,1}((13)|(14)|(15)|(18)|(19)|(17))\\d{9}$";
@@ -126,6 +126,48 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
  */
 -(nullable NSData *) toData{
     return [self dataUsingEncoding:NSUTF8StringEncoding];
+}
+/**
+ 0b10001,
+ 0xFFFFFF33,
+ 10001
+ */
+-(NSInteger) toInteger{
+    
+    if(self.length == 0) return 0;
+    if(self.length > 2){
+        NSString * head = [self substringWithRange:NSMakeRange(0, 2)];
+        if([head isEqual:@"0x"]){
+            return py_data_16_to_10(self.uppercaseString.UTF8String);
+//            const char * value = self.uppercaseString.UTF8String;
+//            NSInteger integer = 0;
+//            NSInteger index = 0;
+//            for (NSInteger i = self.length - 1; i >= 2; --i) {
+//                NSInteger c = (NSInteger)value[i];
+//                if(c >= 48 && c <= 57){
+//                    integer += (c-48) << (4 * index);
+//                }else if(c >= 65 && c <= 70){
+//                    integer += (c-55) << (4 * index);
+//                }
+//                index++;
+//            }
+//            return integer;
+        }else if([head isEqual:@"0b"]){
+            return py_data_2_to_10(self.uppercaseString.UTF8String);
+//            const char * value = self.uppercaseString.UTF8String;
+//            NSInteger integer = 0;
+//            NSInteger index = 0;
+//            for (NSInteger i = self.length -1; i >= 2; --i) {
+//                char c = value[i];
+//                if(c == '1'){
+//                    integer += 1 << (1 * index);
+//                }
+//                index++;
+//            }
+//            return integer;
+        }
+    }
+    return self.integerValue;
 }
 -(NSString *)filterHTML
 {

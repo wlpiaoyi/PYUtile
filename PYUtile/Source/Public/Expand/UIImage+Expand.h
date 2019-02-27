@@ -31,6 +31,7 @@ extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 +(UIImage * _Nonnull) imageWithColor:(UIColor * _Nonnull)color;
 +(UIImage * _Nonnull) imageWithSize:(CGSize) size color:(CGColorRef _Nonnull) colorRef;
 +(UIImage * _Nonnull) imageWithSize:(CGSize) size blockDraw:(void (^ _Nonnull) (CGContextRef _Nonnull context, CGRect rect)) blockDraw;
++ (UIImage *)imageWithSize:(CGSize) size scale:(NSInteger) scale blockDraw:(void (^ _Nonnull) (CGContextRef context, CGRect rect)) blockDraw;
 /**
  二维码
  */
