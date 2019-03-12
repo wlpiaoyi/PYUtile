@@ -89,5 +89,9 @@
 -(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr;
 
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
+/**
+ 比较字符串相似度
+ */
+-(float) likePercentForCompare:(NSString *)compare;
 
 @end

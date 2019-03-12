@@ -7,11 +7,18 @@
 //
 
 #import "NSArray+Expand.h"
+#import "NSObject+Expand.h"
 
 @implementation NSArray(Expand)
 -(NSData * _Nullable) toData{
+    NSMutableArray * toDatas = [NSMutableArray new];
+    for (NSObject * obj in self) {
+        if([obj isKindOfClass:[NSDictionary class]]){
+            [toDatas addObject:obj];
+        }else [toDatas addObject:[obj objectToDictionary]];
+    }
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:toDatas options:NSJSONWritingPrettyPrinted error:&error];
     if (error) {
         NSAssert(NO, error.domain);
     }

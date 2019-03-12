@@ -102,6 +102,12 @@ NSTimer * timer;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    NSArray * bbb = @[@{@"a":@"b"}];
+    
+    float ft1 =  [@"abcdef" likePercentForCompare:@"abcdef"];
+    float ft2 =  [@"abcdef" likePercentForCompare:@"abcde"];
+    float ft3 =  [@"dabcdef" likePercentForCompare:@"abcdef"];
     [NSObject dictionaryAnalysisForClass:@{@"bb":@"adfa",@"aa":[NSNull null]}];
     NSLog(@"%ld %ld", [@"0xabcdef48733" toInteger] ,0xabcdef48733);
     NSLog(@"%ld %ld", [@"0b100100101111" toInteger] ,0b100100101111);

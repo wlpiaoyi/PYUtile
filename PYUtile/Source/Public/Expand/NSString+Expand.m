@@ -22,6 +22,8 @@ NSString * REGEX_TWCARD = @"^[a-zA-Z0-9]{1,20}$";
 NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
 NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,}元)$";
 
+static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
+
 @implementation NSString (Expand)
 -(BOOL) hasChinese:(nullable BOOL *) isAll{
     BOOL hasChinese = false;
@@ -362,6 +364,77 @@ NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,
 +(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{
     NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     return [pred evaluateWithObject:arg];
+}
+
+
+/**
+ 比较字符串相似度
+ */
+- (float) likePercentForCompare:(NSString *)compare{
+    
+    int n = (int)compare.length;
+    
+    int m = (int)self.length;
+    
+    if (m==0) return n;
+    
+    if (n==0) return m;
+    
+    //Construct a matrix, need C99 support
+    
+    int matrix[n+1][m+1];
+    
+    memset(&matrix[0], 0, m+1);
+    
+    for(int i=1; i<=n; i++) {
+        
+        memset(&matrix[i], 0, m+1);
+        
+        matrix[i][0]=i;
+        
+    } for(int i=1; i<=m; i++) {
+        
+        matrix[0][i]=i;
+        
+    } for(int i=1;i<=n;i++) {
+        
+        unichar si = [compare characterAtIndex:i-1];
+        
+        for(int j=1;j<=m;j++)
+            
+        {
+            
+            unichar dj = [self characterAtIndex:j-1];
+            
+            int cost;
+            
+            if(si==dj){
+                
+                cost=0;
+                
+            }
+            
+            else{
+                
+                cost=1;
+                
+            }
+            
+            const int above=matrix[i-1][j]+1;
+            
+            const int left=matrix[i][j-1]+1;
+            
+            const int diag=matrix[i-1][j-1]+cost;
+            
+            matrix[i][j]=py_str_compare_min(above,py_str_compare_min(left,diag));
+            NSLog(@"%d, %d  %d", i, j, matrix[i][j]);
+            
+        }
+        
+    }
+    
+    return 100.0 - 100.0*matrix[n][m]/self.length;
+    
 }
 
 #warning 待定的功能
