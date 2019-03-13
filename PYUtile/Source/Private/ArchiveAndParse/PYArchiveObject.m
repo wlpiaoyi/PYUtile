@@ -171,7 +171,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
         else returnValue = [self archvie:returnValue clazz:nil deep:deep + 1 fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1  FLITERIES:fliteries];
     }
     if(!returnValue) return;
-    [dict setValue:returnValue forKey:[PYArchiveParse checkVarKey:varName]];
+    [dict setValue:returnValue forKey:[PYArchiveParse parseVarToKey:varName]];
 }
 
 #pragma mark 归档数据
@@ -254,7 +254,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
         return value;
     }
     
-    [dict setObject:returnValue forKey:[PYArchiveParse checkVarKey:varName]];
+    [dict setObject:returnValue forKey:[PYArchiveParse parseVarToKey:varName]];
     return nil;
 }
 

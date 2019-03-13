@@ -17,8 +17,10 @@
 
 
 static NSArray * __PY_OBJ_TO_DICT_CLASS;
-static NSDictionary * __PY_VAR_KEY_NAME;
-static NSDictionary * __PY_VAR_HEAD_NAME;
+static NSDictionary * __PY_PARSE_VAR_TO_KEY;
+static NSDictionary * __PY_PARSE_VAR_HEAD_TO_KEY;
+static NSDictionary * __PY_PARSE_KEY_TO_VAR;
+static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 
 
 @implementation NSData(__PY_ARC_PAR)
@@ -115,13 +117,20 @@ static NSDictionary * __PY_VAR_HEAD_NAME;
                                    ,[NSData class]
                                    ,[NSURL class]
                                    ];
-        __PY_VAR_KEY_NAME = @{
-                              @"id":@"keyId",@"keyId":@"id",
-                              @"description":@"keyDescription", @"keyDescription":@"description"
-                              };
-        __PY_VAR_HEAD_NAME = @{
-                               @"new":@"keyNew",@"keyNew":@"new"
-                               };
+        __PY_PARSE_VAR_TO_KEY = @{
+                                  @"keyId":@"id",
+                                  @"keyDescription":@"description"
+                                  };
+        __PY_PARSE_VAR_HEAD_TO_KEY= @{
+                                       @"keyNew":@"new"
+                                       };
+        __PY_PARSE_KEY_TO_VAR= @{
+                                  @"id":@"keyId",
+                                  @"description":@"keyDescription"
+                                  };
+        __PY_PARSE_KEY_TO_VAR_HEAD = @{
+                                       @"new":@"keyNew"
+                                       };
     });
 }
 +(BOOL) canParset:(Class) clazz{
@@ -197,11 +206,11 @@ static NSDictionary * __PY_VAR_HEAD_NAME;
     return nil;
 }
 
-+(nonnull NSString *) checkVarKey:(nonnull NSString *) name{
-    NSString * pname = __PY_VAR_KEY_NAME[name];
++(nonnull NSString *) parseVarToKey:(nonnull NSString *) name{
+    NSString * pname = __PY_PARSE_VAR_TO_KEY[name];
     if(pname) return pname;
-    NSEnumerator<NSString *> *objectEnumerator = __PY_VAR_HEAD_NAME.objectEnumerator;
-    NSEnumerator<NSString *> *keyEnumerator = __PY_VAR_HEAD_NAME.keyEnumerator;
+    NSEnumerator<NSString *> *objectEnumerator = __PY_PARSE_VAR_HEAD_TO_KEY.objectEnumerator;
+    NSEnumerator<NSString *> *keyEnumerator = __PY_PARSE_VAR_HEAD_TO_KEY.keyEnumerator;
     NSString * keyValue;
     NSString * objectValue;
     while ((keyValue = keyEnumerator.nextObject) && (objectValue = objectEnumerator.nextObject)) {
@@ -212,7 +221,23 @@ static NSDictionary * __PY_VAR_HEAD_NAME;
         break;
     }
     return name;
-    
+}
+
++(nonnull NSString *) parseKeyToVar:(nonnull NSString *) name{
+    NSString * pname = __PY_PARSE_KEY_TO_VAR[name];
+    if(pname) return pname;
+    NSEnumerator<NSString *> *objectEnumerator = __PY_PARSE_KEY_TO_VAR_HEAD.objectEnumerator;
+    NSEnumerator<NSString *> *keyEnumerator = __PY_PARSE_KEY_TO_VAR_HEAD.keyEnumerator;
+    NSString * keyValue;
+    NSString * objectValue;
+    while ((keyValue = keyEnumerator.nextObject) && (objectValue = objectEnumerator.nextObject)) {
+        if(keyValue.length > name.length) continue;
+        if(![keyValue isEqual:[name substringToIndex:keyValue.length]]) continue;
+        NSRange range = NSMakeRange(0, keyValue.length);
+        name = [name stringByReplacingCharactersInRange:range withString:objectValue];
+        break;
+    }
+    return name;
 }
 
 

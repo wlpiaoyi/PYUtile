@@ -150,8 +150,8 @@ id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull in
         if(value == nil) continue;
         NSString * keySuffix = nil;
         if(suffix && suffix.length > 0){
-            keySuffix = kFORMAT(@"%@[%@]", suffix, [PYArchiveParse checkVarKey:name]);
-        }else keySuffix = [PYArchiveParse checkVarKey:name];
+            keySuffix = kFORMAT(@"%@[%@]", suffix, [PYArchiveParse parseVarToKey:name]);
+        }else keySuffix = [PYArchiveParse parseVarToKey:name];
         BOOL __hasIndex = NO;
         if([value isKindOfClass:[NSArray class]]){
             __hasIndex = [PYInvoke getPropertyInfoWithClass:[object class] propertyName:kFORMAT(@"has_index_%@", name)] != nil;
@@ -178,7 +178,7 @@ id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull in
             }
         }
     }else if (key){
-        key = [PYArchiveParse checkVarKey:key];
+        key = [PYArchiveParse parseKeyToVar:key];
         if([obj isKindOfClass:[NSString class]]){
             return kFORMAT(@"kPNSNA NSString * %@;//%@\n", key, [obj description]);
         }else if([obj isKindOfClass:[NSNumber class]]){

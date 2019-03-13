@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 +(nullable NSObject *) parseValue:(nonnull NSObject *) value clazz:(nonnull Class) clazz;
 +(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz;
 +(nullable Class) classFromTypeEncoding:(const char *) typeEncoding;
-+(nonnull NSString *) checkVarKey:(nonnull NSString *) name;
++(nonnull NSString *) parseVarToKey:(nonnull NSString *) name;
++(nonnull NSString *) parseKeyToVar:(nonnull NSString *) name;
 
 @end
 

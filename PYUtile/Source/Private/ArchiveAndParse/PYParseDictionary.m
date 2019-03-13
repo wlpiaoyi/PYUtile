@@ -50,7 +50,7 @@
     if (!target)  return nil;
     
     for (NSString *key in ((NSDictionary *)dictionary)) {
-        NSString * fieldKey = [PYArchiveParse checkVarKey:key];
+        NSString * fieldKey = [PYArchiveParse parseKeyToVar:key];
         id value = ((NSDictionary *)dictionary)[key];
         if (value == nil || value == [NSNull null]) {
             continue;
