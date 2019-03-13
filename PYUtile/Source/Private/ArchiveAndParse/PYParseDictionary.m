@@ -40,7 +40,7 @@
     
     if(dictionary == nil) return nil;
     
-    id result = [PYArchiveParse parseValue:dictionary clazz:clazz];// [self __PY_NSOBJECT_EXPAND_DICT_PASET:dictionary _CLAZZ:clazz];
+    id result = [PYArchiveParse parseValue:dictionary clazz:clazz];
     if(result) return result;
     
     if(![dictionary isKindOfClass:[NSDictionary class]]) return nil;
@@ -71,7 +71,7 @@
         
         size_t tedl = strlen(typeEncoding);
         if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-            Class cClazz = [PYArchiveParse classFromTypeEncoding:typeEncoding];//[NSObject __PY_NSOBJECT_EXPAND_GETCALSS_FOR_TYPEENCODING:typeEncoding];
+            Class cClazz = [PYArchiveParse classFromTypeEncoding:typeEncoding];
             if(cClazz == nil){
                 value = nil;
                 continue;
@@ -81,16 +81,16 @@
                 Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",fieldKey].UTF8String);
                 Class valuesClazz = nil;
                 if(cproperty || civar){
-                    const char * teding = [PYParseDictionary getTypeEncodingFromeProperty:cproperty ivar:civar];//[NSObject __PY_GET_TYPEENCODING_FOR_PROPERTY:cproperty IVAR:civar];
-                    valuesClazz = [PYArchiveParse classFromTypeEncoding:teding];//[NSObject __PY_NSOBJECT_EXPAND_GETCALSS_FOR_TYPEENCODING:teding];
+                    const char * teding = [PYParseDictionary getTypeEncodingFromeProperty:cproperty ivar:civar];
+                    valuesClazz = [PYArchiveParse classFromTypeEncoding:teding];
                 }
                 if(valuesClazz){
-                    value = [self forEachValue:value clazz:valuesClazz];//[NSObject __PY_NSOBJECT_EXPAND_VALUE_FOREACH:value CLAZZ:valuesClazz];
+                    value = [self forEachValue:value clazz:valuesClazz];
                 }else{
                     value = value;
                 }
             }else if([PYArchiveParse canParset:cClazz]){
-                value = [PYArchiveParse parseValue:value clazz:cClazz];//[self __PY_NSOBJECT_EXPAND_DICT_PASET:value _CLAZZ:cClazz];
+                value = [PYArchiveParse parseValue:value clazz:cClazz];
             }else{
                 Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
                 value = [self instanceClazz:cClazz dictionary:value];

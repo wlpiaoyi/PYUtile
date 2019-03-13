@@ -11,59 +11,6 @@
 #import <objc/runtime.h>
 #import "PYXml.h"
 #import "PYNetworkReachabilityNotification.h"
-@interface SMETrainDetailSegment : NSObject
-
-kPNSNA NSString * seatGrade;//1
-kPNSNA NSString * arrTime;//2018-04-30 14:58:00
-kPNSNA NSString * seatGradeName;//硬座
-kPNSNA NSString * seatNumber;//硬座
-kPNSNA NSString * arrStationName;//郑州
-kPNSNA NSString * arrStationCode;//ZZF
-kPNSNA NSString * depTime;//2018-04-30 08:36:00
-kPNSNA NSString * trainId;//Z149
-kPNSNA NSString * durationTime;//06:22
-kPNSNA NSString * trainNum;//Z149
-kPNSNA NSString * depStationCode;//BXP
-kPNSNA NSString * depStationName;//北京西
-
-@end
-@interface SMETrainDetailTicket : NSObject
-
-kPNSNA NSString * belongOrderCode;
-kPNSNA NSString * passengerNames;//129974
-kPNSNA NSString * keyId;//129974
-kPNSNA NSString * seatNumber;//10001
-kPNSNA NSString * ticketCode;//2314
-kPNSNA NSString * payPrice;//121.0
-kPNSNA NSString * createDate;//2018-04-23 16:20:57
-kPNSNA NSString * statusName;//退票中
-kPNSNA NSString * refundOrChangeFee;//0
-kPNSNA NSString * type;//ORDER
-kPNSNA NSString * oldTicketId;//null
-kPNSNA NSString * belongOrderId;//87869
-kPNSNA NSString * ticketPrice;//93.0
-kPNSNA SMETrainDetailSegment * trainSegment;
-kPNSNA NSString * statusCode;//A11
-kPNSNA NSString * extraFee;//8.0
-kPNSNA NSString * seatGrade;
-
-@end
-
-@interface SMETrainDetailPassengers : NSObject
-
-kPNSNA NSString * passengerMobile;//13810000002
-kPNSNA NSString * passengerCertificateTypeName;//护照
-kPNSNA NSString * passengerSourceType;//EMPLOYEE
-kPNSNA NSString * changeFlag;//0
-kPNSNA NSString * passengerName;//王二
-kPNSNA NSString * passengerCertificateCode;//G665544
-kPNSNA NSArray * ticketViewList;
-kPNSNA SMETrainDetailTicket * property_ticketViewList;
-kPNSNA SMETrainDetailTicket *recentTicket;//最近的票
-kPNSNA NSString * refundFlag;//0
-kPNA BOOL  isSelected;
-kPNSNA NSString * needPayDate;
-@end
 @interface PYParseTest : NSObject{
 @public
     int ivarInt;
@@ -74,6 +21,7 @@ kPNSNA NSString * needPayDate;
 //kPNA int keyId;
 //kPNSNA NSString * keyDescription;
 kPNA int keyId;
+kPNA int keyNewVar;
 kPNA CGRect pRect;
 kPNSNA NSDate * date;
 kPNSNA NSString * keyDescription;
@@ -82,16 +30,12 @@ kPNSNA NSArray<PYParseTest *> * pTests;
 kPNSNA NSArray<NSArray<PYParseTest *> *> * pTestss;
 kPNSNA NSArray * trainPassengers;
 
-kPNSNA SMETrainDetailPassengers * property_trainPassengers;
 
 kPNSNA PYParseTest * property_pTests;
 kPNSNA PYParseTest * property_pTestss;
 @end
 
 @implementation PYParseTest @end
-@implementation SMETrainDetailPassengers @end
-@implementation SMETrainDetailSegment @end
-@implementation SMETrainDetailTicket @end
 
 NSTimer * timer;
 @interface AppDelegate (){
@@ -103,24 +47,25 @@ NSTimer * timer;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    NSArray * bbb = @[@{@"a":@"b"}];
-    
-    float ft1 =  [@"abcdef" likePercentForCompare:@"abcdef"];
-    float ft2 =  [@"abcdef" likePercentForCompare:@"abcde"];
-    float ft3 =  [@"dabcdef" likePercentForCompare:@"abcdef"];
-    [NSObject dictionaryAnalysisForClass:@{@"bb":@"adfa",@"aa":[NSNull null]}];
-    NSLog(@"%ld %ld", [@"0xabcdef48733" toInteger] ,0xabcdef48733);
-    NSLog(@"%ld %ld", [@"0b100100101111" toInteger] ,0b100100101111);
-    
-    NSLog(@"%@", [@"1999-08-08" dateFormateString:nil]);
-    NSLog(@"%@", [@"1999-08-08 02:02" dateFormateString:nil]);
-    NSLog(@"%@", [@"1999-08-08 02:02:02" dateFormateString:nil]);
+//    NSArray * bbb = @[@{@"a":@"b"}];
+//
+//    float ft1 =  [@"abcdef" likePercentForCompare:@"abcdef"];
+//    float ft2 =  [@"abcdef" likePercentForCompare:@"abcde"];
+//    float ft3 =  [@"dabcdef" likePercentForCompare:@"abcdef"];
+//    [NSObject dictionaryAnalysisForClass:@{@"bb":@"adfa",@"aa":[NSNull null]}];
+//    NSLog(@"%ld %ld", [@"0xabcdef48733" toInteger] ,0xabcdef48733);
+//    NSLog(@"%ld %ld", [@"0b100100101111" toInteger] ,0b100100101111);
+//
+//    NSLog(@"%@", [@"1999-08-08" dateFormateString:nil]);
+//    NSLog(@"%@", [@"1999-08-08 02:02" dateFormateString:nil]);
+//    NSLog(@"%@", [@"1999-08-08 02:02:02" dateFormateString:nil]);
 
-    [@"2001-01-10 08" dateFormateString:@"yyyy-MM-dd HH"];
+//    [@"2001-01-10 08" dateFormateString:@"yyyy-MM-dd HH"];
 //    [dft dateFromString:@];
     NSTimeInterval timer = [NSDate timeIntervalSinceReferenceDate];
     for (int i = 0; i<100; i++) {
         PYParseTest * t = [PYParseTest new];
+        t.keyNewVar = 2;
         t->ivarInt = 2;
         t->ivarRect = CGRectMake(2, 3, 4, 5);
         t->ivarString = @"adfasdfafasdf";

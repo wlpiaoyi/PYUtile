@@ -198,42 +198,22 @@ static NSDictionary * __PY_VAR_HEAD_NAME;
 }
 
 +(nonnull NSString *) checkVarKey:(nonnull NSString *) name{
-    
     NSString * pname = __PY_VAR_KEY_NAME[name];
     if(pname) return pname;
-    
+    NSEnumerator<NSString *> *objectEnumerator = __PY_VAR_HEAD_NAME.objectEnumerator;
+    NSEnumerator<NSString *> *keyEnumerator = __PY_VAR_HEAD_NAME.keyEnumerator;
+    NSString * keyValue;
+    NSString * objectValue;
+    while ((keyValue = keyEnumerator.nextObject) && (objectValue = objectEnumerator.nextObject)) {
+        if(keyValue.length > name.length) continue;
+        if(![keyValue isEqual:[name substringToIndex:keyValue.length]]) continue;
+        NSRange range = NSMakeRange(0, keyValue.length);
+        name = [name stringByReplacingCharactersInRange:range withString:objectValue];
+        break;
+    }
     return name;
     
 }
-
-//+(nullable Class) classFromTypeEncoding:(const char *) typeEncoding{
-//    size_t tedl = strlen(typeEncoding);
-//    if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-//        if(strlen(typeEncoding)){
-//            NSArray * classArgs = [[NSString stringWithUTF8String:typeEncoding] componentsSeparatedByString:@"\""];
-//            return NSClassFromString(classArgs[1]);
-//        }
-//    }
-//    return nil;
-//}
-//
-//+(nonnull NSString *) checkVarKey:(nonnull NSString *) name{
-//
-//    NSString * pname = __PY_VAR_KEY_NAME[name];
-//    if(pname) return pname;
-//
-//    for (NSString * key in __PY_VAR_HEAD_NAME) {
-//        NSRange range = [name rangeOfString:key];
-//        if(range.length > 0 && range.location == 0){
-//            pname = [name stringByReplacingCharactersInRange:range withString:__PY_VAR_HEAD_NAME[key]];
-//            break;
-//        }
-//    }
-//    if(pname) return pname;
-//
-//    return name;
-//
-//}
 
 
 @end
