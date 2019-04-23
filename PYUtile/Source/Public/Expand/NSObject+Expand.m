@@ -15,6 +15,7 @@
 #import "PYArchiveParse.h"
 #import "PYParseDictionary.h"
 #import "NSString+Expand.h"
+#import "PYObjectCopy.h"
 
 id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = nil;
 
@@ -33,6 +34,22 @@ id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull in
  */
 +(BOOL) isNativelibraryClass{
    return  [NSBundle bundleForClass:self] != NSBundle.mainBundle;
+}
+
+/**
+ 复制对象
+ */
+-(nullable instancetype) deepCopyObject;{
+    id objCopy = [self.class new];
+    objCopy = [self.class copyValueFromObj:self toObj:objCopy];
+    return objCopy;
+}
+
+/**
+ 复制同一类型 对象值到另一个对象
+ */
++(nullable NSObject *) copyValueFromObj:(nonnull NSObject *) fromObj toObj:(nonnull NSObject *) toObj;{
+    return [PYObjectCopy copyValueWithClass:self fromObj:fromObj toObj:toObj];
 }
 
 /**

@@ -27,6 +27,15 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  是否是本地库的Class
  */
 +(BOOL) isNativelibraryClass;
+
+/**
+ 复制对象
+ */
+-(nullable instancetype) deepCopyObject;
+/**
+ (同一类型)复制对象值到另一个对象
+ */
++(nullable NSObject *) copyValueFromObj:(nonnull NSObject *) fromObj toObj:(nonnull NSObject *) toObj;
 /**
  通过JSON初始化对象
  */

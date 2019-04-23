@@ -35,9 +35,12 @@ void threadJoinGlobal(dispatch_block_t block){
 }
 
 void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore){
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    block();
-    dispatch_semaphore_signal(semaphore);
+    @try {
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+         block();
+    }@finally{
+        dispatch_semaphore_signal(semaphore);
+    }
 }
 
 void lockForDefault(dispatch_block_t block){

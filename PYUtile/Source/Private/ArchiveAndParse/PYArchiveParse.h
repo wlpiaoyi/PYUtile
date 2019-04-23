@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#pragma 日期装换成秒
+extern char * __PY_ARCHIVE_DATE_PARSE;
 
 @interface PYArchiveParse : NSObject
 @property id (^block) (NSObject * value, Class clazz);
@@ -22,4 +23,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END

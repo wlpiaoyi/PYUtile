@@ -19,12 +19,12 @@
  友好的时间描述
  */
 -(nonnull NSString *) timeDescribe;
--(NSDate *) offsetYear:(int)numYears;
--(NSDate *) offsetMonth:(int)numMonths;
--(NSDate *) offsetDay:(int)numDays;
--(NSDate *) offsetHours:(int)hours;
--(NSDate *) offsetMinutes:(int)minute;
--(NSDate *) offsetSecond:(int)second;
+-(nonnull NSDate *) offsetYear:(int)numYears;
+-(nonnull NSDate *) offsetMonth:(int)numMonths;
+-(nonnull NSDate *) offsetDay:(int)numDays;
+-(nonnull NSDate *) offsetHours:(int)hours;
+-(nonnull NSDate *) offsetMinutes:(int)minute;
+-(nonnull NSDate *) offsetSecond:(int)second;
 -(int) numDaysInMonth;
 -(int) firstWeekDayInMonth;
 -(int) year;
@@ -39,15 +39,15 @@
  0b1111111：年月日时分秒毫，1：保持原值，0：置为0；
  毫秒会自动被清除
  */
--(NSDate *) clearedWithBinary:(int) binary;
--(NSString*) dateFormateDate:(NSString*) formatePattern;
+-(nonnull NSDate *) clearedWithBinary:(int) binary;
+-(nullable NSString*) dateFormateDate:(nullable NSString*) formatePattern;
 
-+(NSDate *) dateStartOfDay:(NSDate *)date;
-+(NSDate *) monthStartOfDay:(NSDate *)date;
-+(NSDate *) monthEndOfDay:(NSDate *)date;
-+(NSDate *) dateStartOfWeek;
-+(NSDate *) dateEndOfWeek;
-+(NSDate *) getTodayZero;
++(nonnull NSDate *) dateStartOfDay:(nonnull NSDate *)date;
++(nonnull NSDate *) monthStartOfDay:(nonnull NSDate *)date;
++(nonnull NSDate *) monthEndOfDay:(nonnull NSDate *)date;
++(nonnull NSDate *) dateStartOfWeek;
++(nonnull NSDate *) dateEndOfWeek;
++(nonnull NSDate *) getTodayZero;
 
--(NSDate *) setCompentsWithBinary:(int) binary NS_DEPRECATED_IOS(2_0, 7_0, "Use clearedWithBinary:");
+-(nonnull NSDate *) setCompentsWithBinary:(int) binary NS_DEPRECATED_IOS(2_0, 7_0, "Use clearedWithBinary:");
 @end

@@ -113,7 +113,7 @@ typedef long long                           kInt64;
 \
 @interface classname : superclassname delegate \
 \
-+ (classname *)shared##classname;
++ (nullable classname *)shared##classname;
 
 #pragma mark 单例化一个类m
 #define SINGLETON_SYNTHESIZE_FOR_mCLASS(classname) \
@@ -122,7 +122,7 @@ static classname *pyshared##classname = nil; \
 \
 @implementation classname\
 \
-+ (classname *)shared##classname { \
++ (nullable classname *)shared##classname { \
 @synchronized(self) { \
 if (pyshared##classname == nil){\
 pyshared##classname = [[self alloc] init]; \
@@ -163,13 +163,13 @@ float boundsHeight(void);
 
 //==================================>
 #pragma mark 线程操作
-void threadJoinMain(dispatch_block_t block);
-void threadJoinGlobal(dispatch_block_t block);
+void threadJoinMain(dispatch_block_t _Nullable block);
+void threadJoinGlobal(dispatch_block_t _Nullable block);
 ///<==================================
 
 //==================================>
-void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore);
-void lockForDefault(dispatch_block_t block);
+void lockForSemaphore(dispatch_block_t _Nullable block, dispatch_semaphore_t _Nonnull semaphore);
+void lockForDefault(dispatch_block_t _Nullable block);
 ///<==================================
 
 UIDeviceOrientation parseInterfaceOrientationToDeviceOrientation(UIInterfaceOrientation interfaceOrientation);
@@ -276,13 +276,13 @@ float app_cpu_usage(void);
  *由于MD5加密是不可逆的,多用来进行验证
  */
 // 32位小写
-+(NSString *)MD5ForLower32Bate:(NSString *)str;
++(nonnull NSString *)MD5ForLower32Bate:(nonnull NSString *)str;
 // 32位大写
-+(NSString *)MD5ForUpper32Bate:(NSString *)str;
++(nonnull NSString *)MD5ForUpper32Bate:(nonnull NSString *)str;
 // 16为大写
-+(NSString *)MD5ForUpper16Bate:(NSString *)str;
++(nonnull NSString *)MD5ForUpper16Bate:(nonnull NSString *)str;
 // 16位小写
-+(NSString *)MD5ForLower16Bate:(NSString *)str;
++(nonnull NSString *)MD5ForLower16Bate:(nonnull NSString *)str;
 
 @end
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15185D272269CA610009CD7A /* PYObjectCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15185D262269CA610009CD7A /* PYObjectCopy.m */; };
+		15185D282269DF860009CD7A /* PYObjectCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15185D262269CA610009CD7A /* PYObjectCopy.m */; };
 		15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A641DF6580100C361E4 /* PYMotionNotification.m */; };
 		15242A6C1DF6580100C361E4 /* PYOrientationNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A661DF6580100C361E4 /* PYOrientationNotification.m */; };
 		15242A751DF6592400C361E4 /* PYInvoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A741DF6592400C361E4 /* PYInvoke.m */; };
@@ -168,6 +170,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		15185D252269CA610009CD7A /* PYObjectCopy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYObjectCopy.h; sourceTree = "<group>"; };
+		15185D262269CA610009CD7A /* PYObjectCopy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYObjectCopy.m; sourceTree = "<group>"; };
 		15242A631DF6580100C361E4 /* PYMotionNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYMotionNotification.h; sourceTree = "<group>"; };
 		15242A641DF6580100C361E4 /* PYMotionNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYMotionNotification.m; sourceTree = "<group>"; };
 		15242A651DF6580100C361E4 /* PYOrientationNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYOrientationNotification.h; sourceTree = "<group>"; };
@@ -269,6 +273,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15185D242269CA4B0009CD7A /* Copy */ = {
+			isa = PBXGroup;
+			children = (
+				15185D252269CA610009CD7A /* PYObjectCopy.h */,
+				15185D262269CA610009CD7A /* PYObjectCopy.m */,
+			);
+			path = Copy;
+			sourceTree = "<group>";
+		};
 		153B97731F1DE544000F007C /* Xml */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +307,7 @@
 		15422DBB21E5B5F10038D09E /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				15185D242269CA4B0009CD7A /* Copy */,
 				155B965A21EDBE1D004AFEF2 /* Hook */,
 				15422DB721E5B3C00038D09E /* ArchiveAndParse */,
 				15E4FB02221021BA001EBCAF /* py_data_function.h */,
@@ -542,7 +556,7 @@
 				TargetAttributes = {
 					15BFDEAA1DF4FFF20044EDAA = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = S4NUSJ3KDJ;
+						DevelopmentTeam = TVXZ27JPZ9;
 						ProvisioningStyle = Automatic;
 					};
 					15C5FAC81DF6688600FF2C75 = {
@@ -557,6 +571,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -621,6 +636,7 @@
 				15BFDF061DF5034A0044EDAA /* NSDate+Expand.m in Sources */,
 				15BFDF041DF5034A0044EDAA /* NSArray+Expand.m in Sources */,
 				15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */,
+				15185D272269CA610009CD7A /* PYObjectCopy.m in Sources */,
 				15BFDF151DF5034A0044EDAA /* UIViewController+HookView.m in Sources */,
 				15422DBE21E5C9680038D09E /* PYArchiveObject.m in Sources */,
 				155D7811207117FD00B2CDDB /* PYNetworkReachabilityNotification.m in Sources */,
@@ -649,6 +665,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15185D282269DF860009CD7A /* PYObjectCopy.m in Sources */,
 				15E4FB0522102522001EBCAF /* py_data_function.c in Sources */,
 				15422DC321E602830038D09E /* PYArchiveParse.m in Sources */,
 				15422DC421E602830038D09E /* PYArchiveObject.m in Sources */,
@@ -804,7 +821,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = S4NUSJ3KDJ;
+				DEVELOPMENT_TEAM = TVXZ27JPZ9;
 				INFOPLIST_FILE = PYUtile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -817,7 +834,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = S4NUSJ3KDJ;
+				DEVELOPMENT_TEAM = TVXZ27JPZ9;
 				INFOPLIST_FILE = PYUtile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

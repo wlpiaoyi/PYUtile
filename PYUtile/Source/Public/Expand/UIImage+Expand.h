@@ -23,22 +23,22 @@ extern NSString * _Nonnull PYColorMatrixCISRGBToneCurveToLinear;
 extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 
 @interface UIImage (Expand)
--(UIImage * _Nonnull) setImageSize:(CGSize) size;
--(UIImage*) setImageSize:(CGSize) size scale:(short) scale;
--(UIImage * _Nonnull) cutImage:(CGRect) cutValue;
--(UIImage * _Nonnull) cutImageCenter:(CGSize) size;
--(UIImage * _Nonnull) cutImageFit:(CGSize) size;
-+(UIImage * _Nonnull) imageWithColor:(UIColor * _Nonnull)color;
-+(UIImage * _Nonnull) imageWithSize:(CGSize) size color:(CGColorRef _Nonnull) colorRef;
-+(UIImage * _Nonnull) imageWithSize:(CGSize) size blockDraw:(void (^ _Nonnull) (CGContextRef _Nonnull context, CGRect rect)) blockDraw;
-+ (UIImage *)imageWithSize:(CGSize) size scale:(NSInteger) scale blockDraw:(void (^ _Nonnull) (CGContextRef context, CGRect rect)) blockDraw;
+-(nonnull UIImage*) setImageSize:(CGSize) size;
+-(nonnull UIImage*) setImageSize:(CGSize) size scale:(short) scale;
+-(nonnull UIImage*) cutImage:(CGRect) cutValue;
+-(nonnull UIImage*) cutImageCenter:(CGSize) size;
+-(nonnull UIImage*) cutImageFit:(CGSize) size;
++(nonnull UIImage*) imageWithColor:(UIColor * _Nonnull)color;
++(nonnull UIImage*) imageWithSize:(CGSize) size color:(CGColorRef _Nonnull) colorRef;
++(nonnull UIImage*) imageWithSize:(CGSize) size blockDraw:(void (^ _Nonnull) (CGContextRef _Nonnull context, CGRect rect)) blockDraw;
++(nonnull UIImage *)imageWithSize:(CGSize) size scale:(NSInteger) scale blockDraw:(void (^ _Nonnull) (CGContextRef  _Nullable context, CGRect rect)) blockDraw;
 /**
  二维码
  */
-//+(UIImage * _Nonnull) imageWithQRCode:(NSString * _Nonnull) QRCode size:(CGFloat) size;
+//+(nonnull UIImage*) imageWithQRCode:(NSString * _Nonnull) QRCode size:(CGFloat) size;
 
 
-- (nullable UIImage*) fliterMatrixWithColor:(NSString*) color;
+- (nullable UIImage*) fliterMatrixWithColor:(nonnull NSString*) color;
 /*可以打印出所有的过滤器以及支持的属性
  NSArray *filters = [CIFilter filterNamesInCategory:kCICategoryBuiltIn];
  for (NSString *filterName in filters) {
@@ -51,9 +51,9 @@ extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 /**
  毛玻璃
  */
--(UIImage * _Nonnull) applyEffect:(CGFloat)blur tintColor:(nullable UIColor *) tintColor;
+-(nonnull UIImage*) applyEffect:(CGFloat)blur tintColor:(nullable UIColor *) tintColor;
 
 
-+(UIImage * _Nonnull) imageWithImage:(UIImage * _Nonnull)inImage colorMatrix:(NSString * _Nonnull) colorMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor");
-+(UIImage * _Nonnull) imageWithImage:(UIImage * _Nonnull)inImage colorMatrix:(NSString * _Nonnull) colorMatrix rectMatrix:(CGRect) rectMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor:rect");
++(nonnull UIImage*) imageWithImage:(nonnull UIImage*)inImage colorMatrix:(nonnull NSString *) colorMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor");
++(nonnull UIImage*) imageWithImage:(nonnull UIImage*)inImage colorMatrix:(nonnull NSString *) colorMatrix rectMatrix:(CGRect) rectMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor:rect");
 @end

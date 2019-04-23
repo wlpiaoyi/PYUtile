@@ -92,6 +92,6 @@
 /**
  比较字符串相似度
  */
--(float) likePercentForCompare:(NSString *)compare;
+-(float) likePercentForCompare:(nullable NSString *)compare;
 
 @end

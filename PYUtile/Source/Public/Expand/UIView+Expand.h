@@ -31,7 +31,7 @@
  topActive,leftActive,bottomActive,rightActive 是否在安全区
  topPoint,leftPoint,bottomPoint,rightPoint 边距参照对象
  */
--(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, id> *) autoLayoutDict;
+-(nonnull NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(nonnull NSDictionary<NSString *, id> *) autoLayoutDict;
 
 /**
  获取相对于目标视图的位置
@@ -40,7 +40,7 @@
 /**
  添加触控事件
  */
--(UITapGestureRecognizer*) addTapGestureWithTarget:(id)target action:(SEL)action;
+-(nullable UITapGestureRecognizer*) addTapGestureWithTarget:(nonnull id)target action:(nonnull SEL)action;
 /**
  图层的简单设置
  */
