@@ -24,8 +24,7 @@ Pod::Spec.new do |spec|
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  spec.description  = <<-DESC
-                   DESC
+  spec.description  = "some commoned used tools"
 
   spec.homepage     = "https://github.com/wlpiaoyi/PYUtile"
   # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
@@ -91,9 +90,9 @@ Pod::Spec.new do |spec|
   #
 
   spec.source_files  = "PYUtile", "PYUtile/Source/**/*.{h,m}"
-  spec.exclude_files = "Classes/Exclude"
+  spec.exclude_files = "PYUtile/Source"
 
-  # spec.public_header_files = "Classes/**/*.h"
+  spec.public_header_files = "PYUtile/Source/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

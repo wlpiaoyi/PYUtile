@@ -7,39 +7,39 @@
 //
 
 #import "AppDelegate.h"
-#import "pyutilea.h"
+//#import "pyutilea.h"
 #import <objc/runtime.h>
-#import "PYXml.h"
-#import "PYNetworkReachabilityNotification.h"
-@interface PYParseTest : NSObject{
-@public
-    int ivarInt;
-    CGRect ivarRect;
-    NSString * ivarString;
-    PYParseTest * ivarTest;
-}
+//#import "PYXml.h"
+//#import "PYNetworkReachabilityNotification.h"
+//@interface PYParseTest : NSObject{
+//@public
+//    int ivarInt;
+//    CGRect ivarRect;
+//    NSString * ivarString;
+//    PYParseTest * ivarTest;
+//}
 //kPNA int keyId;
 //kPNSNA NSString * keyDescription;
-kPNA int keyId;
-kPNA int keyNewVar;
-kPNA CGRect pRect;
-kPNSNA NSDate * date;
-kPNSNA NSString * keyDescription;
-kPNSNA PYParseTest * pTest;
-kPNSNA NSArray<PYParseTest *> * pTests;
-kPNSNA NSArray<NSArray<PYParseTest *> *> * pTestss;
-kPNSNA NSArray * trainPassengers;
+//kPNA int keyId;
+//kPNA int keyNewVar;
+//kPNA CGRect pRect;
+//kPNSNA NSDate * date;
+//kPNSNA NSString * keyDescription;
+//kPNSNA PYParseTest * pTest;
+//kPNSNA NSArray<PYParseTest *> * pTests;
+//kPNSNA NSArray<NSArray<PYParseTest *> *> * pTestss;
+//kPNSNA NSArray * trainPassengers;
+//
+//
+//kPNSNA PYParseTest * property_pTests;
+//kPNSNA PYParseTest * property_pTestss;
+//@end
 
-
-kPNSNA PYParseTest * property_pTests;
-kPNSNA PYParseTest * property_pTestss;
-@end
-
-@implementation PYParseTest @end
+//@implementation PYParseTest @end
 
 NSTimer * timer;
 @interface AppDelegate (){
-    PYNetworkReachabilityNotification * nrn;
+//    PYNetworkReachabilityNotification * nrn;
 }
 @end
 
@@ -62,40 +62,40 @@ NSTimer * timer;
 
 //    [@"2001-01-10 08" dateFormateString:@"yyyy-MM-dd HH"];
 //    [dft dateFromString:@];
-    NSTimeInterval timer = [NSDate timeIntervalSinceReferenceDate];
-    for (int i = 0; i<100; i++) {
-        PYParseTest * t = [PYParseTest new];
-        t.keyNewVar = 2;
-        t->ivarInt = 2;
-        t->ivarRect = CGRectMake(2, 3, 4, 5);
-        t->ivarString = @"adfasdfafasdf";
-        t.date = [NSDate date];
-        t.keyId = 3;
-        t.pRect = CGRectMake(4, 5, 6, 7);
-        t.keyDescription = @"adfaf";
-        NSDictionary * dict = [t objectToDictionary];
-        t.pTest = [PYParseTest objectWithDictionary:dict];
-        dict = [t objectToDictionary];
-        t.pTests = @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]];
-        dict = [t objectToDictionary];
-        t.pTestss = @[
-                      @[@[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]], @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]]],
-                      @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]]
-                      ];
-        dict = [t objectToDictionary];
-        t = [PYParseTest objectWithDictionary:dict];
-        PYParseTest * t2 = [PYParseTest new];
-        [PYParseTest copyValueFromObj:t toObj:t2];
-        t2 = [t deepCopyObject];
-        id copyArray = [t2.pTests deepCopyObject];
-        copyArray = [t2.pTestss deepCopyObject];
-        NSLog(@"");
-    }
-    NSLog(@"======>%f", [NSDate timeIntervalSinceReferenceDate] - timer);
-    
-    NSString * a = @"ewogICJ0cmFpblBhc3NlbmdlcnMiIDogWwogICAgewogICAgICAicGFzc2VuZ2VyTW9iaWxlIiA6ICIxMzkxMDAwMDAwMSIsCiAgICAgICJwYXNzZW5nZXJDZXJ0aWZpY2F0ZVR5cGVOYW1lIiA6ICLmiqTnhaciLAogICAgICAicGFzc2VuZ2VyU291cmNlVHlwZSIgOiAiRU1QTE9ZRUUiLAogICAgICAiY2hhbmdlRmxhZyIgOiAiMSIsCiAgICAgICJuZWVkUGF5RGF0ZSIgOiB7CiAgICAgICAgIm5lZWRQYXlQcmljZSIgOiAiMCIsCiAgICAgICAgImlzTmVlZFBheSIgOiAiTiIKICAgICAgfSwKICAgICAgInBhc3Nlbmdlck5hbWUiIDogIueOi+S4gCIsCiAgICAgICJwYXNzZW5nZXJDZXJ0aWZpY2F0ZUNvZGUiIDogIkcyMjE1NTQiLAogICAgICAidGlja2V0Vmlld0xpc3QiIDogWwogICAgICAgIHsKICAgICAgICAgICJpZCIgOiAiMTM2MiIsCiAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAidGlja2V0Q29kZSIgOiAiMnNIWTEiLAogICAgICAgICAgInBheVByaWNlIiA6ICI0NS41IiwKICAgICAgICAgICJjcmVhdGVEYXRlIiA6ICIyMDE5LTAxLTE1IDE3OjU3OjM4IiwKICAgICAgICAgICJiZWxvbmdPcmRlckNvZGUiIDogIlNCVDIwMTkwMTE1MDAwMDA4IiwKICAgICAgICAgICJzdGF0dXNOYW1lIiA6ICLpooTorqLmiJDlip8iLAogICAgICAgICAgInJlZnVuZE9yQ2hhbmdlRmVlIiA6ICIwIiwKICAgICAgICAgICJ0eXBlIiA6ICJPUkRFUiIsCiAgICAgICAgICAib2xkVGlja2V0SWQiIDogIm51bGwiLAogICAgICAgICAgImJlbG9uZ09yZGVySWQiIDogIjEyMTAiLAogICAgICAgICAgInRpY2tldFByaWNlIiA6ICIzNy41IiwKICAgICAgICAgICJ0cmFpblNlZ21lbnQiIDogewogICAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAgICJ0cmFpbk51bSIgOiAiMzMzOCIsCiAgICAgICAgICAgICJ0cmFpbklkIiA6ICIzMzM4IiwKICAgICAgICAgICAgImRlcFN0YXRpb25OYW1lIiA6ICLmiJDpg70iLAogICAgICAgICAgICAiZGVwU3RhdGlvbkNvZGUiIDogIkNEVyIsCiAgICAgICAgICAgICJhcnJTdGF0aW9uTmFtZSIgOiAi6L6+5beeIiwKICAgICAgICAgICAgImFyclN0YXRpb25Db2RlIiA6ICJSWFciLAogICAgICAgICAgICAiYXJyVGltZSIgOiAiMjAxOS0wMS0xOSAwODowNzowMCIsCiAgICAgICAgICAgICJkZXBUaW1lIiA6ICIyMDE5LTAxLTE5IDAzOjQyOjAwIiwKICAgICAgICAgICAgImR1cmF0aW9uVGltZSIgOiAiMDQ6MjUiLAogICAgICAgICAgICAic2VhdEdyYWRlTmFtZSIgOiAi56Gs5bqnIiwKICAgICAgICAgICAgInNlYXRHcmFkZSIgOiAiMSIKICAgICAgICAgIH0sCiAgICAgICAgICAic3RhdHVzQ29kZSIgOiAiNSIsCiAgICAgICAgICAic2VhdEdyYWRlIiA6ICJPIiwKICAgICAgICAgICJleHRyYUZlZSIgOiAiOC4wIgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIiA6ICIxMzYzIiwKICAgICAgICAgICJwYXlQcmljZSIgOiAiOTQuMCIsCiAgICAgICAgICAiY3JlYXRlRGF0ZSIgOiAiMjAxOS0wMS0xNSAxNzo1ODoxMiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJDb2RlIiA6ICJTQlRDMjAxOTAxMTUwMDAwMDMiLAogICAgICAgICAgInN0YXR1c05hbWUiIDogIuaUueetvuWksei0pSIsCiAgICAgICAgICAicmVmdW5kT3JDaGFuZ2VGZWUiIDogIjAuMCIsCiAgICAgICAgICAidHlwZSIgOiAiQ0hBTkdFIiwKICAgICAgICAgICJvbGRUaWNrZXRJZCIgOiAiMTM2MiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJJZCIgOiAiMTIxMSIsCiAgICAgICAgICAidGlja2V0UHJpY2UiIDogIjEzMS41IiwKICAgICAgICAgICJ0cmFpblNlZ21lbnQiIDogewogICAgICAgICAgICAic2VhdEdyYWRlIiA6ICIzIiwKICAgICAgICAgICAgImFyclRpbWUiIDogIjIwMTktMDEtMTkgMTQ6MzE6MDAiLAogICAgICAgICAgICAic2VhdEdyYWRlTmFtZSIgOiAi56Gs5Y2nIiwKICAgICAgICAgICAgImFyclN0YXRpb25OYW1lIiA6ICLovr7lt54iLAogICAgICAgICAgICAiYXJyU3RhdGlvbkNvZGUiIDogIlJYVyIsCiAgICAgICAgICAgICJkZXBUaW1lIiA6ICIyMDE5LTAxLTE5IDA5OjQ5OjAwIiwKICAgICAgICAgICAgInRyYWluSWQiIDogIksxMjU4IiwKICAgICAgICAgICAgImR1cmF0aW9uVGltZSIgOiAiMDQ6NDIiLAogICAgICAgICAgICAidHJhaW5OdW0iIDogIksxMjU4IiwKICAgICAgICAgICAgImRlcFN0YXRpb25Db2RlIiA6ICJJQ1ciLAogICAgICAgICAgICAiZGVwU3RhdGlvbk5hbWUiIDogIuaIkOmDveS4nCIKICAgICAgICAgIH0sCiAgICAgICAgICAic3RhdHVzQ29kZSIgOiAiOTMiLAogICAgICAgICAgInNlYXRHcmFkZSIgOiAiMyIsCiAgICAgICAgICAiZXh0cmFGZWUiIDogIjAuMCIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJpZCIgOiAiMTM2NCIsCiAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAidGlja2V0Q29kZSIgOiAiMnNIWTEiLAogICAgICAgICAgInBheVByaWNlIiA6ICItMzUuNSIsCiAgICAgICAgICAiY3JlYXRlRGF0ZSIgOiAiMjAxOS0wMS0xNSAxNzo1ODo1NCIsCiAgICAgICAgICAiYmVsb25nT3JkZXJDb2RlIiA6ICJTQlRSMjAxOTAxMTUwMDAwMDIiLAogICAgICAgICAgInN0YXR1c05hbWUiIDogIumAgOelqOWksei0pSIsCiAgICAgICAgICAicmVmdW5kT3JDaGFuZ2VGZWUiIDogIjIuMCIsCiAgICAgICAgICAidHlwZSIgOiAiUkVGVU5EIiwKICAgICAgICAgICJvbGRUaWNrZXRJZCIgOiAiMTM2MiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJJZCIgOiAiMTIxMiIsCiAgICAgICAgICAidGlja2V0UHJpY2UiIDogIjM3LjUiLAogICAgICAgICAgInRyYWluU2VnbWVudCIgOiB7CiAgICAgICAgICAgICJzZWF0TnVtYmVyIiA6ICJYWOi9plhY5bqnIiwKICAgICAgICAgICAgInRyYWluTnVtIiA6ICIzMzM4IiwKICAgICAgICAgICAgInRyYWluSWQiIDogIjMzMzgiLAogICAgICAgICAgICAiZGVwU3RhdGlvbk5hbWUiIDogIuaIkOmDvSIsCiAgICAgICAgICAgICJkZXBTdGF0aW9uQ29kZSIgOiAiQ0RXIiwKICAgICAgICAgICAgImFyclN0YXRpb25OYW1lIiA6ICLovr7lt54iLAogICAgICAgICAgICAiYXJyU3RhdGlvbkNvZGUiIDogIlJYVyIsCiAgICAgICAgICAgICJhcnJUaW1lIiA6ICIyMDE5LTAxLTE5IDA4OjA3OjAwIiwKICAgICAgICAgICAgImRlcFRpbWUiIDogIjIwMTktMDEtMTkgMDM6NDI6MDAiLAogICAgICAgICAgICAiZHVyYXRpb25UaW1lIiA6ICIwNDoyNSIsCiAgICAgICAgICAgICJzZWF0R3JhZGVOYW1lIiA6ICLnoazluqciLAogICAgICAgICAgICAic2VhdEdyYWRlIiA6ICIxIgogICAgICAgICAgfSwKICAgICAgICAgICJzdGF0dXNDb2RlIiA6ICI5MiIsCiAgICAgICAgICAic2VhdEdyYWRlIiA6ICJPIiwKICAgICAgICAgICJleHRyYUZlZSIgOiAiMC4wIgogICAgICAgIH0KICAgICAgXSwKICAgICAgInJlZnVuZEZsYWciIDogIjEiCiAgICB9CiAgXQp9";
-    NSDictionary * dict = [[a toDataForBase64] toDictionary];
-    PYParseTest * t2 = [PYParseTest objectWithDictionary:dict];
+//    NSTimeInterval timer = [NSDate timeIntervalSinceReferenceDate];
+//    for (int i = 0; i<100; i++) {
+//        PYParseTest * t = [PYParseTest new];
+//        t.keyNewVar = 2;
+//        t->ivarInt = 2;
+//        t->ivarRect = CGRectMake(2, 3, 4, 5);
+//        t->ivarString = @"adfasdfafasdf";
+//        t.date = [NSDate date];
+//        t.keyId = 3;
+//        t.pRect = CGRectMake(4, 5, 6, 7);
+//        t.keyDescription = @"adfaf";
+//        NSDictionary * dict = [t objectToDictionary];
+//        t.pTest = [PYParseTest objectWithDictionary:dict];
+//        dict = [t objectToDictionary];
+//        t.pTests = @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]];
+//        dict = [t objectToDictionary];
+//        t.pTestss = @[
+//                      @[@[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]], @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]]],
+//                      @[[PYParseTest objectWithDictionary:dict], [PYParseTest objectWithDictionary:dict]]
+//                      ];
+//        dict = [t objectToDictionary];
+//        t = [PYParseTest objectWithDictionary:dict];
+//        PYParseTest * t2 = [PYParseTest new];
+//        [PYParseTest copyValueFromObj:t toObj:t2];
+//        t2 = [t deepCopyObject];
+//        id copyArray = [t2.pTests deepCopyObject];
+//        copyArray = [t2.pTestss deepCopyObject];
+//        NSLog(@"");
+//    }
+//    NSLog(@"======>%f", [NSDate timeIntervalSinceReferenceDate] - timer);
+//
+//    NSString * a = @"ewogICJ0cmFpblBhc3NlbmdlcnMiIDogWwogICAgewogICAgICAicGFzc2VuZ2VyTW9iaWxlIiA6ICIxMzkxMDAwMDAwMSIsCiAgICAgICJwYXNzZW5nZXJDZXJ0aWZpY2F0ZVR5cGVOYW1lIiA6ICLmiqTnhaciLAogICAgICAicGFzc2VuZ2VyU291cmNlVHlwZSIgOiAiRU1QTE9ZRUUiLAogICAgICAiY2hhbmdlRmxhZyIgOiAiMSIsCiAgICAgICJuZWVkUGF5RGF0ZSIgOiB7CiAgICAgICAgIm5lZWRQYXlQcmljZSIgOiAiMCIsCiAgICAgICAgImlzTmVlZFBheSIgOiAiTiIKICAgICAgfSwKICAgICAgInBhc3Nlbmdlck5hbWUiIDogIueOi+S4gCIsCiAgICAgICJwYXNzZW5nZXJDZXJ0aWZpY2F0ZUNvZGUiIDogIkcyMjE1NTQiLAogICAgICAidGlja2V0Vmlld0xpc3QiIDogWwogICAgICAgIHsKICAgICAgICAgICJpZCIgOiAiMTM2MiIsCiAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAidGlja2V0Q29kZSIgOiAiMnNIWTEiLAogICAgICAgICAgInBheVByaWNlIiA6ICI0NS41IiwKICAgICAgICAgICJjcmVhdGVEYXRlIiA6ICIyMDE5LTAxLTE1IDE3OjU3OjM4IiwKICAgICAgICAgICJiZWxvbmdPcmRlckNvZGUiIDogIlNCVDIwMTkwMTE1MDAwMDA4IiwKICAgICAgICAgICJzdGF0dXNOYW1lIiA6ICLpooTorqLmiJDlip8iLAogICAgICAgICAgInJlZnVuZE9yQ2hhbmdlRmVlIiA6ICIwIiwKICAgICAgICAgICJ0eXBlIiA6ICJPUkRFUiIsCiAgICAgICAgICAib2xkVGlja2V0SWQiIDogIm51bGwiLAogICAgICAgICAgImJlbG9uZ09yZGVySWQiIDogIjEyMTAiLAogICAgICAgICAgInRpY2tldFByaWNlIiA6ICIzNy41IiwKICAgICAgICAgICJ0cmFpblNlZ21lbnQiIDogewogICAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAgICJ0cmFpbk51bSIgOiAiMzMzOCIsCiAgICAgICAgICAgICJ0cmFpbklkIiA6ICIzMzM4IiwKICAgICAgICAgICAgImRlcFN0YXRpb25OYW1lIiA6ICLmiJDpg70iLAogICAgICAgICAgICAiZGVwU3RhdGlvbkNvZGUiIDogIkNEVyIsCiAgICAgICAgICAgICJhcnJTdGF0aW9uTmFtZSIgOiAi6L6+5beeIiwKICAgICAgICAgICAgImFyclN0YXRpb25Db2RlIiA6ICJSWFciLAogICAgICAgICAgICAiYXJyVGltZSIgOiAiMjAxOS0wMS0xOSAwODowNzowMCIsCiAgICAgICAgICAgICJkZXBUaW1lIiA6ICIyMDE5LTAxLTE5IDAzOjQyOjAwIiwKICAgICAgICAgICAgImR1cmF0aW9uVGltZSIgOiAiMDQ6MjUiLAogICAgICAgICAgICAic2VhdEdyYWRlTmFtZSIgOiAi56Gs5bqnIiwKICAgICAgICAgICAgInNlYXRHcmFkZSIgOiAiMSIKICAgICAgICAgIH0sCiAgICAgICAgICAic3RhdHVzQ29kZSIgOiAiNSIsCiAgICAgICAgICAic2VhdEdyYWRlIiA6ICJPIiwKICAgICAgICAgICJleHRyYUZlZSIgOiAiOC4wIgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIiA6ICIxMzYzIiwKICAgICAgICAgICJwYXlQcmljZSIgOiAiOTQuMCIsCiAgICAgICAgICAiY3JlYXRlRGF0ZSIgOiAiMjAxOS0wMS0xNSAxNzo1ODoxMiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJDb2RlIiA6ICJTQlRDMjAxOTAxMTUwMDAwMDMiLAogICAgICAgICAgInN0YXR1c05hbWUiIDogIuaUueetvuWksei0pSIsCiAgICAgICAgICAicmVmdW5kT3JDaGFuZ2VGZWUiIDogIjAuMCIsCiAgICAgICAgICAidHlwZSIgOiAiQ0hBTkdFIiwKICAgICAgICAgICJvbGRUaWNrZXRJZCIgOiAiMTM2MiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJJZCIgOiAiMTIxMSIsCiAgICAgICAgICAidGlja2V0UHJpY2UiIDogIjEzMS41IiwKICAgICAgICAgICJ0cmFpblNlZ21lbnQiIDogewogICAgICAgICAgICAic2VhdEdyYWRlIiA6ICIzIiwKICAgICAgICAgICAgImFyclRpbWUiIDogIjIwMTktMDEtMTkgMTQ6MzE6MDAiLAogICAgICAgICAgICAic2VhdEdyYWRlTmFtZSIgOiAi56Gs5Y2nIiwKICAgICAgICAgICAgImFyclN0YXRpb25OYW1lIiA6ICLovr7lt54iLAogICAgICAgICAgICAiYXJyU3RhdGlvbkNvZGUiIDogIlJYVyIsCiAgICAgICAgICAgICJkZXBUaW1lIiA6ICIyMDE5LTAxLTE5IDA5OjQ5OjAwIiwKICAgICAgICAgICAgInRyYWluSWQiIDogIksxMjU4IiwKICAgICAgICAgICAgImR1cmF0aW9uVGltZSIgOiAiMDQ6NDIiLAogICAgICAgICAgICAidHJhaW5OdW0iIDogIksxMjU4IiwKICAgICAgICAgICAgImRlcFN0YXRpb25Db2RlIiA6ICJJQ1ciLAogICAgICAgICAgICAiZGVwU3RhdGlvbk5hbWUiIDogIuaIkOmDveS4nCIKICAgICAgICAgIH0sCiAgICAgICAgICAic3RhdHVzQ29kZSIgOiAiOTMiLAogICAgICAgICAgInNlYXRHcmFkZSIgOiAiMyIsCiAgICAgICAgICAiZXh0cmFGZWUiIDogIjAuMCIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJpZCIgOiAiMTM2NCIsCiAgICAgICAgICAic2VhdE51bWJlciIgOiAiWFjovaZYWOW6pyIsCiAgICAgICAgICAidGlja2V0Q29kZSIgOiAiMnNIWTEiLAogICAgICAgICAgInBheVByaWNlIiA6ICItMzUuNSIsCiAgICAgICAgICAiY3JlYXRlRGF0ZSIgOiAiMjAxOS0wMS0xNSAxNzo1ODo1NCIsCiAgICAgICAgICAiYmVsb25nT3JkZXJDb2RlIiA6ICJTQlRSMjAxOTAxMTUwMDAwMDIiLAogICAgICAgICAgInN0YXR1c05hbWUiIDogIumAgOelqOWksei0pSIsCiAgICAgICAgICAicmVmdW5kT3JDaGFuZ2VGZWUiIDogIjIuMCIsCiAgICAgICAgICAidHlwZSIgOiAiUkVGVU5EIiwKICAgICAgICAgICJvbGRUaWNrZXRJZCIgOiAiMTM2MiIsCiAgICAgICAgICAiYmVsb25nT3JkZXJJZCIgOiAiMTIxMiIsCiAgICAgICAgICAidGlja2V0UHJpY2UiIDogIjM3LjUiLAogICAgICAgICAgInRyYWluU2VnbWVudCIgOiB7CiAgICAgICAgICAgICJzZWF0TnVtYmVyIiA6ICJYWOi9plhY5bqnIiwKICAgICAgICAgICAgInRyYWluTnVtIiA6ICIzMzM4IiwKICAgICAgICAgICAgInRyYWluSWQiIDogIjMzMzgiLAogICAgICAgICAgICAiZGVwU3RhdGlvbk5hbWUiIDogIuaIkOmDvSIsCiAgICAgICAgICAgICJkZXBTdGF0aW9uQ29kZSIgOiAiQ0RXIiwKICAgICAgICAgICAgImFyclN0YXRpb25OYW1lIiA6ICLovr7lt54iLAogICAgICAgICAgICAiYXJyU3RhdGlvbkNvZGUiIDogIlJYVyIsCiAgICAgICAgICAgICJhcnJUaW1lIiA6ICIyMDE5LTAxLTE5IDA4OjA3OjAwIiwKICAgICAgICAgICAgImRlcFRpbWUiIDogIjIwMTktMDEtMTkgMDM6NDI6MDAiLAogICAgICAgICAgICAiZHVyYXRpb25UaW1lIiA6ICIwNDoyNSIsCiAgICAgICAgICAgICJzZWF0R3JhZGVOYW1lIiA6ICLnoazluqciLAogICAgICAgICAgICAic2VhdEdyYWRlIiA6ICIxIgogICAgICAgICAgfSwKICAgICAgICAgICJzdGF0dXNDb2RlIiA6ICI5MiIsCiAgICAgICAgICAic2VhdEdyYWRlIiA6ICJPIiwKICAgICAgICAgICJleHRyYUZlZSIgOiAiMC4wIgogICAgICAgIH0KICAgICAgXSwKICAgICAgInJlZnVuZEZsYWciIDogIjEiCiAgICB9CiAgXQp9";
+//    NSDictionary * dict = [[a toDataForBase64] toDictionary];
+//    PYParseTest * t2 = [PYParseTest objectWithDictionary:dict];
     
 
     return YES;
