@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PYUtile.h"
 /**
  hook 转屏 delegate
  */
@@ -16,7 +17,6 @@
 @end
 
 @interface UIResponder(Hook)
-+(nonnull NSMutableDictionary *) paramsDictForHookExpand;
 +(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase;
 /**
  hook Controller 的方法

@@ -9,6 +9,7 @@
 #import "UIViewController+HookView.h"
 #import "UIViewController+Hook.h"
 #import <objc/runtime.h>
+#import "NSObject+__PYHook_Private.h"
 
 static id HookViewSynTag = @"";
 static id HookViewTempSynTag = @"";
@@ -222,7 +223,7 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
         }
         HookViewIsIteritor = NO;
         @synchronized (HookViewTempSynTag) {
-            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateOrientationsTemp"];
+            NSMutableArray * temps = [self __paramsDictForHookExpand].delegateOrientationsTemp;
             if(temps && temps.count > 0){
                 for (id temp in temps) {
                     [self addDelegateView:temp];
@@ -235,10 +236,10 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
 +(void) addDelegateView:(nonnull id<UIViewcontrollerHookViewDelegate>) delegateView{
     if(HookViewIsIteritor && delegateView){
         @synchronized (HookViewTempSynTag) {
-            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateViewsTemp"];
+            NSMutableArray * temps = [self __paramsDictForHookExpand].delegateViewsTemp;
             if(temps == nil){
                 temps = [NSMutableArray new];
-                [self paramsDictForHookExpand][@"delegateViewsTemp"] = temps;
+                [self __paramsDictForHookExpand].delegateViewsTemp = temps;
             }
             [temps addObject:delegateView];
         }

@@ -27,14 +27,16 @@
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */; };
+		15B13E2722927AC20063AA74 /* NSObject+__PYHook_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B13E2622927AC20063AA74 /* NSObject+__PYHook_Private.m */; };
+		15B13E2822927BAB0063AA74 /* NSObject+__PYHook_Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B13E2622927AC20063AA74 /* NSObject+__PYHook_Private.m */; };
+		15B13E382293E5330063AA74 /* NSString+__PY_Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B13E372293E5330063AA74 /* NSString+__PY_Match.m */; };
+		15B13E392293E94D0063AA74 /* NSString+__PY_Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B13E372293E5330063AA74 /* NSString+__PY_Match.m */; };
 		15BFDEB01DF4FFF20044EDAA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEAF1DF4FFF20044EDAA /* main.m */; };
 		15BFDEB31DF4FFF20044EDAA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEB21DF4FFF20044EDAA /* AppDelegate.m */; };
 		15BFDEB61DF4FFF20044EDAA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEB51DF4FFF20044EDAA /* ViewController.m */; };
 		15BFDEB91DF4FFF20044EDAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15BFDEB71DF4FFF20044EDAA /* Main.storyboard */; };
 		15BFDEBB1DF4FFF20044EDAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15BFDEBA1DF4FFF20044EDAA /* Assets.xcassets */; };
 		15BFDEBE1DF4FFF20044EDAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15BFDEBC1DF4FFF20044EDAA /* LaunchScreen.storyboard */; };
-		15BFDF021DF5034A0044EDAA /* PYUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEC81DF5034A0044EDAA /* PYUncaughtExceptionHandler.m */; };
-		15BFDF031DF5034A0044EDAA /* PYUtile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECA1DF5034A0044EDAA /* PYUtile.m */; };
 		15BFDF041DF5034A0044EDAA /* NSArray+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECD1DF5034A0044EDAA /* NSArray+Expand.m */; };
 		15BFDF051DF5034A0044EDAA /* NSData+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECF1DF5034A0044EDAA /* NSData+Expand.m */; };
 		15BFDF061DF5034A0044EDAA /* NSDate+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDED11DF5034A0044EDAA /* NSDate+Expand.m */; };
@@ -53,8 +55,6 @@
 		15BFDF141DF5034A0044EDAA /* UIViewController+HookOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEF01DF5034A0044EDAA /* UIViewController+HookOrientation.m */; };
 		15BFDF151DF5034A0044EDAA /* UIViewController+HookView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEF21DF5034A0044EDAA /* UIViewController+HookView.m */; };
 		15BFDF1A1DF5034A0044EDAA /* PYKeyboardNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEFE1DF5034A0044EDAA /* PYKeyboardNotification.m */; };
-		15C5FAD21DF668A800FF2C75 /* PYUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEC81DF5034A0044EDAA /* PYUncaughtExceptionHandler.m */; };
-		15C5FAD31DF668A800FF2C75 /* PYUtile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECA1DF5034A0044EDAA /* PYUtile.m */; };
 		15C5FAD41DF668A800FF2C75 /* NSArray+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECD1DF5034A0044EDAA /* NSArray+Expand.m */; };
 		15C5FAD51DF668A800FF2C75 /* NSData+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDECF1DF5034A0044EDAA /* NSData+Expand.m */; };
 		15C5FAD61DF668A800FF2C75 /* NSDate+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDED11DF5034A0044EDAA /* NSDate+Expand.m */; };
@@ -76,8 +76,6 @@
 		15C5FAE71DF668A800FF2C75 /* PYKeyboardNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BFDEFE1DF5034A0044EDAA /* PYKeyboardNotification.m */; };
 		15C5FAE81DF668A800FF2C75 /* PYMotionNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A641DF6580100C361E4 /* PYMotionNotification.m */; };
 		15C5FAE91DF668A800FF2C75 /* PYOrientationNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A661DF6580100C361E4 /* PYOrientationNotification.m */; };
-		15C5FAED1DF668BD00FF2C75 /* PYUncaughtExceptionHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15BFDEC71DF5034A0044EDAA /* PYUncaughtExceptionHandler.h */; };
-		15C5FAEE1DF668BD00FF2C75 /* PYUtile.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15BFDEC91DF5034A0044EDAA /* PYUtile.h */; };
 		15C5FAEF1DF668BD00FF2C75 /* NSArray+Expand.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15BFDECC1DF5034A0044EDAA /* NSArray+Expand.h */; };
 		15C5FAF01DF668BD00FF2C75 /* NSData+Expand.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15BFDECE1DF5034A0044EDAA /* NSData+Expand.h */; };
 		15C5FAF11DF668BD00FF2C75 /* NSDate+Expand.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15BFDED01DF5034A0044EDAA /* NSDate+Expand.h */; };
@@ -110,10 +108,26 @@
 		15C5FB381DF66C4800FF2C75 /* PYGraphicsThumb.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15C5FB331DF66C3B00FF2C75 /* PYGraphicsThumb.h */; };
 		15C5FB391DF66C5200FF2C75 /* PYGraphicsDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C5FB321DF66C3B00FF2C75 /* PYGraphicsDraw.m */; };
 		15C5FB3A1DF66C5200FF2C75 /* PYGraphicsThumb.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C5FB341DF66C3B00FF2C75 /* PYGraphicsThumb.m */; };
+		15CECCA7228BAE6C008173E0 /* NSObject+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */; };
+		15CECCA8228BB6D2008173E0 /* NSObject+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15CECCA5228BAE6C008173E0 /* NSObject+Hook.h */; };
+		15CECCA9228BB6F2008173E0 /* NSObject+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */; };
 		15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
 		15DB17431DF6935700182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
 		15E4FB04221021BA001EBCAF /* py_data_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 15E4FB03221021BA001EBCAF /* py_data_function.c */; };
 		15E4FB0522102522001EBCAF /* py_data_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 15E4FB03221021BA001EBCAF /* py_data_function.c */; };
+		15FA7FC6227EB327007C484E /* PYUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC0227EB327007C484E /* PYUncaughtExceptionHandler.m */; };
+		15FA7FC7227EB327007C484E /* PYUtile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC3227EB327007C484E /* PYUtile.m */; };
+		15FA7FD3227EB357007C484E /* NSObject+PYCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FCE227EB357007C484E /* NSObject+PYCopy.m */; };
+		15FA7FD4227EB357007C484E /* NSObject+PYDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FD0227EB357007C484E /* NSObject+PYDictionary.m */; };
+		15FA7FD5227EB357007C484E /* NSObject+PYForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FD2227EB357007C484E /* NSObject+PYForm.m */; };
+		15FA7FD6227EB375007C484E /* PYUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC0227EB327007C484E /* PYUncaughtExceptionHandler.m */; };
+		15FA7FD7227EB375007C484E /* PYUtile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC3227EB327007C484E /* PYUtile.m */; };
+		15FA7FD8227EB375007C484E /* NSObject+PYCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FCE227EB357007C484E /* NSObject+PYCopy.m */; };
+		15FA7FD9227EB375007C484E /* NSObject+PYDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FD0227EB357007C484E /* NSObject+PYDictionary.m */; };
+		15FA7FDA227EB375007C484E /* NSObject+PYForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FD2227EB357007C484E /* NSObject+PYForm.m */; };
+		15FA7FDB227EB389007C484E /* PYUncaughtExceptionHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC5227EB327007C484E /* PYUncaughtExceptionHandler.h */; };
+		15FA7FDC227EB389007C484E /* PYUtile.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC2227EB327007C484E /* PYUtile.h */; };
+		15FA7FDD227EB389007C484E /* PYUtileMacro.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC4227EB327007C484E /* PYUtileMacro.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -133,6 +147,11 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				15C5FAF41DF668BD00FF2C75 /* NSObject+Expand.h in CopyFiles */,
+				15CECCA8228BB6D2008173E0 /* NSObject+Hook.h in CopyFiles */,
+				15FA7FDB227EB389007C484E /* PYUncaughtExceptionHandler.h in CopyFiles */,
+				15FA7FDC227EB389007C484E /* PYUtile.h in CopyFiles */,
+				15FA7FDD227EB389007C484E /* PYUtileMacro.h in CopyFiles */,
 				152AB3D52078F92E0047F1AE /* PYNetworkReachabilityNotification.h in CopyFiles */,
 				15799F9C1F99DB62001A7276 /* PYXml.h in CopyFiles */,
 				1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */,
@@ -140,14 +159,11 @@
 				15C5FB381DF66C4800FF2C75 /* PYGraphicsThumb.h in CopyFiles */,
 				15C5FB2F1DF66A8B00FF2C75 /* PYViewAutolayoutCenter.h in CopyFiles */,
 				15C5FB091DF668C600FF2C75 /* pyutilea.h in CopyFiles */,
-				15C5FAED1DF668BD00FF2C75 /* PYUncaughtExceptionHandler.h in CopyFiles */,
-				15C5FAEE1DF668BD00FF2C75 /* PYUtile.h in CopyFiles */,
 				15C5FAEF1DF668BD00FF2C75 /* NSArray+Expand.h in CopyFiles */,
 				15C5FAF01DF668BD00FF2C75 /* NSData+Expand.h in CopyFiles */,
 				15C5FAF11DF668BD00FF2C75 /* NSDate+Expand.h in CopyFiles */,
 				15C5FAF21DF668BD00FF2C75 /* NSDictionary+Expand.h in CopyFiles */,
 				15C5FAF31DF668BD00FF2C75 /* NSNumber+Expand.h in CopyFiles */,
-				15C5FAF41DF668BD00FF2C75 /* NSObject+Expand.h in CopyFiles */,
 				15C5FAF51DF668BD00FF2C75 /* NSString+Expand.h in CopyFiles */,
 				15C5FAF61DF668BD00FF2C75 /* UIColor+Expand.h in CopyFiles */,
 				15C5FAF71DF668BD00FF2C75 /* UIImage+Expand.h in CopyFiles */,
@@ -190,6 +206,10 @@
 		155D7810207117FC00B2CDDB /* PYNetworkReachabilityNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYNetworkReachabilityNotification.h; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
+		15B13E2522927AC20063AA74 /* NSObject+__PYHook_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+__PYHook_Private.h"; sourceTree = "<group>"; };
+		15B13E2622927AC20063AA74 /* NSObject+__PYHook_Private.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+__PYHook_Private.m"; sourceTree = "<group>"; };
+		15B13E362293E5330063AA74 /* NSString+__PY_Match.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+__PY_Match.h"; sourceTree = "<group>"; };
+		15B13E372293E5330063AA74 /* NSString+__PY_Match.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+__PY_Match.m"; sourceTree = "<group>"; };
 		15BFDEAB1DF4FFF20044EDAA /* PYUtile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PYUtile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15BFDEAF1DF4FFF20044EDAA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		15BFDEB11DF4FFF20044EDAA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -200,10 +220,6 @@
 		15BFDEBA1DF4FFF20044EDAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		15BFDEBD1DF4FFF20044EDAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		15BFDEBF1DF4FFF20044EDAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		15BFDEC71DF5034A0044EDAA /* PYUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUncaughtExceptionHandler.h; sourceTree = "<group>"; };
-		15BFDEC81DF5034A0044EDAA /* PYUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUncaughtExceptionHandler.m; sourceTree = "<group>"; };
-		15BFDEC91DF5034A0044EDAA /* PYUtile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUtile.h; sourceTree = "<group>"; };
-		15BFDECA1DF5034A0044EDAA /* PYUtile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUtile.m; sourceTree = "<group>"; };
 		15BFDECC1DF5034A0044EDAA /* NSArray+Expand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Expand.h"; sourceTree = "<group>"; };
 		15BFDECD1DF5034A0044EDAA /* NSArray+Expand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Expand.m"; sourceTree = "<group>"; };
 		15BFDECE1DF5034A0044EDAA /* NSData+Expand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Expand.h"; sourceTree = "<group>"; };
@@ -249,10 +265,23 @@
 		15C5FB321DF66C3B00FF2C75 /* PYGraphicsDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYGraphicsDraw.m; sourceTree = "<group>"; };
 		15C5FB331DF66C3B00FF2C75 /* PYGraphicsThumb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYGraphicsThumb.h; sourceTree = "<group>"; };
 		15C5FB341DF66C3B00FF2C75 /* PYGraphicsThumb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYGraphicsThumb.m; sourceTree = "<group>"; };
+		15CECCA5228BAE6C008173E0 /* NSObject+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Hook.h"; sourceTree = "<group>"; };
+		15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Hook.m"; sourceTree = "<group>"; };
 		15DB171E1DF687AB00182429 /* py_hook_encode_type.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = py_hook_encode_type.c; sourceTree = "<group>"; };
 		15DB171F1DF687AB00182429 /* py_hook_encode_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = py_hook_encode_type.h; sourceTree = "<group>"; };
 		15E4FB02221021BA001EBCAF /* py_data_function.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = py_data_function.h; sourceTree = "<group>"; };
 		15E4FB03221021BA001EBCAF /* py_data_function.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = py_data_function.c; sourceTree = "<group>"; };
+		15FA7FC0227EB327007C484E /* PYUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		15FA7FC2227EB327007C484E /* PYUtile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUtile.h; sourceTree = "<group>"; };
+		15FA7FC3227EB327007C484E /* PYUtile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYUtile.m; sourceTree = "<group>"; };
+		15FA7FC4227EB327007C484E /* PYUtileMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUtileMacro.h; sourceTree = "<group>"; };
+		15FA7FC5227EB327007C484E /* PYUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYUncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		15FA7FCD227EB357007C484E /* NSObject+PYCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PYCopy.h"; sourceTree = "<group>"; };
+		15FA7FCE227EB357007C484E /* NSObject+PYCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PYCopy.m"; sourceTree = "<group>"; };
+		15FA7FCF227EB357007C484E /* NSObject+PYDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PYDictionary.h"; sourceTree = "<group>"; };
+		15FA7FD0227EB357007C484E /* NSObject+PYDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PYDictionary.m"; sourceTree = "<group>"; };
+		15FA7FD1227EB357007C484E /* NSObject+PYForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PYForm.h"; sourceTree = "<group>"; };
+		15FA7FD2227EB357007C484E /* NSObject+PYForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PYForm.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +336,8 @@
 		15422DBB21E5B5F10038D09E /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				15B13E352293E4BC0063AA74 /* Match */,
+				15FA7FCC227EB357007C484E /* NSObject */,
 				15185D242269CA4B0009CD7A /* Copy */,
 				155B965A21EDBE1D004AFEF2 /* Hook */,
 				15422DB721E5B3C00038D09E /* ArchiveAndParse */,
@@ -319,23 +350,44 @@
 		155B965A21EDBE1D004AFEF2 /* Hook */ = {
 			isa = PBXGroup;
 			children = (
+				15B13E2522927AC20063AA74 /* NSObject+__PYHook_Private.h */,
+				15B13E2622927AC20063AA74 /* NSObject+__PYHook_Private.m */,
 				15DB171E1DF687AB00182429 /* py_hook_encode_type.c */,
 				15DB171F1DF687AB00182429 /* py_hook_encode_type.h */,
 			);
 			path = Hook;
 			sourceTree = "<group>";
 		};
+		15B13E2922927BBB0063AA74 /* Invoke */ = {
+			isa = PBXGroup;
+			children = (
+				15242A731DF6592400C361E4 /* PYInvoke.h */,
+				15242A741DF6592400C361E4 /* PYInvoke.m */,
+			);
+			path = Invoke;
+			sourceTree = "<group>";
+		};
+		15B13E352293E4BC0063AA74 /* Match */ = {
+			isa = PBXGroup;
+			children = (
+				15B13E362293E5330063AA74 /* NSString+__PY_Match.h */,
+				15B13E372293E5330063AA74 /* NSString+__PY_Match.m */,
+			);
+			path = Match;
+			sourceTree = "<group>";
+		};
 		15B7051721EDB631004C5555 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				153B97731F1DE544000F007C /* Xml */,
-				15C5FB301DF66C3B00FF2C75 /* Graphics */,
-				15C5FB2A1DF66A7900FF2C75 /* ViewAutolayout */,
-				15BFDEC61DF5034A0044EDAA /* Common */,
 				15BFDECB1DF5034A0044EDAA /* Expand */,
 				15BFDEE21DF5034A0044EDAA /* EXTScope */,
+				15C5FB301DF66C3B00FF2C75 /* Graphics */,
 				15BFDEE61DF5034A0044EDAA /* Hook */,
+				15B13E2922927BBB0063AA74 /* Invoke */,
 				15BFDEFC1DF5034A0044EDAA /* Notification */,
+				15FA7FC1227EB327007C484E /* Utile */,
+				15C5FB2A1DF66A7900FF2C75 /* ViewAutolayout */,
+				153B97731F1DE544000F007C /* Xml */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -392,17 +444,6 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		15BFDEC61DF5034A0044EDAA /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				15BFDEC71DF5034A0044EDAA /* PYUncaughtExceptionHandler.h */,
-				15BFDEC81DF5034A0044EDAA /* PYUncaughtExceptionHandler.m */,
-				15BFDEC91DF5034A0044EDAA /* PYUtile.h */,
-				15BFDECA1DF5034A0044EDAA /* PYUtile.m */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		15BFDECB1DF5034A0044EDAA /* Expand */ = {
 			isa = PBXGroup;
 			children = (
@@ -445,10 +486,10 @@
 		15BFDEE61DF5034A0044EDAA /* Hook */ = {
 			isa = PBXGroup;
 			children = (
+				15CECCA5228BAE6C008173E0 /* NSObject+Hook.h */,
+				15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */,
 				15BFDEE91DF5034A0044EDAA /* PYHook.h */,
 				15BFDEEA1DF5034A0044EDAA /* PYHook.m */,
-				15242A731DF6592400C361E4 /* PYInvoke.h */,
-				15242A741DF6592400C361E4 /* PYInvoke.m */,
 				1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */,
 				1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */,
 				15BFDEEB1DF5034A0044EDAA /* UIView+Hook.h */,
@@ -504,6 +545,31 @@
 				15C5FB341DF66C3B00FF2C75 /* PYGraphicsThumb.m */,
 			);
 			path = Graphics;
+			sourceTree = "<group>";
+		};
+		15FA7FC1227EB327007C484E /* Utile */ = {
+			isa = PBXGroup;
+			children = (
+				15FA7FC2227EB327007C484E /* PYUtile.h */,
+				15FA7FC3227EB327007C484E /* PYUtile.m */,
+				15FA7FC5227EB327007C484E /* PYUncaughtExceptionHandler.h */,
+				15FA7FC0227EB327007C484E /* PYUncaughtExceptionHandler.m */,
+				15FA7FC4227EB327007C484E /* PYUtileMacro.h */,
+			);
+			path = Utile;
+			sourceTree = "<group>";
+		};
+		15FA7FCC227EB357007C484E /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				15FA7FCD227EB357007C484E /* NSObject+PYCopy.h */,
+				15FA7FCE227EB357007C484E /* NSObject+PYCopy.m */,
+				15FA7FCF227EB357007C484E /* NSObject+PYDictionary.h */,
+				15FA7FD0227EB357007C484E /* NSObject+PYDictionary.m */,
+				15FA7FD1227EB357007C484E /* NSObject+PYForm.h */,
+				15FA7FD2227EB357007C484E /* NSObject+PYForm.m */,
+			);
+			path = NSObject;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -622,17 +688,20 @@
 			files = (
 				15BFDF091DF5034A0044EDAA /* NSObject+Expand.m in Sources */,
 				15BFDF071DF5034A0044EDAA /* NSDictionary+Expand.m in Sources */,
+				15FA7FC7227EB327007C484E /* PYUtile.m in Sources */,
+				15B13E2722927AC20063AA74 /* NSObject+__PYHook_Private.m in Sources */,
 				15BFDF0B1DF5034A0044EDAA /* UIColor+Expand.m in Sources */,
 				15E4FB04221021BA001EBCAF /* py_data_function.c in Sources */,
+				15B13E382293E5330063AA74 /* NSString+__PY_Match.m in Sources */,
 				15BFDF131DF5034A0044EDAA /* UIViewController+Hook.m in Sources */,
-				15BFDF021DF5034A0044EDAA /* PYUncaughtExceptionHandler.m in Sources */,
 				15BFDF111DF5034A0044EDAA /* PYHook.m in Sources */,
-				15BFDF031DF5034A0044EDAA /* PYUtile.m in Sources */,
 				15BFDEB61DF4FFF20044EDAA /* ViewController.m in Sources */,
 				15BFDEB31DF4FFF20044EDAA /* AppDelegate.m in Sources */,
 				15BFDF0F1DF5034A0044EDAA /* EXTScope.m in Sources */,
 				1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */,
+				15FA7FD3227EB357007C484E /* NSObject+PYCopy.m in Sources */,
 				153B97761F1DE566000F007C /* PYXml.m in Sources */,
+				15FA7FC6227EB327007C484E /* PYUncaughtExceptionHandler.m in Sources */,
 				15BFDF061DF5034A0044EDAA /* NSDate+Expand.m in Sources */,
 				15BFDF041DF5034A0044EDAA /* NSArray+Expand.m in Sources */,
 				15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */,
@@ -641,6 +710,7 @@
 				15422DBE21E5C9680038D09E /* PYArchiveObject.m in Sources */,
 				155D7811207117FD00B2CDDB /* PYNetworkReachabilityNotification.m in Sources */,
 				15BFDEB01DF4FFF20044EDAA /* main.m in Sources */,
+				15FA7FD4227EB357007C484E /* NSObject+PYDictionary.m in Sources */,
 				15BFDF051DF5034A0044EDAA /* NSData+Expand.m in Sources */,
 				15422DC121E5FA490038D09E /* PYParseDictionary.m in Sources */,
 				15BFDF081DF5034A0044EDAA /* NSNumber+Expand.m in Sources */,
@@ -651,8 +721,10 @@
 				15242A751DF6592400C361E4 /* PYInvoke.m in Sources */,
 				15BFDF0C1DF5034A0044EDAA /* UIImage+Expand.m in Sources */,
 				15C5FB361DF66C3B00FF2C75 /* PYGraphicsThumb.m in Sources */,
+				15FA7FD5227EB357007C484E /* NSObject+PYForm.m in Sources */,
 				15BFDF0E1DF5034A0044EDAA /* UIView+Expand.m in Sources */,
 				15C5FB2D1DF66A7900FF2C75 /* PYViewAutolayoutCenter.m in Sources */,
+				15CECCA7228BAE6C008173E0 /* NSObject+Hook.m in Sources */,
 				15242A6C1DF6580100C361E4 /* PYOrientationNotification.m in Sources */,
 				15422DBA21E5B4A30038D09E /* PYArchiveParse.m in Sources */,
 				15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */,
@@ -665,6 +737,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15B13E392293E94D0063AA74 /* NSString+__PY_Match.m in Sources */,
+				15C5FAD91DF668A800FF2C75 /* NSObject+Expand.m in Sources */,
+				15CECCA9228BB6F2008173E0 /* NSObject+Hook.m in Sources */,
+				15FA7FD6227EB375007C484E /* PYUncaughtExceptionHandler.m in Sources */,
+				15FA7FD7227EB375007C484E /* PYUtile.m in Sources */,
+				15FA7FD8227EB375007C484E /* NSObject+PYCopy.m in Sources */,
+				15FA7FD9227EB375007C484E /* NSObject+PYDictionary.m in Sources */,
+				15FA7FDA227EB375007C484E /* NSObject+PYForm.m in Sources */,
 				15185D282269DF860009CD7A /* PYObjectCopy.m in Sources */,
 				15E4FB0522102522001EBCAF /* py_data_function.c in Sources */,
 				15422DC321E602830038D09E /* PYArchiveParse.m in Sources */,
@@ -677,14 +757,12 @@
 				15C5FB391DF66C5200FF2C75 /* PYGraphicsDraw.m in Sources */,
 				15C5FB3A1DF66C5200FF2C75 /* PYGraphicsThumb.m in Sources */,
 				15C5FB2E1DF66A8300FF2C75 /* PYViewAutolayoutCenter.m in Sources */,
-				15C5FAD21DF668A800FF2C75 /* PYUncaughtExceptionHandler.m in Sources */,
-				15C5FAD31DF668A800FF2C75 /* PYUtile.m in Sources */,
+				15B13E2822927BAB0063AA74 /* NSObject+__PYHook_Private.m in Sources */,
 				15C5FAD41DF668A800FF2C75 /* NSArray+Expand.m in Sources */,
 				15C5FAD51DF668A800FF2C75 /* NSData+Expand.m in Sources */,
 				15C5FAD61DF668A800FF2C75 /* NSDate+Expand.m in Sources */,
 				15C5FAD71DF668A800FF2C75 /* NSDictionary+Expand.m in Sources */,
 				15C5FAD81DF668A800FF2C75 /* NSNumber+Expand.m in Sources */,
-				15C5FAD91DF668A800FF2C75 /* NSObject+Expand.m in Sources */,
 				15C5FADA1DF668A800FF2C75 /* NSString+Expand.m in Sources */,
 				15C5FADB1DF668A800FF2C75 /* UIColor+Expand.m in Sources */,
 				15C5FADC1DF668A800FF2C75 /* UIImage+Expand.m in Sources */,

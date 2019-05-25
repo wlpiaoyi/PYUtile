@@ -10,6 +10,8 @@
 #import "UIViewController+Hook.h"
 #import "PYUtile.h"
 #import <objc/runtime.h>
+#import "NSObject+__PYHook_Private.h"
+
 static id HookOrientationSynTag = @"";
 static id HookOrientationTempSynTag = @"";
 static BOOL HookOrientationIsIteritor = NO;
@@ -152,10 +154,10 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
 //⇐
 
 +(nullable NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> *) delegateOrientations{
-    return [self paramsDictForHookExpand][@"delegateOrientations"];
+    return [self __paramsDictForHookExpand].delegateOrientations;
 }
 +(void) setDelegateOrientations:(nullable NSHashTable<id<UIViewcontrollerHookOrientationDelegate>> *) delegateOrientations{
-    [self paramsDictForHookExpand][@"delegateOrientations"] = delegateOrientations;
+    [self __paramsDictForHookExpand].delegateOrientations = delegateOrientations;
 }
 +(void) hookOrientationIteratorTable:(nonnull NSHashTable *) table block:(void(^)(id sub)) block target:(nonnull UIViewController *) target{
     if(![UIViewController canExcuHookMethod:target]) return;
@@ -166,7 +168,7 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
         }
         HookOrientationIsIteritor = NO;
         @synchronized (HookOrientationTempSynTag) {
-            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateOrientationsTemp"];
+            NSMutableArray * temps = [self __paramsDictForHookExpand].delegateOrientationsTemp;
             if(temps && temps.count > 0){
                 for (id temp in temps) {
                     [self addDelegateOrientation:temp];
@@ -179,10 +181,10 @@ BOOL isExcuteUIViewControllerHookOrientationMethod = false;
 +(void) addDelegateOrientation:(nullable id<UIViewcontrollerHookOrientationDelegate>) delegateOrientation{
     if(HookOrientationIsIteritor && delegateOrientation){
         @synchronized (HookOrientationTempSynTag) {
-            NSMutableArray * temps = [self paramsDictForHookExpand][@"delegateOrientationsTemp"];
+            NSMutableArray * temps = [self __paramsDictForHookExpand].delegateOrientationsTemp;
             if(temps == nil){
                 temps = [NSMutableArray new];
-                [self paramsDictForHookExpand][@"delegateOrientationsTemp"] = temps;
+                [self __paramsDictForHookExpand].delegateOrientationsTemp = temps;
             }
             [temps addObject:delegateOrientation];
         }

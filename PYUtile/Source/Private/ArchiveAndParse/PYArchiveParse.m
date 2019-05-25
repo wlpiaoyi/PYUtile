@@ -45,50 +45,23 @@ static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 @implementation NSDate(__PY_ARC_PAR)
 +(NSObject *) __PY_PARSE:(NSObject *) value{
     if(value == nil) return nil;
-//    if(parseTags != nil && strlen(parseTags) > 0){
-//        if([value isKindOfClass:[NSDate class]]){
-//            if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX1, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX1))){
-//                return @(((NSDate *) value).timeIntervalSince1970);
-//            }else if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX3, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX3))){
-//                return @((long)(((NSDate *) value).timeIntervalSince1970 * 1000));
-//            }else{
-//                return [((NSString *)value) dateFormateString:[NSString stringWithUTF8String:parseTags]];
-//            }
-//        }else if([value isKindOfClass:[NSNumber class]]){
-//            NSTimeInterval  timex1 = ((NSNumber *)value).longValue;
-//            if(timex1 > 9999999999.0) timex1 = timex1 / 1000.0;
-//            if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX1, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX1))){
-//                return @(timex1);
-//            }else if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX3, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX3))){
-//                return @(timex1 * 1000);
-//            }else{
-//                NSDate * date = [NSDate dateWithTimeIntervalSince1970:timex1];
-//                return [date dateFormateDate:[NSString stringWithUTF8String:parseTags]];
-//            }
-//        }else if([value isKindOfClass:[NSString class]]){
-//            NSDate * date = [((NSString *)value) dateFormateString:nil];
-//            if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX1, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX1))){
-//                return @(date.timeIntervalSince1970);
-//            }else if(strncmp(parseTags, __PY_ARCHIVE_DATE_PARSE_NUMBERX3, strlen(__PY_ARCHIVE_DATE_PARSE_NUMBERX3))){
-//                return @(date.timeIntervalSince1970 * 1000);
-//            }else{
-//                return [date dateFormateDate:[NSString stringWithUTF8String:parseTags]];
-//            }
-//        }
-//    }
+    if([value isKindOfClass:[NSString class]]){
+        NSDate * date = [((NSString *)value) dateFormateString:nil];
+        if(date) return date;
+        if([NSString isEnabled:value]) value = @([(NSString *)value integerValue]);
+        else return nil;
+    }
     if([value isKindOfClass:[NSDate class]]){
         return [(NSDate *)value dateFormateDate:nil];
-    }else if([value isKindOfClass:[NSNumber class]]){
+    }
+    if([value isKindOfClass:[NSNumber class]]){
         NSTimeInterval timeInterval =  [((NSNumber *)value) doubleValue];
         if(timeInterval > 9999999999.0){
             return  [NSDate dateWithTimeIntervalSince1970:timeInterval/1000.0];
         }else{
             return [NSDate dateWithTimeIntervalSince1970:timeInterval];
         }
-    }else if([value isKindOfClass:[NSString class]]){
-        return [((NSString *)value) dateFormateString:nil];
     }
-    
     kPrintExceptionln("value:%s can't parset to %s", [value description].UTF8String, NSStringFromClass(self).UTF8String);
     return nil;
 }
@@ -122,6 +95,8 @@ static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
         return @([((NSString *)value) doubleValue]);
     }else if([value isKindOfClass:[NSData class]]){
         return @([([((NSData *)value) toString]) doubleValue]);
+    }else if([value isKindOfClass:[NSDate class]]){
+        return @([((NSDate *)value) timeIntervalSince1970]);
     }
     kPrintExceptionln("value:%s can't parset to %s", [value description].UTF8String, NSStringFromClass(self).UTF8String);
     return nil;

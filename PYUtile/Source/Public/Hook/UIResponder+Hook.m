@@ -8,27 +8,22 @@
 
 #import "UIResponder+Hook.h"
 #import "PYUtile.h"
+#import "NSObject+Hook.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "NSObject+__PYHook_Private.h"
 
-NSArray * PY_HOOK_RESPOINDER_CLASS_MS;
-
-void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 
 @implementation UIResponder(Hook)
 
--(void) myDealloc{
-    
-}
-
 -(void) exchangeDealloc{
-    Class clazz = self.class;
-    if([NSBundle bundleForClass:clazz] != [NSBundle mainBundle] && clazz != [UIView class]) {
-        [self exchangeDealloc];
-        return;
-    }
+//    Class clazz = self.class;
+//    if([NSBundle bundleForClass:clazz] != [NSBundle mainBundle] && clazz != [UIView class]) {
+//        [self exchangeDealloc];
+//        return;
+//    }
     NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
-    for (id<UIResponderHookBaseDelegate> delegate in delegates){
+    if(delegates) for (id<UIResponderHookBaseDelegate> delegate in delegates){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
             [delegate beforeExcuteDeallocWithTarget:self];
         }
@@ -38,51 +33,19 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
     [self exchangeDealloc];
 }
 
-
-+(nonnull NSMutableDictionary *) paramsDictForHookExpand{
-    NSMutableDictionary * paramsDict = objc_getAssociatedObject([UIResponder class], UIResponderHookParamDictPointer);
-    if(paramsDict == nil) {
-        paramsDict = [NSMutableDictionary new];
-        objc_setAssociatedObject([UIResponder class], UIResponderHookParamDictPointer, paramsDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return paramsDict;
-}
 +(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
-    return [self paramsDictForHookExpand][@"delegateBase"];
+    return [self __paramsDictForHookExpand].delegateBase;
 }
 +(void) setDelegateBase:(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase{
-    [self paramsDictForHookExpand][@"delegateBase"] = delegateBase;
-}
-+(BOOL) M_PY_HOOK_RESPOINDER_CLASS_MS{
-    for (Class clazz in PY_HOOK_RESPOINDER_CLASS_MS) {
-        if(clazz == self){
-            return false;
-        }
-    }
-    return true;
+    [self __paramsDictForHookExpand].delegateBase = delegateBase;
 }
 ///<== exchangeMethods
 +(BOOL) hookWithMethodNames:(nullable NSArray<NSString *> *) methodNames{
-    
-    static dispatch_once_t predicate;
-    dispatch_once(&predicate, ^{
-        PY_HOOK_RESPOINDER_CLASS_MS = @[[UISearchBar class]];
-        SEL sel = sel_getUid("dealloc");
-        Class responderClazz = [UIResponder class];
-        IMP imp = class_getMethodImplementation(responderClazz, sel);
-        IMP superImp = class_getMethodImplementation(class_getSuperclass(responderClazz), sel);
-        if(imp == superImp){
-            SEL mySel = @selector(myDealloc);
-            IMP myImp = class_getMethodImplementation(responderClazz, mySel);
-            Method myMethod = class_getInstanceMethod(responderClazz, mySel);
-            class_replaceMethod(self, sel, myImp, method_getTypeEncoding(myMethod));
-        }
+    static dispatch_once_t predicate; dispatch_once(&predicate, ^{
         [UIResponder hookMethodWithName:@"dealloc"];
         [UIResponder setDelegateBase:[NSHashTable<id<UIResponderHookBaseDelegate>> weakObjectsHashTable]];
     });
-    if (!methodNames) {
-        return false;
-    }
+    if (!methodNames)  return false;
     @synchronized([self class]){
         for (NSString *methodName in methodNames) {
             if([self hookMethodWithName:methodName]){
@@ -96,29 +59,9 @@ void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 }
 
 +(BOOL) hookMethodWithName:(NSString*) name{
-    SEL orgSel = sel_getUid(name.UTF8String);
-    
+    SEL originalSel = sel_getUid(name.UTF8String);
     SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[name substringToIndex:1] uppercaseString], [name substringFromIndex:1]].UTF8String);
-    IMP exchangeIMP = class_getMethodImplementation(self, exchangeSel);
-    IMP orgIMP = class_getMethodImplementation(self, orgSel);
-    IMP gmf = (IMP)_objc_msgForward;
-    if(exchangeIMP == gmf || orgIMP == gmf){
-        return false;
-    }
-    
-    Class superClazz = class_getSuperclass(self);
-    IMP superOrgIMP = class_getMethodImplementation(superClazz, orgSel);
-    IMP superExchangeIMP = class_getMethodImplementation(superClazz, exchangeSel);
-    
-    if(superOrgIMP != gmf && superExchangeIMP != gmf && superOrgIMP == orgIMP){
-        return [superClazz hookMethodWithName:name];;
-    }
-    
-    Method orgMethod = class_getInstanceMethod(self, orgSel);
-    Method exchangeMethod = class_getInstanceMethod(self, exchangeSel);
-    class_replaceMethod(self, orgSel, exchangeIMP, method_getTypeEncoding(orgMethod));
-    class_replaceMethod(self, exchangeSel, orgIMP, method_getTypeEncoding(exchangeMethod));
-    return true;
+    return [self hookInstanceOriginalAction:originalSel exchangeAction:exchangeSel];
 }
 
 

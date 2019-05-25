@@ -9,6 +9,7 @@
 #import "UIViewController+Hook.h"
 #import "PYUtile.h"
 #import <objc/runtime.h>
+#import "NSObject+__PYHook_Private.h"
 
 static NSArray<Class> * PYCanExcuHookMethodVCS;
 

@@ -28,6 +28,8 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  */
 +(BOOL) isNativelibraryClass;
 
+#pragma 以下是私有库实现
+#pragma 复制对象=========================================>
 /**
  复制对象
  */
@@ -36,6 +38,10 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  (同一类型)复制对象值到另一个对象
  */
 +(nullable NSObject *) copyValueFromObj:(nonnull NSObject *) fromObj toObj:(nonnull NSObject *) toObj;
+#pragma 复制对象=========================================<
+
+
+#pragma 数据对象化=========================================>
 /**
  通过JSON初始化对象
  */
@@ -44,6 +50,10 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  通过JSON初始化对象
  */
 +(nullable id) objectWithDictionary:(nonnull NSObject*) dictionary clazz:(nonnull Class) clazz;
+#pragma 数据对象化=========================================<
+
+
+#pragma 归档对象=========================================>
 /**
  通过对象生成JSON
  */
@@ -56,7 +66,16 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  通过对象生成JSON
  */
 -(nullable NSObject*) objectToDictionaryWithDeepClass:(nullable Class) deepClass;
+/**
+ 通过对象生成JSON
+ #param fliteries 过滤标识
+ #param deepClass 遍历深度标识
+ */
+-(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(nullable Class) deepClass;
+#pragma 归档对象=========================================<
 
+
+#pragma 对象转化成表单==========================================>
 /**
  将当前对象装换成form表单
  如果数组需要index, 这要使用has_index_{propertyname}标记
@@ -70,17 +89,11 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  @param clazz 类型
  */
 -(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix clazz:(nullable Class) clazz;
-/**
- 通过对象生成JSON
- #param fliteries 过滤标识
- #param deepClass 遍历深度标识
- */
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(nullable Class) deepClass;
+#pragma 对象转化成表单==========================================<
 
 /**
  通过dictionary解析出实体结构
  参考
  */
 +(nullable NSString *) dictionaryAnalysisForClass:(nonnull NSDictionary*) dictionary;
-
 @end

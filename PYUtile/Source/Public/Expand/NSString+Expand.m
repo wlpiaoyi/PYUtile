@@ -7,22 +7,12 @@
 //
 
 #import "NSString+Expand.h"
+#import "NSString+__PY_Match.h"
 #import "py_data_function.h"
 
-NSString * REGEX_HOMEHONE = @"^((\\d{2,4}\\-){0,1}\\d{7,9})$";
-NSString * REGEX_MOBILEPHONE = @"^(\\+(\\d{2})){0,1}((13)|(14)|(15)|(18)|(19)|(17))\\d{9}$";
-NSString * REGEX_INTEGER = @"^\\d{1,}$";
-NSString * REGEX_FLOAT = @"^\\d{1,}\\.{1}\\d{1,}$";
-NSString * REGEX_EMAIL = @"^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";
-//港澳通行证
-NSString * REGEX_HKMACCARD = @"^([a-zA-Z]\\d{8})$";
-//台湾通行证
-NSString * REGEX_TWCARD = @"^[a-zA-Z0-9]{1,20}$";
-//护照
-NSString * REGEX_PASSPORT = @"^[A-Z\\d]{5,30}$";
-NSString * REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\\d{1,}元)$";
-
 static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @implementation NSString (Expand)
 -(BOOL) hasChinese:(nullable BOOL *) isAll{
@@ -141,32 +131,8 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
         NSString * head = [self substringWithRange:NSMakeRange(0, 2)];
         if([head isEqual:@"0x"]){
             return py_data_16_to_10(self.uppercaseString.UTF8String);
-//            const char * value = self.uppercaseString.UTF8String;
-//            NSInteger integer = 0;
-//            NSInteger index = 0;
-//            for (NSInteger i = self.length - 1; i >= 2; --i) {
-//                NSInteger c = (NSInteger)value[i];
-//                if(c >= 48 && c <= 57){
-//                    integer += (c-48) << (4 * index);
-//                }else if(c >= 65 && c <= 70){
-//                    integer += (c-55) << (4 * index);
-//                }
-//                index++;
-//            }
-//            return integer;
         }else if([head isEqual:@"0b"]){
             return py_data_2_to_10(self.uppercaseString.UTF8String);
-//            const char * value = self.uppercaseString.UTF8String;
-//            NSInteger integer = 0;
-//            NSInteger index = 0;
-//            for (NSInteger i = self.length -1; i >= 2; --i) {
-//                char c = value[i];
-//                if(c == '1'){
-//                    integer += 1 << (1 * index);
-//                }
-//                index++;
-//            }
-//            return integer;
         }
     }
     return self.integerValue;
@@ -216,154 +182,6 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
         output[theIndex + 3] = (i + 2) < length ? table[(value >> 0)  & 0x3F] : '=';
     }
     return [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-}
-
-/**
- 整数
- */
--(BOOL) matchInteger{
-    return [NSString matchArg:self regex:REGEX_INTEGER];
-}
-/**
- 小数
- */
--(BOOL) matchFloat{
-    return [NSString matchArg:self regex:REGEX_FLOAT];
-}
-/**
- 手机号码
- */
--(BOOL) matchMobliePhone{
-    return [NSString matchArg:self regex:REGEX_MOBILEPHONE];
-}
-/**
- 座机号码
- */
--(BOOL) matchHomePhone{
-    return [NSString matchArg:self regex:REGEX_HOMEHONE];
-}
-/**
- 邮箱
- */
--(BOOL) matchEmail{
-    return [NSString matchArg:self regex:REGEX_EMAIL];
-}
-/**
- 港澳通行证
- */
--(BOOL) matchHkMacCard{
-    return [NSString matchArg:self regex:REGEX_HKMACCARD];
-}
-/**
- 台湾通行证
- */
--(BOOL) matchTWCard{
-    return [NSString matchArg:self regex:REGEX_TWCARD];
-}
-/**
- 护照
- */
--(BOOL) matchPassport{
-    return [NSString matchArg:self regex:REGEX_PASSPORT];
-}
-
-/**
- 身份证
- */
--(BOOL) matchIdentifyNumber{
-    if(self.length == 18)
-    {
-        const char* pszSrc = self.uppercaseString.UTF8String;
-        int iS = 0;
-        int iW[]={7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
-        char szVerCode[]="10X98765432";
-        int i;
-        for(i=0;i<17;i++)
-        {
-            iS += (int)(pszSrc[i]-'0') * iW[i];
-        }
-        int iY = iS%11;
-        return pszSrc[17] == szVerCode[iY];
-    }
-    return NO;
-}
-
-/**
- * 银行卡验证
- */
--(BOOL) matchBankNumber{
-    if(self.length==0)
-    {
-        return NO;
-    }
-    NSString *digitsOnly = @"";
-    char c;
-    for (int i = 0; i < self.length; i++)
-    {
-        c = [self characterAtIndex:i];
-        if (isdigit(c))
-        {
-            digitsOnly =[digitsOnly stringByAppendingFormat:@"%c",c];
-        }
-    }
-    int sum = 0;
-    int digit = 0;
-    int addend = 0;
-    BOOL timesTwo = false;
-    for (NSInteger i = digitsOnly.length - 1; i >= 0; i--)
-    {
-        digit = [digitsOnly characterAtIndex:i] - '0';
-        if (timesTwo)
-        {
-            addend = digit * 2;
-            if (addend > 9) {
-                addend -= 9;
-            }
-        }
-        else {
-            addend = digit;
-        }
-        sum += addend;
-        timesTwo = !timesTwo;
-    }
-    int modulus = sum % 10;
-    return modulus == 0;
-}
-
-/**
- 通过正则表达式找出所以匹配的String
- */
--(nullable NSArray<NSString *> *) stringsForRegex:(nonnull NSString *) regexstr{
-    
-    NSArray<NSTextCheckingResult *> * matches = [self matchesForRegex:regexstr];
-    
-    //match: 所有匹配到的字符,根据() 包含级
-    NSMutableArray<NSString *> * array = [NSMutableArray array];
-    for (NSTextCheckingResult *match in matches) {
-        if([match numberOfRanges] < 1) continue;
-        //以正则中的(),划分成不同的匹配部分
-        NSRange range = [match rangeAtIndex:0];
-        NSString *component = [self substringWithRange:range];
-        [array addObject:component];
-    }
-    
-    return array;
-}
-
-/**
- 通过正则表达式找出所以匹配的Ranges
- */
--(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr{
-
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexstr options:NSRegularExpressionCaseInsensitive error:nil];
-    
-    return [regex matchesInString:self options:0 range:NSMakeRange(0, [self length])];
-}
-
-
-+(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{
-    NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    return [pred evaluateWithObject:arg];
 }
 
 
@@ -436,9 +254,5 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
     return 100.0 - 100.0*matrix[n][m]/self.length;
     
 }
-
-#warning 待定的功能
--(BOOL) mathMoneyCN{
-    return [NSString matchArg:self regex:REGEX_MONEYCN];
-}
 @end
+#pragma clang diagnostic pop

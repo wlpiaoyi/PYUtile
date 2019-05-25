@@ -10,11 +10,11 @@
 #import "PYInvoke.h"
 #import "PYUtile.h"
 #import "PYArchiveParse.h"
-#import "NSString+Expand.h"
-
+#import "NSObject+PYDictionary.h"
 #import <objc/runtime.h>
 
-static NSDictionary *PYObjectSuperPropertNameDict;
+NSDictionary * PY_OBJ_PROPER_NAME_DICT;
+
 static char * PYObjectParsedictFailedKey = "pyobj_parsed_failed";
 id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value, Class _Nonnull clazz) = nil;
 
@@ -22,7 +22,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 
 +(void) initialize{
     static dispatch_once_t onceToken; dispatch_once(&onceToken, ^{
-        PYObjectSuperPropertNameDict = @{@"hash":@YES,@"superclass":@YES,@"description":@YES,@"debugDescription":@YES};
+        PY_OBJ_PROPER_NAME_DICT = @{@"hash":@YES,@"superclass":@YES,@"description":@YES,@"debugDescription":@YES};
     });
 }
 +(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
@@ -177,7 +177,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 #pragma mark 归档数据
 +(nullable NSObject *) archvieForDict:(nonnull NSMutableDictionary *) dict object:(nonnull NSObject *) object varName:(NSString *) varName typeEncoding:(const char *) typeEncoding{
 
-    if(((NSNumber *)PYObjectSuperPropertNameDict[varName]).boolValue) return nil;//过滤Obj特殊属性
+    if(((NSNumber *)PY_OBJ_PROPER_NAME_DICT[varName]).boolValue) return nil;//过滤Obj特殊属性
     NSObject * returnValue = nil;
     size_t tedl = strlen(typeEncoding);
     if(tedl == 0) return nil;
@@ -228,8 +228,8 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
             NSUInteger size = invocation.methodSignature.methodReturnLength;
             returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(PYBlocktodictParsetStruct){
-//            returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
+        }else if(PYBlocktodictParsetStruct){
+            returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
         }else return nil;
     }else if(strcasecmp(typeEncoding, @encode(SEL)) == 0){
         NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];

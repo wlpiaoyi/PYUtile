@@ -42,6 +42,22 @@ kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
  */
 +(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(nonnull UIView*) subView centerPointer:(CGPoint) pointer;
 /**
+ 等宽约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsWithForView:(nonnull UIView *) view target:(nonnull UIView *) target;
+/**
+ 等宽约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsWithForView:(nonnull UIView *) view target:(nonnull UIView *) target multiplier:(CGFloat) multiplier constant:(CGFloat) constant;
+/**
+ 等高约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsHeightForView:(nonnull UIView *) view target:(nonnull UIView *) target;
+/**
+ 等高约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsHeightForView:(nonnull UIView *) view target:(nonnull UIView *) target multiplier:(CGFloat) multiplier constant:(CGFloat) constant;
+/**
  横向等比约束
  */
 +(nonnull NSArray<NSDictionary<NSString *, NSLayoutConstraint *> *> *) persistConstraintHorizontal:(nonnull NSArray<UIView *> *)subViews relationmargins:(UIEdgeInsets) margins relationToItems:(PYEdgeInsetsItem) toItems offset:(CGFloat) offset;

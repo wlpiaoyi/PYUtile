@@ -9,6 +9,7 @@
 #import "UIView+Hook.h"
 #import "UIResponder+Hook.h"
 #import <objc/runtime.h>
+#import "NSObject+__PYHook_Private.h"
 
 BOOL isExcuteUIViewHookMethod;
 
@@ -54,10 +55,10 @@ BOOL isExcuteUIViewHookMethod;
 }
 
 +(nullable NSHashTable<id<UIViewHookDelegate>> *) delegateViews{
-    return [self paramsDictForHookExpand][@"delegateViews"];
+    return [self __paramsDictForHookExpand].delegateViews;
 }
 +(void) setDelegateViews:(NSHashTable<id<UIViewHookDelegate>> *) delegateViews{
-    [self paramsDictForHookExpand][@"delegateViews"] = delegateViews;
+    [self __paramsDictForHookExpand].delegateViews = delegateViews;
 }
 +(void) addDelegateView:(nonnull id<UIViewHookDelegate>) delegateView{
     NSHashTable<id<UIViewHookDelegate>> * delegateViews = [self delegateViews];

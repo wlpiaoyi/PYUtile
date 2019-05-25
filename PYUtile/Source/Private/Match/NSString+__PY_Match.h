@@ -1,49 +1,15 @@
 //
-//  NSString+Convenience.h
-//  AKSL-189-Msp
+//  NSString+__PY_Match.h
+//  PYUtile
 //
-//  Created by qqpiaoyi on 13-11-12.
-//  Copyright (c) 2013年 AKSL. All rights reserved.
+//  Created by wlpiaoyi on 2019/5/21.
+//  Copyright © 2019 wlpiaoyi. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface NSString (Expand)
--(BOOL) hasChinese:(nullable BOOL *) isAll;
--(BOOL) hasASCII:(nullable BOOL *) isAll;
--(BOOL) hasUnkown:(nullable BOOL *) isAll;
--(NSComparisonResult) compareVersion:(nullable NSString *) version;
--(nullable NSString *)filterHTML;
-/**
- 将字符串转换成日期
- */
--(nullable NSDate *) dateFormateString:(nullable NSString *) formatePattern;
-/**
- 判断字符串是否有效 "",nil,NO,NSNull
- */
-+(bool) isEnabled:(nullable id) target;
-/**
- 将64位的字符串装换成正常的Data数据
- */
--(nullable NSData *) toDataForBase64;
-/**
- 将字符串装换成Data数据
- */
--(nullable NSData *) toData;
-/**
- 0b10001,
- 0xFFFFFF33,
- 10001
- */
--(NSInteger) toInteger;
 
-/**
- 比较字符串相似度
- */
--(float) likePercentForCompare:(nullable NSString *)compare;
-
-
+@interface NSString(__PY_Match)
 #pragma 字符串验证=================================>
 /**
  整数验证
@@ -98,5 +64,5 @@
 
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
 #pragma 字符串验证<=================================
-
 @end
+

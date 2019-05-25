@@ -34,8 +34,8 @@
     }
     if([PYArchiveParse canParset:fromObj.class]) return nil;
     
-    if(fromObj.class != clazz && ![fromObj.class isMemberForClazz:clazz]) return nil;
-    if(toObj.class != clazz && ![toObj.class isMemberForClazz:clazz]) return nil;
+    if(![fromObj.class isMemberForClazz:clazz]) return nil;
+    if(![toObj.class isMemberForClazz:clazz]) return nil;
     
     unsigned int outCount;
     Ivar *ivars = class_copyIvarList(clazz, &outCount);
@@ -51,7 +51,7 @@
         if([value isKindOfClass:[NSDictionary class]]){
             NSDictionary * toValue = [toObj valueForKey:keyName];
             if(toValue == nil) toValue = [NSMutableDictionary new];
-            toValue = (NSDictionary *)[self copyValueFromObj:value toObj:toValue];
+            toValue = (NSDictionary *)[PYObjectCopy copyValueWithClass:[value class] fromObj:value toObj:toValue];//[self copyValueFromObj:value toObj:toValue];
             [toObj setValue:toValue forKey:keyName];
             continue;
         }
@@ -93,7 +93,7 @@
             isContained = YES;
             toObj = toObjs[index];
         }
-        NSObject * objResult = [fromObj.class copyValueFromObj:fromObj toObj:toObj];
+        NSObject * objResult = [PYObjectCopy copyValueWithClass:[fromObj class] fromObj:fromObj toObj:toObj];//[fromObj.class copyValueFromObj:fromObj toObj:toObj];
         if(!isContained) [((NSMutableArray *) toObjs) addObject:objResult];
         else if(objResult != toObj){
             [((NSMutableArray *) toObjs) removeObject:toObj];
@@ -124,7 +124,7 @@
             toObj = [fromObj.class new];
             isContained = NO;
         }
-        NSObject * objResult = [fromObj.class copyValueFromObj:fromObj toObj:toObj];
+        NSObject * objResult = [PYObjectCopy copyValueWithClass:[fromObj class] fromObj:fromObj toObj:toObj];//[fromObj.class copyValueFromObj:fromObj toObj:toObj];
         [contains addObject:objResult];
         if(!isContained) [((NSMutableSet *) toObjs) addObject:objResult];
         else if(objResult != toObj){

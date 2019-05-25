@@ -194,16 +194,13 @@
     }else{
         NSMutableArray * argumentTypes = [NSMutableArray new];
         NSMutableArray * argumentEncodes = [NSMutableArray new];
+        NSString * methodName = [NSString stringWithUTF8String:sel_getName(method_getName(method))];
         for (int index = 2; index < argumentNum.integerValue + 2; index ++) {
             char argumentEncode[2];
             method_getArgumentType(method, index, argumentEncode, 2);
             NSString *argumentType = [[NSString alloc] initWithUTF8String:[PYInvoke pyParseEncodeTpe:argumentEncode isBaseType:nil]];
-            [argumentEncodes addObject:[NSString stringWithUTF8String:argumentEncode]];
+            [argumentEncodes addObject:[NSString stringWithUTF8String:argumentEncode] ? : @"?"];
             [argumentTypes addObject:argumentType];
-        }
-        NSString * methodName = [NSString stringWithUTF8String:sel_getName(method_getName(method))];
-        if([methodName containsString:@"handleDelegateCallbacksWithOptions"]){
-            NSLog(@"");
         }
         return @{keyName : methodName,
                  keyArgumentNum:argumentNum,
