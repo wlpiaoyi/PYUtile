@@ -9,13 +9,20 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol PYObjectParseProtocol <NSObject>
+
+@optional
+-(nullable NSArray *) pyObjectGetKeysForParseValue;
+
+@end
+
 extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
 
 /**
  归档实体数据
  由于Object-c的反射不支持泛型所以如果对数组进行归档和解析时必须使用(property_??/ivar_??)进行泛型的指定
  */
-@interface NSObject(toDictionary)
+@interface NSObject(PYExpand)
 /**
  当前Class是否是指定的class
  0：不是
@@ -28,7 +35,11 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  */
 +(BOOL) isNativelibraryClass;
 
+@end
+
 #pragma 以下是私有库实现
+
+@interface NSObject(PYCopyObject)
 #pragma 复制对象=========================================>
 /**
  复制对象
@@ -39,7 +50,13 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
  */
 +(nullable NSObject *) copyValueFromObj:(nonnull NSObject *) fromObj toObj:(nonnull NSObject *) toObj;
 #pragma 复制对象=========================================<
+@end
 
+/**
+ 归档实体数据
+ 由于Object-c的反射不支持泛型所以如果对数组进行归档和解析时必须使用(property_??/ivar_??)进行泛型的指定
+ */
+@interface NSObject(PYParseToDictionary)
 
 #pragma 数据对象化=========================================>
 /**

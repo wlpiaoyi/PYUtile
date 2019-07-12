@@ -10,6 +10,13 @@
 
 extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
 
+@protocol PYObjectParseProtocol <NSObject>
+
+@optional
+-(nullable NSArray *) pyObjectGetKeysForParseValue;
+
+@end
+
 @interface NSObject(PYDictionary)
 
 #pragma 数据对象化=========================================>

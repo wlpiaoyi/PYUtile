@@ -72,13 +72,23 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     NSMutableDictionary *dict = [NSMutableDictionary new];
     unsigned int outCount;
     objc_property_t *properties = class_copyPropertyList(clazz, &outCount);
+    
     unsigned int outCount2;
     Ivar *ivars = class_copyIvarList(clazz, &outCount2);
     @try {
+        NSArray<NSString *> * parseKeys = nil;
+        if([object conformsToProtocol:@protocol(PYObjectParseProtocol)]){
+            if([object respondsToSelector:@selector(pyObjectGetKeysForParseValue)]){
+                parseKeys = [object performSelector:@selector(pyObjectGetKeysForParseValue)];
+            }
+        }
         NSMutableArray<NSString *> * removePNames = [NSMutableArray new];
         for (int i = 0; i < outCount; i++) {
             objc_property_t property = properties[i];
             NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
+            if(parseKeys && ![parseKeys containsObject:propertyName]){
+                continue;
+            }
             if(propertyName.length == 0) continue;
             const char * typeEncoding;
             bool flagCanExcute = true;
@@ -124,6 +134,9 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             Ivar ivar = ivars[i];
             NSString * ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
             if([removePNames containsObject:ivarName]){
+                continue;
+            }
+            if(parseKeys && ![parseKeys containsObject:ivarName]){
                 continue;
             }
             if([dict valueForKey:ivarName] != nil) continue;

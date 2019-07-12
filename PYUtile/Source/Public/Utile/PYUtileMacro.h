@@ -18,6 +18,12 @@
 
 #pragma mark APP版本号
 #define kAppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+#pragma mark APP构建版本号
+#define kAppBundleVersion [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleVersion"]
+#pragma mark 获取App显示名
+#define kAppDisplayName [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleDisplayName"]
+#pragma mark 获取AppID
+#define kAppBundleIdentifier [[[NSBundle mainBundle]infoDictionary] objectForKey:@"CFBundleIdentifier"]
 #pragma mark 系统版本号
 #define kSystemVersion [[UIDevice currentDevice] systemVersion]
 #pragma mark 获取当前语言

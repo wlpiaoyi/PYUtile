@@ -17,19 +17,14 @@
 @implementation UIResponder(Hook)
 
 -(void) exchangeDealloc{
-//    Class clazz = self.class;
-//    if([NSBundle bundleForClass:clazz] != [NSBundle mainBundle] && clazz != [UIView class]) {
-//        [self exchangeDealloc];
-//        return;
-//    }
     NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBase];
     if(delegates) for (id<UIResponderHookBaseDelegate> delegate in delegates){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
             [delegate beforeExcuteDeallocWithTarget:self];
         }
     }
+    if([self conformsToProtocol:@protocol(UITextInput)] && [self isFirstResponder])[self resignFirstResponder];
     objc_removeAssociatedObjects(self);
-    if([self canResignFirstResponder]) [self resignFirstResponder];
     [self exchangeDealloc];
 }
 
@@ -59,9 +54,7 @@
 }
 
 +(BOOL) hookMethodWithName:(NSString*) name{
-    SEL originalSel = sel_getUid(name.UTF8String);
-    SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[name substringToIndex:1] uppercaseString], [name substringFromIndex:1]].UTF8String);
-    return [self hookInstanceOriginalAction:originalSel exchangeAction:exchangeSel];
+    return [self hookInstanceMethodName:name];
 }
 
 
