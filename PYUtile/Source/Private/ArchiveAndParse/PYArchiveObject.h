@@ -10,7 +10,8 @@
 
 
 @interface PYArchiveObject : NSObject
-+(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries;
++(void) iteratorWithObject:(nonnull NSObject *) object clazz:(nullable Class) clazz userInfo:(nullable id) userInfo blockExcute:(void (^_Nonnull)(NSObject * _Nonnull object, NSString * _Nonnull filedName, const char * _Nonnull typeEncoding, id _Nonnull userInfo, BOOL isIvar)) blockExcute;
++(nullable NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries;
 @end
 
 

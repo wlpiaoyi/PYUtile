@@ -10,15 +10,22 @@
 #import <Foundation/Foundation.h>
 
 @interface NSDate (Expand)
-
+/**
+ 友好的时间描述
+ */
+-(nonnull NSString *) dateTimeDescribe;
+/**
+ 友好的时间描述
+ */
+-(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate dateFormate:(nullable NSString *) dateFormate;
 /**
  友好的日期描述
  */
 -(nonnull NSString *) dateDescribe;
 /**
- 友好的时间描述
+ 友好的日期描述
  */
--(nonnull NSString *) timeDescribe;
+-(nonnull NSString *) dateDescribe:(nullable NSString *) dateFormate;
 -(nonnull NSDate *) offsetYear:(int)numYears;
 -(nonnull NSDate *) offsetMonth:(int)numMonths;
 -(nonnull NSDate *) offsetDay:(int)numDays;

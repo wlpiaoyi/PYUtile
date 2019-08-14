@@ -12,8 +12,6 @@
 		15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A641DF6580100C361E4 /* PYMotionNotification.m */; };
 		15242A6C1DF6580100C361E4 /* PYOrientationNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A661DF6580100C361E4 /* PYOrientationNotification.m */; };
 		15242A751DF6592400C361E4 /* PYInvoke.m in Sources */ = {isa = PBXBuildFile; fileRef = 15242A741DF6592400C361E4 /* PYInvoke.m */; };
-		152AB3D52078F92E0047F1AE /* PYNetworkReachabilityNotification.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 155D7810207117FC00B2CDDB /* PYNetworkReachabilityNotification.h */; };
-		152AB3D62078F9390047F1AE /* PYNetworkReachabilityNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 155D780F207117FC00B2CDDB /* PYNetworkReachabilityNotification.m */; };
 		153B97761F1DE566000F007C /* PYXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 153B97751F1DE566000F007C /* PYXml.m */; };
 		15422DBA21E5B4A30038D09E /* PYArchiveParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DB921E5B4A30038D09E /* PYArchiveParse.m */; };
 		15422DBE21E5C9680038D09E /* PYArchiveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DBD21E5C9680038D09E /* PYArchiveObject.m */; };
@@ -21,7 +19,6 @@
 		15422DC321E602830038D09E /* PYArchiveParse.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DB921E5B4A30038D09E /* PYArchiveParse.m */; };
 		15422DC421E602830038D09E /* PYArchiveObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DBD21E5C9680038D09E /* PYArchiveObject.m */; };
 		15422DC521E602830038D09E /* PYParseDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DC021E5FA490038D09E /* PYParseDictionary.m */; };
-		155D7811207117FD00B2CDDB /* PYNetworkReachabilityNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 155D780F207117FC00B2CDDB /* PYNetworkReachabilityNotification.m */; };
 		15799F9B1F99DB54001A7276 /* PYXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 153B97751F1DE566000F007C /* PYXml.m */; };
 		15799F9C1F99DB62001A7276 /* PYXml.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 153B97741F1DE566000F007C /* PYXml.h */; };
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
@@ -152,7 +149,6 @@
 				15FA7FDB227EB389007C484E /* PYUncaughtExceptionHandler.h in CopyFiles */,
 				15FA7FDC227EB389007C484E /* PYUtile.h in CopyFiles */,
 				15FA7FDD227EB389007C484E /* PYUtileMacro.h in CopyFiles */,
-				152AB3D52078F92E0047F1AE /* PYNetworkReachabilityNotification.h in CopyFiles */,
 				15799F9C1F99DB62001A7276 /* PYXml.h in CopyFiles */,
 				1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */,
 				15C5FB371DF66C4800FF2C75 /* PYGraphicsDraw.h in CopyFiles */,
@@ -202,8 +198,6 @@
 		15422DBF21E5FA490038D09E /* PYParseDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYParseDictionary.h; sourceTree = "<group>"; };
 		15422DC021E5FA490038D09E /* PYParseDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYParseDictionary.m; sourceTree = "<group>"; };
 		15422DC221E601370038D09E /* PYArchiveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYArchiveObject.h; sourceTree = "<group>"; };
-		155D780F207117FC00B2CDDB /* PYNetworkReachabilityNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYNetworkReachabilityNotification.m; sourceTree = "<group>"; };
-		155D7810207117FC00B2CDDB /* PYNetworkReachabilityNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYNetworkReachabilityNotification.h; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
 		15B13E2522927AC20063AA74 /* NSObject+__PYHook_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+__PYHook_Private.h"; sourceTree = "<group>"; };
@@ -507,8 +501,6 @@
 		15BFDEFC1DF5034A0044EDAA /* Notification */ = {
 			isa = PBXGroup;
 			children = (
-				155D7810207117FC00B2CDDB /* PYNetworkReachabilityNotification.h */,
-				155D780F207117FC00B2CDDB /* PYNetworkReachabilityNotification.m */,
 				15BFDEFD1DF5034A0044EDAA /* PYKeyboardNotification.h */,
 				15BFDEFE1DF5034A0044EDAA /* PYKeyboardNotification.m */,
 				15242A631DF6580100C361E4 /* PYMotionNotification.h */,
@@ -708,7 +700,6 @@
 				15185D272269CA610009CD7A /* PYObjectCopy.m in Sources */,
 				15BFDF151DF5034A0044EDAA /* UIViewController+HookView.m in Sources */,
 				15422DBE21E5C9680038D09E /* PYArchiveObject.m in Sources */,
-				155D7811207117FD00B2CDDB /* PYNetworkReachabilityNotification.m in Sources */,
 				15BFDEB01DF4FFF20044EDAA /* main.m in Sources */,
 				15FA7FD4227EB357007C484E /* NSObject+PYDictionary.m in Sources */,
 				15BFDF051DF5034A0044EDAA /* NSData+Expand.m in Sources */,
@@ -750,7 +741,6 @@
 				15422DC321E602830038D09E /* PYArchiveParse.m in Sources */,
 				15422DC421E602830038D09E /* PYArchiveObject.m in Sources */,
 				15422DC521E602830038D09E /* PYParseDictionary.m in Sources */,
-				152AB3D62078F9390047F1AE /* PYNetworkReachabilityNotification.m in Sources */,
 				15799F9B1F99DB54001A7276 /* PYXml.m in Sources */,
 				1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */,
 				15DB17431DF6935700182429 /* py_hook_encode_type.c in Sources */,

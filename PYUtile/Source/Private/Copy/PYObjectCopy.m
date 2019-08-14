@@ -11,6 +11,7 @@
 #import "PYArchiveParse.h"
 #import "PYInvoke.h"
 #import <objc/runtime.h>
+#import "PYArchiveObject.h"
 
 @implementation PYObjectCopy
 
@@ -37,43 +38,78 @@
     if(![fromObj.class isMemberForClazz:clazz]) return nil;
     if(![toObj.class isMemberForClazz:clazz]) return nil;
     
-    unsigned int outCount;
-    Ivar *ivars = class_copyIvarList(clazz, &outCount);
-    for (int i = 0; i < outCount; i++) {
-        Ivar ivar = ivars[i];
-        NSString * keyName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+    [PYArchiveObject iteratorWithObject:fromObj clazz:clazz userInfo:toObj blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull keyName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
+        NSObject * fromObj = object;
+        NSObject * toObj = userInfo;
         id value = [fromObj valueForKey:keyName];
-        if(!value) continue;
+        if(!value) return;
         if([PYArchiveParse canParset:[value class]]){
             [toObj setValue:value forKey:keyName];
-            continue;
+            return;
         }
         if([value isKindOfClass:[NSDictionary class]]){
             NSDictionary * toValue = [toObj valueForKey:keyName];
             if(toValue == nil) toValue = [NSMutableDictionary new];
             toValue = (NSDictionary *)[PYObjectCopy copyValueWithClass:[value class] fromObj:value toObj:toValue];//[self copyValueFromObj:value toObj:toValue];
             [toObj setValue:toValue forKey:keyName];
-            continue;
+            return;
         }
         if([value isKindOfClass:[NSArray class]]){
             NSArray * toValues = [toObj valueForKey:keyName];
             if(toValues == nil) toValues = [NSMutableArray new];
             toValues = [self copyArrayFromObjs:value toObjs:toValues];
             [toObj setValue:toValues forKey:keyName];
-            continue;
+            return;
         }
         if([value isKindOfClass:[NSSet class]]){
             NSSet * toValues = [toObj valueForKey:keyName];
             if(toValues == nil) toValues = [NSMutableSet new];
             toValues = [self copySetFromObjs:value toObjs:toValues];
             [toObj setValue:toValues forKey:keyName];
-            continue;
+            return;
         }
         id toValue = [toObj valueForKey:keyName];
         if(toValue == nil) toValue = [[value class] new];
         toValue = [self copyValueWithClass:[value class] fromObj:value toObj:toValue];
         [toObj setValue:toValue forKey:keyName];
-    }
+    }];
+//    unsigned int outCount2;
+//    Ivar *ivars = class_copyIvarList(clazz, &outCount2);
+//    for (int i = 0; i < outCount2; i++) {
+//        Ivar ivar = ivars[i];
+//        NSString * keyName = [NSString stringWithUTF8String:ivar_getName(ivar)];
+//        id value = [fromObj valueForKey:keyName];
+//        if(!value) continue;
+//        if([PYArchiveParse canParset:[value class]]){
+//            [toObj setValue:value forKey:keyName];
+//            continue;
+//        }
+//        if([value isKindOfClass:[NSDictionary class]]){
+//            NSDictionary * toValue = [toObj valueForKey:keyName];
+//            if(toValue == nil) toValue = [NSMutableDictionary new];
+//            toValue = (NSDictionary *)[PYObjectCopy copyValueWithClass:[value class] fromObj:value toObj:toValue];//[self copyValueFromObj:value toObj:toValue];
+//            [toObj setValue:toValue forKey:keyName];
+//            continue;
+//        }
+//        if([value isKindOfClass:[NSArray class]]){
+//            NSArray * toValues = [toObj valueForKey:keyName];
+//            if(toValues == nil) toValues = [NSMutableArray new];
+//            toValues = [self copyArrayFromObjs:value toObjs:toValues];
+//            [toObj setValue:toValues forKey:keyName];
+//            continue;
+//        }
+//        if([value isKindOfClass:[NSSet class]]){
+//            NSSet * toValues = [toObj valueForKey:keyName];
+//            if(toValues == nil) toValues = [NSMutableSet new];
+//            toValues = [self copySetFromObjs:value toObjs:toValues];
+//            [toObj setValue:toValues forKey:keyName];
+//            continue;
+//        }
+//        id toValue = [toObj valueForKey:keyName];
+//        if(toValue == nil) toValue = [[value class] new];
+//        toValue = [self copyValueWithClass:[value class] fromObj:value toObj:toValue];
+//        [toObj setValue:toValue forKey:keyName];
+//    }
     return toObj;
 }
 +(nullable NSArray *) copyArrayFromObjs:(nonnull NSArray *) fromObjs toObjs:(nonnull NSArray *) toObjs{

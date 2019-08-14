@@ -96,8 +96,8 @@
                 value = [self instanceClazz:cClazz dictionary:value];
             }
         }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
-            NSData * tempData = value;
-            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
+//            NSData * tempData = value;
+//            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
         }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
             NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
             NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];

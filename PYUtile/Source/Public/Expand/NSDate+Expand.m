@@ -6,12 +6,53 @@
 //
 
 #import "NSDate+Expand.h"
+#import "PYUtile.h"
 
 @implementation NSDate (Expand)
+
+/**
+ 友好的时间描述
+ */
+-(nonnull NSString *) dateTimeDescribe{
+    return [self dateTimeDescribe:nil dateFormate:nil];
+}
+/**
+ 友好的时间描述
+ */
+-(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate dateFormate:(nullable NSString *) dateFormate{
+    NSString * describle = nil;
+    NSInteger second = self.timeIntervalSinceNow;
+    if(ABS(second) < 60 * 60 * 5){
+        NSString * suffix = nil;
+        if(second > 0){
+            suffix = @"之后";
+        }else{
+            suffix = @"之前";
+            second  = -second;
+        }
+        if(second < 30) describle = kFORMAT(@"%ld秒%@", second, suffix);
+        else if(second < 60) describle = kFORMAT(@"半分钟%@", suffix);
+        else if(second < 3600) describle = kFORMAT(@"%ld分钟%@", second / 60, suffix);
+        else{
+            NSInteger minute = second / 60;
+            describle = kFORMAT(@"%ld小时%ld分钟%@", minute / 60, minute % 60, suffix);
+        }
+    }
+    if(describle == nil){
+        describle = kFORMAT(@"%@ %@", [self dateDescribe:dateFormate],  [self dateFormateDate:timeFormate ? : @"HH:mm"]);
+    }
+    return describle;
+}
 /**
  友好的日期描述
  */
 -(nonnull NSString *) dateDescribe{
+    return [self dateDescribe:nil];
+}
+/**
+ 友好的日期描述
+ */
+-(nonnull NSString *) dateDescribe:(nullable NSString *) dateFormate{
     
     NSInteger offday = ([self clearedWithBinary:0b1110000].timeIntervalSince1970 - [[NSDate date] clearedWithBinary:0b1110000].timeIntervalSince1970)/(3600 * 24);
     switch (offday) {
@@ -53,14 +94,7 @@
             weekDay = @"周六";
             break;
     }
-    return [NSString stringWithFormat:@"%@ %@", [self dateFormateDate:@"yyyy-MM-dd"],weekDay];
-}
-
-/**
- 友好的时间描述
- */
--(nonnull NSString *) timeDescribe{
-    return [NSString stringWithFormat:@"%@ %@", [self dateDescribe],[self dateFormateDate:@"HH:mm"]];
+    return [NSString stringWithFormat:@"%@ %@", [self dateFormateDate:dateFormate ? : @"yyyy-MM-dd"],weekDay];
 }
 
 
