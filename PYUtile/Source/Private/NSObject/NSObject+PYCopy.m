@@ -27,7 +27,7 @@
 +(nullable NSObject *) copyValueFromObj:(nonnull NSObject *) fromObj toObj:(nonnull NSObject *) toObj{
     Class clazz = toObj.class;
     int isM = 0;
-    while ((isM = [clazz isMemberForClazz:self])) {
+    while ((isM = [clazz isMemberForClazz:self]) && clazz != [NSObject class]) {
         if(![fromObj isKindOfClass:clazz] || ! [toObj isKindOfClass:clazz]) continue;
         toObj = [PYObjectCopy copyValueWithClass:clazz fromObj:fromObj toObj:toObj];
         if(isM <= 1) break;

@@ -11,25 +11,27 @@
 @implementation NSDate (Expand)
 
 /**
- 友好的时间描述
+ 友好的时间描述1
  */
--(nonnull NSString *) dateTimeDescribe{
-    return [self dateTimeDescribe:nil dateFormate:nil];
+-(nonnull NSString *) dateTimeDescribe1{
+    return [self dateTimeDescribe:nil hasBeforeTime:YES dateFormate:nil];
+}
+
+/**
+ 友好的时间描述2
+ */
+-(nonnull NSString *) dateTimeDescribe2{
+    return [self dateTimeDescribe:nil hasBeforeTime:NO dateFormate:nil];
 }
 /**
  友好的时间描述
  */
--(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate dateFormate:(nullable NSString *) dateFormate{
+-(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate hasBeforeTime:(BOOL) hasBeforeTime dateFormate:(nullable NSString *) dateFormate{
     NSString * describle = nil;
     NSInteger second = self.timeIntervalSinceNow;
-    if(ABS(second) < 60 * 60 * 5){
-        NSString * suffix = nil;
-        if(second > 0){
-            suffix = @"之后";
-        }else{
-            suffix = @"之前";
-            second  = -second;
-        }
+    if(hasBeforeTime && ABS(second) < 60 * 60 * 5){
+        NSString * suffix = second > 0 ? @"之后" : @"之前";
+        second = ABS(second);
         if(second < 30) describle = kFORMAT(@"%ld秒%@", second, suffix);
         else if(second < 60) describle = kFORMAT(@"半分钟%@", suffix);
         else if(second < 3600) describle = kFORMAT(@"%ld分钟%@", second / 60, suffix);
@@ -53,20 +55,26 @@
  友好的日期描述
  */
 -(nonnull NSString *) dateDescribe:(nullable NSString *) dateFormate{
-    
+    NSString * returnValue = nil;
     NSInteger offday = ([self clearedWithBinary:0b1110000].timeIntervalSince1970 - [[NSDate date] clearedWithBinary:0b1110000].timeIntervalSince1970)/(3600 * 24);
     switch (offday) {
         case 0:
-            return @"今天";
+            returnValue = @"今天";
+            break;
         case 1:
-            return @"明天";
+            returnValue = @"明天";
+            break;
         case 2:
-            return @"后天";
+            returnValue = @"后天";
+            break;
         case -2:
-            return @"前天";
+            returnValue = @"前天";
+            break;
         case -1:
-            return @"昨天";
+            returnValue = @"昨天";
+            break;
         default:
+            returnValue = [self dateFormateDate:dateFormate ? : @"yyyy-MM-dd"];
             break;
     }
     
@@ -94,7 +102,7 @@
             weekDay = @"周六";
             break;
     }
-    return [NSString stringWithFormat:@"%@ %@", [self dateFormateDate:dateFormate ? : @"yyyy-MM-dd"],weekDay];
+    return [NSString stringWithFormat:@"%@ %@", returnValue, weekDay];
 }
 
 

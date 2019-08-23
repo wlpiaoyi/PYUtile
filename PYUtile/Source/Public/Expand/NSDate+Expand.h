@@ -11,13 +11,17 @@
 
 @interface NSDate (Expand)
 /**
- 友好的时间描述
+ 友好的时间描述1
  */
--(nonnull NSString *) dateTimeDescribe;
+-(nonnull NSString *) dateTimeDescribe1;
+/**
+ 友好的时间描述2
+ */
+-(nonnull NSString *) dateTimeDescribe2;
 /**
  友好的时间描述
  */
--(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate dateFormate:(nullable NSString *) dateFormate;
+-(nonnull NSString *) dateTimeDescribe:(nullable NSString *) timeFormate hasBeforeTime:(BOOL) hasBeforeTime dateFormate:(nullable NSString *) dateFormate;
 /**
  友好的日期描述
  */

@@ -42,9 +42,12 @@
         NSObject * fromObj = object;
         NSObject * toObj = userInfo;
         id value = [fromObj valueForKey:keyName];
-        if(!value) return;
+        if(!value){
+            [toObj setValue:nil forKeyPath:keyName];
+            return;
+        }
         if([PYArchiveParse canParset:[value class]]){
-            [toObj setValue:value forKey:keyName];
+            [toObj setValue:value forKeyPath:keyName];
             return;
         }
         if([value isKindOfClass:[NSDictionary class]]){
@@ -58,14 +61,14 @@
             NSArray * toValues = [toObj valueForKey:keyName];
             if(toValues == nil) toValues = [NSMutableArray new];
             toValues = [self copyArrayFromObjs:value toObjs:toValues];
-            [toObj setValue:toValues forKey:keyName];
+            [toObj setValue:toValues forKeyPath:keyName];
             return;
         }
         if([value isKindOfClass:[NSSet class]]){
             NSSet * toValues = [toObj valueForKey:keyName];
             if(toValues == nil) toValues = [NSMutableSet new];
             toValues = [self copySetFromObjs:value toObjs:toValues];
-            [toObj setValue:toValues forKey:keyName];
+            [toObj setValue:toValues forKeyPath:keyName];
             return;
         }
         id toValue = [toObj valueForKey:keyName];
