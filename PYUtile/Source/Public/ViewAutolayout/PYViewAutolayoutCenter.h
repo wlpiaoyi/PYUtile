@@ -29,6 +29,11 @@ kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
 
 
 @interface PYViewAutolayoutCenter : NSObject
+
+/**
+ 新增关系约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(nonnull UIView*) subView relationmargins:(UIEdgeInsets) margins controller:(nonnull UIViewController *) controller;
 /**
  新增关系约束
  */

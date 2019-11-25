@@ -7,7 +7,7 @@
 //
 
 #import "PYViewAutolayoutCenter.h"
-#import "UIView+Expand.h"
+#import "UIView+PYExpand.h"
 
 
 const CGFloat DisableConstrainsValueMAX = CGFLOAT_MAX - 1;
@@ -28,88 +28,118 @@ const NSString * PYAtltEquelsHeight = @"equelsHeight";
 /**
  新增关系约束
  */
++(NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(UIView*) subView relationmargins:(UIEdgeInsets) margins controller:(UIViewController *) controller{
+    PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
+    eii.top = (__bridge void * _Nullable)(controller.topLayoutGuide);
+    eii.bottom = (__bridge void * _Nullable)(controller.bottomLayoutGuide);
+    eii.topActive = true;
+    eii.bottomActive = true;
+    eii.leftActive = true;
+    eii.rightActive = true;
+    return [PYViewAutolayoutCenter persistConstraint:subView relationmargins:UIEdgeInsetsZero relationToItems:eii];
+}
+
+/**
+ 新增关系约束
+ */
 +(NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(UIView*) subView relationmargins:(UIEdgeInsets) margins relationToItems:(PYEdgeInsetsItem) toItems{
     subView.translatesAutoresizingMaskIntoConstraints = NO;
     NSMutableDictionary<NSString *, NSLayoutConstraint *> * dictResult = [NSMutableDictionary new];
+    NSLayoutAttribute superAtt;
+    NSObject *layoutGuide;
+    #pragma mark margin top
     if ([self isValueEnable:margins.top]) {
-        UIView *superView = toItems.top ? (__bridge UIView *)(toItems.top) : nil;
-        NSLayoutAttribute superAtt = NSLayoutAttributeBottom;
-        if (!superView) {
-            superView = [subView superview];
+        if(toItems.top){
+            superAtt = NSLayoutAttributeBottom;
+            layoutGuide = (__bridge NSObject *)(toItems.top);
+        }else{
+            layoutGuide = [subView superview];
             superAtt = NSLayoutAttributeTop;
         }
         NSLayoutConstraint * marginsTop = nil;
-        if (toItems.topActive && superView == [subView superview]){
-            if (@available(iOS 11.0, *)) {
-                marginsTop =[subView.topAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.topAnchor constant:margins.top];
-                marginsTop.active = true;
+        if (@available(iOS 11.0, *) ) {
+            if(toItems.topActive && layoutGuide == [subView superview]){
+                marginsTop = [subView.topAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.topAnchor constant:margins.top];
             }
         }
         if(!marginsTop){
-          marginsTop = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.top];
-            [[subView superview] addConstraint:marginsTop];
+            marginsTop = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:layoutGuide attribute:superAtt multiplier:1 constant:margins.top];
         }
+        marginsTop.active = toItems.topActive;
+        [[subView superview] addConstraint:marginsTop];
         dictResult[PYAtltSuperTop] = marginsTop;
     }
+    #pragma mark margin buttom
     if ([self isValueEnable:margins.bottom]) {
-        UIView *superView = toItems.bottom ? (__bridge UIView *)(toItems.bottom) : nil;
-        NSLayoutAttribute superAtt = NSLayoutAttributeTop;
-        if (!superView) {
-            superView = [subView superview];
+        if(toItems.bottom){
+            superAtt = NSLayoutAttributeTop;
+            layoutGuide = (__bridge NSObject *)(toItems.bottom);
+        }else{
+            layoutGuide = [subView superview];
             superAtt = NSLayoutAttributeBottom;
         }
         NSLayoutConstraint * marginsBottom = nil;
-        if (toItems.bottomActive && superView == [subView superview]){
-            if (@available(iOS 11.0, *)) {
+        if (@available(iOS 11.0, *) ) {
+            if(toItems.bottomActive && layoutGuide == [subView superview]){
                 marginsBottom =[subView.bottomAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.bottomAnchor constant:-margins.bottom];
-                marginsBottom.active = true;
             }
         }
         if(!marginsBottom){
-             marginsBottom = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.bottom];
-            [[subView superview] addConstraint:marginsBottom];
+             marginsBottom = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:layoutGuide attribute:superAtt multiplier:1 constant:-margins.bottom];
         }
+        marginsBottom.active = toItems.bottomActive;
+        [[subView superview] addConstraint:marginsBottom];
 
         dictResult[PYAtltSuperBottom] = marginsBottom;
     }
+    #pragma mark margin left
     if ([self isValueEnable:margins.left]) {
-        UIView *superView = toItems.left ? (__bridge UIView *)(toItems.left) : nil;
-        NSLayoutAttribute superAtt = NSLayoutAttributeRight;
-        if (!superView) {
-            superView = [subView superview];
+        if(toItems.left){
+            superAtt = NSLayoutAttributeRight;
+            layoutGuide = (__bridge NSObject *)(toItems.left);
+        }else{
+            layoutGuide = [subView superview];
             superAtt = NSLayoutAttributeLeft;
         }
         NSLayoutConstraint *marginsLeft = nil;
-        if (toItems.leftActive && superView == [subView superview]){
-            if (@available(iOS 11.0, *)) {
+        
+        if (@available(iOS 11.0, *) ) {
+            if(toItems.leftActive && layoutGuide == [subView superview]){
                 marginsLeft = [subView.leftAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.leftAnchor constant:margins.left];
+            }
+        }
+        if (layoutGuide == [subView superview]){
+            if (@available(iOS 11.0, *)) {
                 marginsLeft.active = true;
             }
         }
         if(!marginsLeft){
-             marginsLeft = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:margins.left];
-            [[subView superview] addConstraint:marginsLeft];
+             marginsLeft = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:layoutGuide attribute:superAtt multiplier:1 constant:margins.left];
         }
+        marginsLeft.active = toItems.leftActive;
+        [[subView superview] addConstraint:marginsLeft];
         dictResult[PYAtltSuperLeft] = marginsLeft;
     }
+    #pragma mark margin right
     if ([self isValueEnable:margins.right]) {
-        UIView *superView = toItems.right ? (__bridge UIView *)(toItems.right) : nil;
-        NSLayoutAttribute superAtt = NSLayoutAttributeLeft;
-        if (!superView) {
-            superView = [subView superview];
+        if(toItems.right){
+            superAtt = NSLayoutAttributeLeft;
+            layoutGuide = (__bridge NSObject *)(toItems.right);
+        }else{
+            layoutGuide = [subView superview];
             superAtt = NSLayoutAttributeRight;
         }
         NSLayoutConstraint *marginsRight = nil;
-        if (toItems.rightActive && superView == [subView superview]){
-            if (@available(iOS 11.0, *)) {
+        if (@available(iOS 11.0, *) ) {
+            if(toItems.rightActive && layoutGuide == [subView superview]){
                 marginsRight = [subView.rightAnchor constraintEqualToAnchor:subView.superview.safeAreaLayoutGuide.rightAnchor constant:-margins.right];
-                marginsRight.active = true;
             }
         }
         if(!marginsRight){
-            marginsRight = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:superView attribute:superAtt multiplier:1 constant:-margins.right];
-            [[subView superview] addConstraint:marginsRight];
+            marginsRight = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:layoutGuide attribute:superAtt multiplier:1 constant:-margins.right];
         }
+        marginsRight.active = toItems.rightActive;
+        [[subView superview] addConstraint:marginsRight];
 
         dictResult[PYAtltSuperRight] = marginsRight;
     }

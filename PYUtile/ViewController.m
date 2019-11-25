@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "pyutilea.h"
 
 @interface ViewController ()
 @end
@@ -15,11 +16,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    UIView * sv = [UIView new];
-//    sv.backgroundColor =[UIColor clearColor];
-//    [self.view addSubview:sv];
-//    [sv setCornerRadiusAndBorder:2 borderWidth:2 borderColor:[UIColor greenColor]];
-//    [PYViewAutolayoutCenter persistConstraint:sv relationmargins:UIEdgeInsetsMake(10, 10, 10, 10) relationToItems:PYEdgeInsetsItemNull()];
+    self.navigationController.navigationBar.hidden = NO;
+    self.title = @"adfad";
+    UIView * view = [UIView new];
+    [view setCornerRadiusAndBorder:1 borderWidth:1 borderColor:[UIColor systemRedColor]];
+    [self.view addSubview:view];
+    [PYViewAutolayoutCenter persistConstraint:view relationmargins:UIEdgeInsetsZero controller:self];
+//    PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
+//    eii.top = (__bridge void * _Nullable)(self.topLayoutGuide);
+//    eii.bottom = (__bridge void * _Nullable)(self.bottomLayoutGuide);
+//    eii.topActive = true;
+//    eii.bottomActive = true;
+//    [PYViewAutolayoutCenter persistConstraint:view relationmargins:UIEdgeInsetsZero relationToItems:eii];
     
 }
 -(void) viewDidAppear:(BOOL)animated{

@@ -7,7 +7,7 @@
 //
 
 #import "PYXml.h"
-#import "NSData+Expand.h"
+#import "NSData+PYExpand.h"
 
 @interface PYXmlElement(){
 }

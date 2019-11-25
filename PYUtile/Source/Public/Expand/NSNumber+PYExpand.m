@@ -1,24 +1,20 @@
 //
-//  NSNumber+Expand.m
+//  NSNumber+PYExpand.m
 //  Common
 //
 //  Created by wlpiaoyi on 15/2/2.
 //  Copyright (c) 2015年 wlpiaoyi. All rights reserved.
 //
 
-#import "NSNumber+Expand.h"
-#import "NSString+Expand.h"
+#import "NSNumber+PYExpand.h"
+#import "NSString+PYExpand.h"
 
-@implementation NSNumber(Expand)
+@implementation NSNumber(PYExpand)
 /**
  将number转换成string 
  @percision 精度控制
  */
 -(NSString*) stringValueWithPrecision:(int) precision{
-    
-    if(precision == 0){
-        return [NSString stringWithFormat:@"%ld", self.integerValue];
-    }
     
     NSMutableString * format = [NSMutableString new];
     [format appendString:@"%."];

@@ -1,5 +1,5 @@
 //
-//  NSNumber+Expand.h
+//  NSNumber+PYExpand.h
 //  Common
 //
 //  Created by wlpiaoyi on 15/2/2.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSNumber(Expand)
+@interface NSNumber(PYExpand)
 /**
  将number转换成string
  @percision 精度控制

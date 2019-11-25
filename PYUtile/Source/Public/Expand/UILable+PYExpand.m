@@ -6,10 +6,10 @@
 //  Copyright (c) 2014年 wlpiaoyi. All rights reserved.
 //
 
-#import "UILable+Expand.h"
-#import "UIView+Expand.h"
+#import "UILable+PYExpand.h"
+#import "UIView+PYExpand.h"
 #import "PYUtile.h"
-@implementation  UILabel(Expand)
+@implementation  UILabel(PYExpand)
 
 -(void) automorphismHeight{
     self.numberOfLines = 0;

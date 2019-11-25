@@ -5,10 +5,10 @@
 //  Copyright (c) 2012 Vurig Media. All rights reserved.
 //
 
-#import "NSDate+Expand.h"
+#import "NSDate+PYExpand.h"
 #import "PYUtile.h"
 
-@implementation NSDate (Expand)
+@implementation NSDate (PYExpand)
 
 /**
  友好的时间描述1

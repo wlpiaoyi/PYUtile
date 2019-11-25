@@ -26,6 +26,10 @@ typedef long long                           kInt64;
 typedef kInt64                             kLong64;
 #endif
 
+bool py_isPrisonBreakByPath(void);
+bool py_isPrisonBreakByDyldimage(void);
+bool py_isPrisonBreakByScheme(void);
+
 #pragma mark 常用沙盒路径
 extern const NSString * _Nonnull documentDir;
 extern const NSString * _Nonnull cachesDir;

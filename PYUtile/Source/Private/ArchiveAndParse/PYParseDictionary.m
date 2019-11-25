@@ -10,7 +10,7 @@
 #import "PYArchiveParse.h"
 #import "PYUtile.h"
 #import "PYInvoke.h"
-#import "NSString+Expand.h"
+#import "NSString+PYExpand.h"
 
 @implementation PYParseDictionary
 

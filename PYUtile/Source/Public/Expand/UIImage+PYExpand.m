@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 AKSL. All rights reserved.
 //
 
-#import "UIImage+Expand.h"
+#import "UIImage+PYExpand.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
 enum {
@@ -26,7 +26,7 @@ const NSString *PYColorMatrixCIPhotoEffectTransfer = @"CIPhotoEffectTransfer";
 const NSString *PYColorMatrixCISRGBToneCurveToLinear = @"CISRGBToneCurveToLinear";
 const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 
-@implementation UIImage (Expand)
+@implementation UIImage (PYExpand)
 -(UIImage*) setImageSize:(CGSize) size{
     return [self setImageSize:size scale:[UIScreen mainScreen].scale];
 }

@@ -1,4 +1,4 @@
-#import "UIColor+Expand.h"
+#import "UIColor+PYExpand.h"
 
 /*
  
@@ -46,7 +46,7 @@ static NSMutableDictionary *colorNameCache = nil;
 
 #pragma mark -
 
-@implementation UIColor (Expand)
+@implementation UIColor (PYExpand)
 
 - (CGColorSpaceModel)colorSpaceModel {
 	return CGColorSpaceGetModel(CGColorGetColorSpace(self.CGColor));

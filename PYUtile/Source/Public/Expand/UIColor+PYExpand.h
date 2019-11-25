@@ -14,7 +14,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface UIColor (Expand)
+@interface UIColor (PYExpand)
 @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
 @property (nonatomic, readonly) BOOL canProvideRGBComponents;
 @property (nonatomic, readonly) CGFloat red; // Only valid if canProvideRGBComponents is YES

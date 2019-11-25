@@ -11,7 +11,7 @@
 #include <libkern/OSAtomic.h>
 #include <execinfo.h>
 #import "PYUtile.h"
-#import "NSData+Expand.h"
+#import "NSData+PYExpand.h"
 
 NSString * PYUncaughtExceptionHandlerLogUrl;
 

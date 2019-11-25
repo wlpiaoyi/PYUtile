@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface UIView (Expand)
+@interface UIView (PYExpand)
 
 @property (nonatomic) CGPoint frameOrigin;
 @property (nonatomic) CGSize frameSize;

@@ -22,7 +22,7 @@ extern NSString * _Nonnull PYColorMatrixCIPhotoEffectTransfer;
 extern NSString * _Nonnull PYColorMatrixCISRGBToneCurveToLinear;
 extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 
-@interface UIImage (Expand)
+@interface UIImage (PYExpand)
 -(nonnull UIImage*) setImageSize:(CGSize) size;
 -(nonnull UIImage*) setImageSize:(CGSize) size scale:(short) scale;
 -(nonnull UIImage*) cutImage:(CGRect) cutValue;

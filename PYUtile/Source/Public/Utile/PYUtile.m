@@ -13,8 +13,10 @@
 #import <mach/mach.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <mach-o/dyld.h>
 #include <mach/machine.h>
 #import <CommonCrypto/CommonDigest.h>
+
 
 
 NSString * documentDir;
@@ -24,8 +26,49 @@ NSString * systemVersion;
 NSMutableDictionary<NSString*, NSDictionary*> *dictionaryInfoPlist;
 double EARTH_RADIUS = 6378.137;//地球半径
 
+bool py_isPrisonBreakByPath(){
+    BOOL root = NO;
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    NSArray *pathArray = @[@"/etc/ssh/sshd_config",
+                           @"/usr/libexec/ssh-keysign",
+                           @"/usr/sbin/sshd",
+                           @"/usr/sbin/sshd",
+                           @"/bin/sh",
+                           @"/bin/bash",
+                           @"/etc/apt",
+                           @"/Application/Cydia.app/",
+                           @"/Library/MobileSubstrate/MobileSubstrate.dylib"
+                           ];
+    for (NSString *path in pathArray) {
+        root = [fileManager fileExistsAtPath:path];
+        // 如果存在这些目录，就是已经越狱
+        if (root) return YES;
+    }
+    return true;
+}
 
-NSObject *synProgressObj;
+
+bool py_isPrisonBreakByDyldimage(){
+    NSMutableArray * dypaths = [NSMutableArray new];
+    int count = _dyld_image_count();
+    for (int i = 0; i < count; i++) {
+        const char *dyld = _dyld_get_image_name(i);
+        NSString *dylibPath = [[NSString alloc] initWithCString:dyld encoding:NSUTF8StringEncoding];
+        if([dylibPath containsString:@"/DynamicLibraries"]) return YES;
+//        [dypaths appendString:dylibPath];
+//        [dypaths appendString:@"\n"];
+    }
+    
+    return NO;
+}
+
+bool py_isPrisonBreakByScheme(){
+    NSURL *scheme = [NSURL URLWithString:@"cydia://package/com.example.package"];
+    if([[UIApplication sharedApplication] canOpenURL:scheme]){
+        return YES;
+    }
+    return NO;
+}
 
 void threadJoinMain(dispatch_block_t block){
     dispatch_async(dispatch_get_main_queue(), block);
@@ -233,8 +276,9 @@ static NSTimeInterval static_controls_time = 0;
 //        block();
 //    });
 //}
-
+id synProgressObj;
 @implementation PYUtile
+
 +(void) load{
     documentDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject;
     cachesDir = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).lastObject;
@@ -303,6 +347,7 @@ static NSTimeInterval static_controls_time = 0;
     
     return [self getCurrentController:result];
 }
+
 
 /**
  获取当前正在显示的controller(直接从指定controller遍历)

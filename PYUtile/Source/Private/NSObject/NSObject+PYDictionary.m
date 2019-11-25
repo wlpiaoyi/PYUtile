@@ -14,7 +14,7 @@
 #import "PYArchiveObject.h"
 #import "PYArchiveParse.h"
 #import "PYParseDictionary.h"
-#import "NSString+Expand.h"
+#import "NSString+PYExpand.h"
 
 id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = nil;
 

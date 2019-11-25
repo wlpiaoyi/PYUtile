@@ -7,7 +7,7 @@
 //
 
 #import "PYObjectCopy.h"
-#import "NSObject+Expand.h"
+#import "NSObject+PYExpand.h"
 #import "PYArchiveParse.h"
 #import "PYInvoke.h"
 #import <objc/runtime.h>
@@ -118,58 +118,40 @@
 +(nullable NSArray *) copyArrayFromObjs:(nonnull NSArray *) fromObjs toObjs:(nonnull NSArray *) toObjs{
     if(![fromObjs isKindOfClass:[NSArray class]]) return nil;
     if(![toObjs isKindOfClass:[NSArray class]]) return nil;
-    NSInteger index = 0;
-    for (NSObject * fromObj in fromObjs) {
-        NSObject * toObj = nil;
-        if(toObjs.count <= index){
-            toObj = [fromObj.class new];
-            if(![toObjs isKindOfClass:[NSMutableArray class]]){
-                toObjs = [toObjs mutableCopy];
-            }
+    while (toObjs.count > fromObjs.count && [toObjs isKindOfClass:[NSMutableArray class]]) {
+        [((NSMutableArray *) toObjs)  removeObject:toObjs.lastObject];
+    }
+    
+    for (int i = 0; i < fromObjs.count; i++) {
+        if(i >= toObjs.count){
+            if([toObjs isKindOfClass:[NSMutableArray class]]){
+                [((NSMutableArray *)toObjs) addObject:[fromObjs[i] deepCopyObject]];
+            }else break;
         }
-        BOOL isContained = NO;
-        if(!toObj){
-            isContained = YES;
-            toObj = toObjs[index];
-        }
-        NSObject * objResult = [PYObjectCopy copyValueWithClass:[fromObj class] fromObj:fromObj toObj:toObj];//[fromObj.class copyValueFromObj:fromObj toObj:toObj];
-        if(!isContained) [((NSMutableArray *) toObjs) addObject:objResult];
-        else if(objResult != toObj){
-            [((NSMutableArray *) toObjs) removeObject:toObj];
-            [((NSMutableArray *) toObjs) addObject:objResult];
-        }
-        index ++;
+        NSObject * toObj = toObjs[i];
+        NSObject * fromObj = fromObjs[i];
+        [NSObject copyValueFromObj:fromObj toObj:toObj];
     }
     return toObjs;
 }
 +(nullable NSSet *) copySetFromObjs:(nonnull NSSet *) fromObjs toObjs:(nonnull NSSet *) toObjs{
     if(![fromObjs isKindOfClass:[NSSet class]]) return nil;
     if(![toObjs isKindOfClass:[NSSet class]]) return nil;
-    NSMutableSet * contains = [NSMutableSet new];
-    for (NSObject * fromObj in fromObjs) {
-        NSObject * toObj = nil;
-        if(toObjs.count < fromObjs.count){
-            if(![toObjs isKindOfClass:[NSMutableSet class]]){
-                toObjs = [toObjs mutableCopy];
-            }
-            for (NSObject * obj in toObjs) {
-                if([contains containsObject:obj]) continue;
-                toObj = obj;
-                break;
-            }
+    while (toObjs.count > fromObjs.count && [toObjs isKindOfClass:[NSMutableSet class]]) {
+        [((NSMutableSet *) toObjs)  removeObject:toObjs.anyObject];
+    }
+    
+    NSArray * array = toObjs.allObjects;
+    int i = 0;
+    for (id fromObj in fromObjs) {
+        if(i >= toObjs.count){
+            if([toObjs isKindOfClass:[NSMutableSet class]]){
+                [((NSMutableSet *)toObjs) addObject:[fromObj deepCopyObject]];
+            }else break;
         }
-        BOOL isContained = YES;
-        if(!toObj){
-            toObj = [fromObj.class new];
-            isContained = NO;
-        }
-        NSObject * objResult = [PYObjectCopy copyValueWithClass:[fromObj class] fromObj:fromObj toObj:toObj];//[fromObj.class copyValueFromObj:fromObj toObj:toObj];
-        [contains addObject:objResult];
-        if(!isContained) [((NSMutableSet *) toObjs) addObject:objResult];
-        else if(objResult != toObj){
-            [((NSMutableSet *) toObjs) removeObject:toObj];
-            [((NSMutableSet *) toObjs) addObject:objResult];
-        }
+        NSObject * toObj = array[i];
+        [NSObject copyValueFromObj:fromObj toObj:toObj];
+        i++;
     }
     return toObjs;
 }

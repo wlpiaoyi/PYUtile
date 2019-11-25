@@ -73,6 +73,10 @@ NSTimer * timer;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    bool flag = py_isPrisonBreakByPath();
+    flag = py_isPrisonBreakByScheme();
+    flag = py_isPrisonBreakByDyldimage();
+    [@(148.99991) stringValueWithPrecision:0];
 //    SMEBudgetListParam * param01 = [SMEBudgetListParam new];
 //    param01.masterName = @"xxxx";
 //    param01.pRect = CGRectMake(2, 2, 2, 2);

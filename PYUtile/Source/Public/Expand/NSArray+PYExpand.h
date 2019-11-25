@@ -1,5 +1,5 @@
 //
-//  NSArray+Expand.h
+//  NSArray+PYExpand.h
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/26.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray(Expand)
+@interface NSArray(PYExpand)
 -(NSData * _Nullable) toData;
 @end

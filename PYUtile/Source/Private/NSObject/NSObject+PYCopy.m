@@ -9,7 +9,7 @@
 #import "NSObject+PYCopy.h"
 #import "PYObjectCopy.h"
 #import <objc/runtime.h>
-#import "NSObject+Expand.h"
+#import "NSObject+PYExpand.h"
 
 @implementation NSObject(PYCopy)
 /**

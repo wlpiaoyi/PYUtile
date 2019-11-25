@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface NSDate (Expand)
+@interface NSDate (PYExpand)
 /**
  友好的时间描述1
  */

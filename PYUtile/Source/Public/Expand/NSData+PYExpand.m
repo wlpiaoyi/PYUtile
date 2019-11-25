@@ -1,15 +1,15 @@
 //
-//  NSData+Expand.m
+//  NSData+PYExpand.m
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/26.
 //  Copyright © 2015年 wlpiaoyi. All rights reserved.
 //
 
-#import "NSData+Expand.h"
+#import "NSData+PYExpand.h"
 #import "PYUtile.h"
 
-@implementation NSData(Expand)
+@implementation NSData(PYExpand)
 -(id _Nullable) toDictionary{
     NSError *error;
     id obj = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingMutableContainers error:&error];

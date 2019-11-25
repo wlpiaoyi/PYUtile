@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-@interface NSString (Expand)
+@interface NSString (PYExpand)
 -(BOOL) hasChinese:(nullable BOOL *) isAll;
 -(BOOL) hasASCII:(nullable BOOL *) isAll;
 -(BOOL) hasUnkown:(nullable BOOL *) isAll;

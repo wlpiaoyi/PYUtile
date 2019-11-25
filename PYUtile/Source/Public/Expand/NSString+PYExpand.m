@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 AKSL. All rights reserved.
 //
 
-#import "NSString+Expand.h"
+#import "NSString+PYExpand.h"
 #import "NSString+__PY_Match.h"
 #import "py_data_function.h"
 
@@ -14,7 +14,7 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 
-@implementation NSString (Expand)
+@implementation NSString (PYExpand)
 -(BOOL) hasChinese:(nullable BOOL *) isAll{
     BOOL hasChinese = false;
     if(isAll)*isAll = true;

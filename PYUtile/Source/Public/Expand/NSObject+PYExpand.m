@@ -1,12 +1,12 @@
 //
-//  NSobject+Expand.m
+//  NSobject+PYExpand.m
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/5.
 //  Copyright © 2015年 wlpiaoyi. All rights reserved.
 //
 
-#import "NSObject+Expand.h"
+#import "NSObject+PYExpand.h"
 #import "PYArchiveParse.h"
 
 //常见警告的名称

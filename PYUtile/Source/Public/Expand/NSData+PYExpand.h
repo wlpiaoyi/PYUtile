@@ -1,5 +1,5 @@
 //
-//  NSData+Expand.h
+//  NSData+PYExpand.h
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/26.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSData(Expand)
+@interface NSData(PYExpand)
 /**
  将数据转换成数据字典
  */

@@ -5,13 +5,13 @@
 //  Copyright (c) 2011 Vurig Media. All rights reserved.
 //
 
-#import "UIView+Expand.h"
+#import "UIView+PYExpand.h"
 #import "PYViewAutolayoutCenter.h"
 
 @interface UIView(){
 }
 @end
-@implementation UIView (Expand)
+@implementation UIView (PYExpand)
 
 - (CGPoint)frameOrigin {
     return self.frame.origin;

@@ -1,15 +1,15 @@
 //
-//  NSDictionary+Expand.m
+//  NSDictionary+PYExpand.m
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/26.
 //  Copyright © 2015年 wlpiaoyi. All rights reserved.
 //
 
-#import "NSDictionary+Expand.h"
+#import "NSDictionary+PYExpand.h"
 static char * NSDictionaryExpandWeakKey = "weakkey_";
 
-@implementation NSDictionary(Expand)
+@implementation NSDictionary(PYExpand)
 
 +(nullable id) checkDict:(nullable id) value{
     if(!value) return nil;
@@ -60,7 +60,7 @@ static char * NSDictionaryExpandWeakKey = "weakkey_";
 }
 @end
 
-@implementation NSMutableDictionary(Expand)
+@implementation NSMutableDictionary(PYExpand)
 -(void) setWeakValue:(nullable id)value forKey:(nonnull NSString *)key{
     NSString * weakKey = [NSString stringWithFormat:@"%s%@",NSDictionaryExpandWeakKey, key];
     if(value == nil) [self setValue:nil forKey:weakKey];

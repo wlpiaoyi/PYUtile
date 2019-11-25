@@ -1,15 +1,15 @@
 //
-//  NSArray+Expand.m
+//  NSArray+PYExpand.m
 //  UtileScourceCode
 //
 //  Created by wlpiaoyi on 15/11/26.
 //  Copyright © 2015年 wlpiaoyi. All rights reserved.
 //
 
-#import "NSArray+Expand.h"
-#import "NSObject+Expand.h"
+#import "NSArray+PYExpand.h"
+#import "NSObject+PYExpand.h"
 
-@implementation NSArray(Expand)
+@implementation NSArray(PYExpand)
 -(NSData * _Nullable) toData{
     NSMutableArray * toDatas = [NSMutableArray new];
     for (NSObject * obj in self) {
