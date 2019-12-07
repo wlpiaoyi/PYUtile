@@ -24,6 +24,12 @@
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
 		1583E1591DFA9FAC00AD48EA /* UIResponder+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */; };
+		159F23FA23978F9900C95278 /* UIResponder+PYKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F23F923978F9900C95278 /* UIResponder+PYKeyboard.m */; };
+		159F23FD23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F23FC23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m */; };
+		159F24032397908D00C95278 /* PYKeyboardNotificationObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F24022397908D00C95278 /* PYKeyboardNotificationObject.m */; };
+		159F24042397923700C95278 /* UIResponder+PYKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F23F923978F9900C95278 /* UIResponder+PYKeyboard.m */; };
+		159F24052397923700C95278 /* PYKeyboardNotifyPointerContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F23FC23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m */; };
+		159F24062397923700C95278 /* PYKeyboardNotificationObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 159F24022397908D00C95278 /* PYKeyboardNotificationObject.m */; };
 		15B11B23232216D000CB11FF /* PYKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B11B21232216D000CB11FF /* PYKeychain.m */; };
 		15B11B242322171F00CB11FF /* PYKeychain.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15B11B22232216D000CB11FF /* PYKeychain.h */; };
 		15B11B252322172F00CB11FF /* PYKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B11B21232216D000CB11FF /* PYKeychain.m */; };
@@ -128,6 +134,9 @@
 		15FA7FDB227EB389007C484E /* PYUncaughtExceptionHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC5227EB327007C484E /* PYUncaughtExceptionHandler.h */; };
 		15FA7FDC227EB389007C484E /* PYUtile.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC2227EB327007C484E /* PYUtile.h */; };
 		15FA7FDD227EB389007C484E /* PYUtileMacro.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FA7FC4227EB327007C484E /* PYUtileMacro.h */; };
+		15FCA4EA239654CE008E4E96 /* UIButton+PYExpand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */; };
+		15FCA4EB239656E0008E4E96 /* UIButton+PYExpand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */; };
+		15FCA4EC239656EF008E4E96 /* UIButton+PYExpand.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FCA4E8239654CD008E4E96 /* UIButton+PYExpand.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -147,6 +156,7 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				15FCA4EC239656EF008E4E96 /* UIButton+PYExpand.h in CopyFiles */,
 				15B11B242322171F00CB11FF /* PYKeychain.h in CopyFiles */,
 				15C5FAF41DF668BD00FF2C75 /* NSObject+PYExpand.h in CopyFiles */,
 				15CECCA8228BB6D2008173E0 /* NSObject+Hook.h in CopyFiles */,
@@ -204,6 +214,12 @@
 		15422DC221E601370038D09E /* PYArchiveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYArchiveObject.h; sourceTree = "<group>"; };
 		1583E1551DFA9F7000AD48EA /* UIResponder+Hook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Hook.h"; sourceTree = "<group>"; };
 		1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+Hook.m"; sourceTree = "<group>"; };
+		159F23F823978F9900C95278 /* UIResponder+PYKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+PYKeyboard.h"; sourceTree = "<group>"; };
+		159F23F923978F9900C95278 /* UIResponder+PYKeyboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+PYKeyboard.m"; sourceTree = "<group>"; };
+		159F23FB23978FDE00C95278 /* PYKeyboardNotifyPointerContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYKeyboardNotifyPointerContext.h; sourceTree = "<group>"; };
+		159F23FC23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYKeyboardNotifyPointerContext.m; sourceTree = "<group>"; };
+		159F24012397908D00C95278 /* PYKeyboardNotificationObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYKeyboardNotificationObject.h; sourceTree = "<group>"; };
+		159F24022397908D00C95278 /* PYKeyboardNotificationObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYKeyboardNotificationObject.m; sourceTree = "<group>"; };
 		15B11B21232216D000CB11FF /* PYKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYKeychain.m; sourceTree = "<group>"; };
 		15B11B22232216D000CB11FF /* PYKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYKeychain.h; sourceTree = "<group>"; };
 		15B13E2522927AC20063AA74 /* NSObject+__PYHook_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+__PYHook_Private.h"; sourceTree = "<group>"; };
@@ -282,6 +298,8 @@
 		15FA7FD0227EB357007C484E /* NSObject+PYDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PYDictionary.m"; sourceTree = "<group>"; };
 		15FA7FD1227EB357007C484E /* NSObject+PYForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PYForm.h"; sourceTree = "<group>"; };
 		15FA7FD2227EB357007C484E /* NSObject+PYForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PYForm.m"; sourceTree = "<group>"; };
+		15FCA4E8239654CD008E4E96 /* UIButton+PYExpand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+PYExpand.h"; sourceTree = "<group>"; };
+		15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+PYExpand.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +354,7 @@
 		15422DBB21E5B5F10038D09E /* Private */ = {
 			isa = PBXGroup;
 			children = (
+				159F23F723978F7300C95278 /* Notification */,
 				15B13E352293E4BC0063AA74 /* Match */,
 				15FA7FCC227EB357007C484E /* NSObject */,
 				15185D242269CA4B0009CD7A /* Copy */,
@@ -356,6 +375,19 @@
 				15DB171F1DF687AB00182429 /* py_hook_encode_type.h */,
 			);
 			path = Hook;
+			sourceTree = "<group>";
+		};
+		159F23F723978F7300C95278 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				159F23F823978F9900C95278 /* UIResponder+PYKeyboard.h */,
+				159F23F923978F9900C95278 /* UIResponder+PYKeyboard.m */,
+				159F23FB23978FDE00C95278 /* PYKeyboardNotifyPointerContext.h */,
+				159F23FC23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m */,
+				159F24012397908D00C95278 /* PYKeyboardNotificationObject.h */,
+				159F24022397908D00C95278 /* PYKeyboardNotificationObject.m */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		15B11B1D232216AD00CB11FF /* Keychain */ = {
@@ -479,6 +511,8 @@
 				15BFDEDF1DF5034A0044EDAA /* UILable+PYExpand.m */,
 				15BFDEE01DF5034A0044EDAA /* UIView+PYExpand.h */,
 				15BFDEE11DF5034A0044EDAA /* UIView+PYExpand.m */,
+				15FCA4E8239654CD008E4E96 /* UIButton+PYExpand.h */,
+				15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */,
 			);
 			path = Expand;
 			sourceTree = "<group>";
@@ -702,6 +736,7 @@
 				15BFDF091DF5034A0044EDAA /* NSObject+PYExpand.m in Sources */,
 				15BFDF071DF5034A0044EDAA /* NSDictionary+PYExpand.m in Sources */,
 				15FA7FC7227EB327007C484E /* PYUtile.m in Sources */,
+				159F24032397908D00C95278 /* PYKeyboardNotificationObject.m in Sources */,
 				15B13E2722927AC20063AA74 /* NSObject+__PYHook_Private.m in Sources */,
 				15BFDF0B1DF5034A0044EDAA /* UIColor+PYExpand.m in Sources */,
 				15E4FB04221021BA001EBCAF /* py_data_function.c in Sources */,
@@ -719,6 +754,7 @@
 				15BFDF061DF5034A0044EDAA /* NSDate+PYExpand.m in Sources */,
 				15BFDF041DF5034A0044EDAA /* NSArray+PYExpand.m in Sources */,
 				15242A6B1DF6580100C361E4 /* PYMotionNotification.m in Sources */,
+				159F23FA23978F9900C95278 /* UIResponder+PYKeyboard.m in Sources */,
 				15185D272269CA610009CD7A /* PYObjectCopy.m in Sources */,
 				15BFDF151DF5034A0044EDAA /* UIViewController+HookView.m in Sources */,
 				15422DBE21E5C9680038D09E /* PYArchiveObject.m in Sources */,
@@ -734,9 +770,11 @@
 				15242A751DF6592400C361E4 /* PYInvoke.m in Sources */,
 				15BFDF0C1DF5034A0044EDAA /* UIImage+PYExpand.m in Sources */,
 				15C5FB361DF66C3B00FF2C75 /* PYGraphicsThumb.m in Sources */,
+				159F23FD23978FDE00C95278 /* PYKeyboardNotifyPointerContext.m in Sources */,
 				15FA7FD5227EB357007C484E /* NSObject+PYForm.m in Sources */,
 				15BFDF0E1DF5034A0044EDAA /* UIView+PYExpand.m in Sources */,
 				15C5FB2D1DF66A7900FF2C75 /* PYViewAutolayoutCenter.m in Sources */,
+				15FCA4EA239654CE008E4E96 /* UIButton+PYExpand.m in Sources */,
 				15CECCA7228BAE6C008173E0 /* NSObject+Hook.m in Sources */,
 				15242A6C1DF6580100C361E4 /* PYOrientationNotification.m in Sources */,
 				15422DBA21E5B4A30038D09E /* PYArchiveParse.m in Sources */,
@@ -750,6 +788,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159F24042397923700C95278 /* UIResponder+PYKeyboard.m in Sources */,
+				159F24052397923700C95278 /* PYKeyboardNotifyPointerContext.m in Sources */,
+				159F24062397923700C95278 /* PYKeyboardNotificationObject.m in Sources */,
+				15FCA4EB239656E0008E4E96 /* UIButton+PYExpand.m in Sources */,
 				15B11B252322172F00CB11FF /* PYKeychain.m in Sources */,
 				15B13E392293E94D0063AA74 /* NSString+__PY_Match.m in Sources */,
 				15C5FAD91DF668A800FF2C75 /* NSObject+PYExpand.m in Sources */,

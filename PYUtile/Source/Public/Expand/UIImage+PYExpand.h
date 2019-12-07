@@ -28,6 +28,11 @@ extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 -(nonnull UIImage*) cutImage:(CGRect) cutValue;
 -(nonnull UIImage*) cutImageCenter:(CGSize) size;
 -(nonnull UIImage*) cutImageFit:(CGSize) size;
+/**
+ 创建上下结构的文字图片结构
+ direction：(0:top, 1:bottom)
+ */
++(nonnull UIImage *) createImageWithTitle:(nonnull NSString *) title font:(nonnull UIFont *) font color:(nonnull UIColor *) color image:(nonnull UIImage *) image offH:(CGFloat) offH imageOffH:(CGFloat) imageOffH direction:(short) direction;
 +(nonnull UIImage*) imageWithColor:(UIColor * _Nonnull)color;
 +(nonnull UIImage*) imageWithSize:(CGSize) size color:(CGColorRef _Nonnull) colorRef;
 +(nonnull UIImage*) imageWithSize:(CGSize) size blockDraw:(void (^ _Nonnull) (CGContextRef _Nonnull context, CGRect rect)) blockDraw;

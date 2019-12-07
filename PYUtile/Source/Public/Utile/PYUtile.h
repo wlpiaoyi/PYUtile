@@ -99,6 +99,11 @@ float app_cpu_usage(void);
 +(nullable UIWindow *) getCurrenWindow;
 
 /**
+ 获取最顶层的View
+ */
++(nonnull UIView *) getTopView:(nonnull UIView *) subView;
+
+/**
  获取当前正在显示的controller(直接从window遍历)
  */
 +(nullable UIViewController *) getCurrentController;

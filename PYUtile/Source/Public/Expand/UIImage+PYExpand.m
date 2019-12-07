@@ -9,6 +9,10 @@
 #import "UIImage+PYExpand.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
+#import <CoreText/CoreText.h>
+#import "PYUtile.h"
+#import "PYGraphicsDraw.h"
+
 enum {
     qr_margin = 3
 };
@@ -66,6 +70,44 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
     CGRect r = CGRectMake(x, y, size.width, size.height);
     return [self cutImage:r];
 }
+
+/**
+ 创建上下结构的文字图片结构
+ */
++(UIImage *) createImageWithTitle:(NSString *) title font:(UIFont *) font color:(UIColor *) color image:(UIImage *) image offH:(CGFloat) offH imageOffH:(CGFloat) imageOffH direction:(short) direction{
+    NSAttributedString * attribute = [[NSAttributedString alloc] initWithString:title attributes:@{(NSString *)kCTForegroundColorAttributeName:color,(NSString *)kCTFontAttributeName:font}];
+    CGSize tSize = [PYUtile getBoundSizeWithAttributeTxt:attribute size:CGSizeMake(999, [PYUtile getFontHeightWithSize:font.pointSize fontName:font.fontName])];
+    UIImage * tImage = [UIImage imageWithSize:tSize blockDraw:^(CGContextRef  _Nonnull context, CGRect rect) {
+        [PYGraphicsDraw drawTextWithContext:context attribute:attribute rect:CGRectMake(0, 0, 400, 400) y:rect.size.height scaleFlag:YES];
+    }];
+    
+    tSize = CGSizeMake(tImage.size.width, tImage.size.height);
+    tImage = [tImage setImageSize:tSize];
+    
+    tSize = tImage.size;
+    CGSize tS = CGSizeMake(MAX(tSize.width, image.size.width), tSize.height + offH + image.size.height + imageOffH);
+    CGRect tFrame, iFrame;
+    switch (direction) {
+        case 0:{
+            tFrame = CGRectMake((tS.width - tSize.width)/2, 0, tImage.size.width, tImage.size.height);
+            iFrame = CGRectMake((tS.width - image.size.width)/2, tFrame.size.height + tFrame.origin.y + offH + imageOffH, image.size.width, image.size.height);
+        }
+            break;
+        default:{
+            iFrame = CGRectMake((tS.width - image.size.width)/2, imageOffH, image.size.width, image.size.height);
+            tFrame = CGRectMake((tS.width - tSize.width)/2, iFrame.size.height + iFrame.origin.y + offH, tImage.size.width, tImage.size.height);
+        }
+            break;
+    }
+    UIGraphicsBeginImageContextWithOptions(tS, NO, [UIScreen mainScreen].scale);
+    [tImage drawInRect:tFrame];
+    [image drawInRect:iFrame];
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 + (UIImage *)imageWithColor:(UIColor *)color {
     UIImage *image = [self imageWithSize:CGSizeMake(1.0f, 1.0f) color:[color CGColor]];
     return image;

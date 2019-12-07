@@ -323,6 +323,15 @@ id synProgressObj;
 }
 
 /**
+ 获取最顶层的View
+ */
++(nonnull UIView *) getTopView:(nonnull UIView *) subView{
+    if(subView.superview == nil) return subView;
+    if([subView isKindOfClass:[UIWindow class]]) return subView;
+    return [self getTopView:subView.superview];
+}
+
+/**
  获取当前正在显示的controller(直接从window遍历)
  */
 +(nullable UIViewController*) getCurrentController{

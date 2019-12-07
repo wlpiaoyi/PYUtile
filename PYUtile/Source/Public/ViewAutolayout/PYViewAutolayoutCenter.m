@@ -36,7 +36,7 @@ const NSString * PYAtltEquelsHeight = @"equelsHeight";
     eii.bottomActive = true;
     eii.leftActive = true;
     eii.rightActive = true;
-    return [PYViewAutolayoutCenter persistConstraint:subView relationmargins:UIEdgeInsetsZero relationToItems:eii];
+    return [PYViewAutolayoutCenter persistConstraint:subView relationmargins:margins relationToItems:eii];
 }
 
 /**

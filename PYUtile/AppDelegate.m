@@ -72,7 +72,18 @@ NSTimer * timer;
 
 @implementation AppDelegate
 
+- (int)test01:(int )v {
+    return 2 + v;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    int(^tempBlock)(id, int) =^(id target, int x) {
+        int ir;
+        [target invokeOrginalWithSel:@selector(test01:) returnValue:&ir params:&x, nil];
+        return 3 + x;
+    };
+    [AppDelegate hookInstanceMethodWithSel:@selector(test01:) block:tempBlock];
+    int i = [self test01:3];
     bool flag = py_isPrisonBreakByPath();
     flag = py_isPrisonBreakByScheme();
     flag = py_isPrisonBreakByDyldimage();

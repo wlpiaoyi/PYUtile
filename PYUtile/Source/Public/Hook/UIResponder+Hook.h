@@ -17,7 +17,7 @@
 @end
 
 @interface UIResponder(Hook)
-+(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBase;
++(nullable NSHashTable<id<UIResponderHookBaseDelegate>> *) delegateBaseHook;
 /**
  hook Controller 的方法
  规则: method , exchangeMethod
