@@ -33,7 +33,7 @@
 -(void) afterExcuteViewDidLayoutSubviewsWithTarget:(nonnull UIViewController *) target;
 
 -(void) beforeExcutePreferredStatusBarStyle:(nonnull BOOL *) isExcute target:(nonnull UIViewController *) target;
--(UIStatusBarStyle) afterExcutePreferredStatusBarStyleWithTarget:(nonnull UIViewController *) target;
+-(UIStatusBarStyle) afterExcutePreferredStatusBarStyleWithTarget:(nonnull UIViewController *) target style:(UIStatusBarStyle) style;
 @end
 
 @interface UIViewController(hookview)

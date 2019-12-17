@@ -16,6 +16,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIImageView * imageView = [self.view viewWithTag:186003];
+    imageView.image = [UIImage createQRCodeImageWithString:@"xxxx" withSize:100];
     self.navigationController.navigationBar.hidden = NO;
     self.title = @"adfad";
     UIView * view = [UIView new];

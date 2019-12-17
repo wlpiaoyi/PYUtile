@@ -23,7 +23,6 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
 //==>exchangeMethods
 -(void) exchangeViewDidLoad{
      __block BOOL isExcute = true;
-    
     NSHashTable<id<UIViewcontrollerHookViewDelegate>> * delegates = [UIViewController delegateViews];
     
     [UIViewController hookViewIteratorTable:delegates block:^(id delegate) {
@@ -175,8 +174,8 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
     }
     
     [UIViewController hookViewIteratorTable:delegates block:^(id delegate){
-        if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:)]) {
-            result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self];
+        if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:style:)]) {
+            result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self style:result];
         }
     } target:self];
     
@@ -198,8 +197,8 @@ BOOL isExcuteUIViewControllerHookViewMethod = false;
          result = [self exchangePreferredStatusBarStyle];
     }
     [UIViewController hookViewIteratorTable:delegates block:^(id delegate) {
-        if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:)]) {
-            result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self];
+        if (delegate && [delegate respondsToSelector:@selector(afterExcutePreferredStatusBarStyleWithTarget:style:)]) {
+            result = [delegate afterExcutePreferredStatusBarStyleWithTarget:self style:result];
         }
     } target:self];
     

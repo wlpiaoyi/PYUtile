@@ -61,4 +61,6 @@ extern NSString * _Nonnull PYColorMatrixCIVignetteEffect;
 
 +(nonnull UIImage*) imageWithImage:(nonnull UIImage*)inImage colorMatrix:(nonnull NSString *) colorMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor");
 +(nonnull UIImage*) imageWithImage:(nonnull UIImage*)inImage colorMatrix:(nonnull NSString *) colorMatrix rectMatrix:(CGRect) rectMatrix NS_DEPRECATED_IOS(2_0, 7_0, "Use fliterMatrixWithColor:rect");
+
++(nonnull UIImage *) createQRCodeImageWithString:(nonnull NSString *) string withSize:(CGFloat) withSize;
 @end

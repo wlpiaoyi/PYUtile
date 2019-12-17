@@ -336,8 +336,7 @@ id synProgressObj;
  */
 +(nullable UIViewController*) getCurrentController{
     UIViewController *result = nil;
-    
-    UIWindow *topWindow = [UIApplication sharedApplication].delegate.window;
+    UIWindow *topWindow = [self getCurrenWindow];
     if (!topWindow)  return nil;
     
     UIView *rootView = [topWindow subviews].firstObject;
@@ -358,26 +357,26 @@ id synProgressObj;
 }
 
 
+
+
 /**
  获取当前正在显示的controller(直接从指定controller遍历)
  */
 +(nonnull UIViewController *) getCurrentController:(nonnull UIViewController *) parentVc{
     
     UIViewController * childVc = nil;
-    
-    if(parentVc.childViewControllers
+    if ([parentVc isKindOfClass:[UITabBarController class]]) {
+        if(((UITabBarController*)parentVc).selectedViewController)
+            childVc =  ((UITabBarController*)parentVc).selectedViewController;
+    } else if ([parentVc isKindOfClass:[UINavigationController class]]
+            && ((UINavigationController*)parentVc).viewControllers
+           && ((UINavigationController*)parentVc).viewControllers.count > 0) {
+           childVc =  ((UINavigationController*)parentVc).viewControllers.lastObject;
+    }else if(parentVc.childViewControllers
        && parentVc.childViewControllers.count > 0){
         childVc = [self getCurrentController:parentVc.childViewControllers.lastObject];
     }else if(parentVc.presentedViewController){
         childVc = parentVc.presentedViewController;
-    } else if ([parentVc isKindOfClass:[UINavigationController class]]
-         && ((UINavigationController*)parentVc).viewControllers
-        && ((UINavigationController*)parentVc).viewControllers.count > 0) {
-        childVc =  ((UINavigationController*)parentVc).viewControllers.lastObject;
-    }else if ([parentVc isKindOfClass:[UITabBarController class]]
-              && ((UITabBarController*)parentVc).viewControllers
-              && ((UITabBarController*)parentVc).viewControllers.count > 0) {
-        childVc =  ((UITabBarController*)parentVc).viewControllers.lastObject;
     }
     
     if(!childVc) return parentVc;
