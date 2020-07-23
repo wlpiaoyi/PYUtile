@@ -9,7 +9,7 @@
 #import "NSString+__PY_Match.h"
 
 NSString * __PY_REGEX_HOMEHONE = @"^((\\d{2,4}\\-){0,1}\\d{7,9})$";
-NSString * __PY_REGEX_MOBILEPHONE = @"^(\\+(\\d{2})){0,1}((13)|(14)|(15)|(16)|(17)|(18)|(19))\\d{9}$";
+NSString * __PY_REGEX_MOBILEPHONE = @"^(\\+(\\d{1,3})){0,1}((13)|(14)|(15)|(16)|(17)|(18)|(19))\\d{9}$";
 NSString * __PY_REGEX_INTEGER = @"^\\d{1,}$";
 NSString * __PY_REGEX_FLOAT = @"^\\d{1,}\\.{1}\\d{1,}$";
 NSString * __PY_REGEX_EMAIL = @"^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$";

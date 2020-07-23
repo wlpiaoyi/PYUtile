@@ -46,7 +46,7 @@ PYKeyboardNotificationObject * xPYKeyboardNotificationObject;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:selInputShow name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:selInputShow name:UIKeyboardWillChangeFrameNotification object:nil];
     SEL selInputHidden = @selector(py_keybord_inputhidden:);
-    [[NSNotificationCenter defaultCenter]addObserver:self selector: selInputHidden name: UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:selInputHidden name:UIKeyboardWillHideNotification object:nil];
     _notifyContextSet = [NSMutableSet new];
     return self;
 }
@@ -132,6 +132,7 @@ PYKeyboardNotificationObject * xPYKeyboardNotificationObject;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
 }
 
 @end

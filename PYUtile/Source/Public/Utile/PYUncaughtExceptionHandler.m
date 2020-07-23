@@ -120,7 +120,6 @@ const int32_t UncaughtExceptionMaximum = 10;
     }
 }
 @end
-
 void PYHandleException(NSException *exception){
     int32_t exceptionCount = OSAtomicIncrement32(&UncaughtExceptionCount);
     if (exceptionCount > UncaughtExceptionMaximum){

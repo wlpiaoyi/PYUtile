@@ -9,6 +9,9 @@
 #import "PYXml.h"
 #import "NSData+PYExpand.h"
 
+static NSMutableDictionary * TSZF_DICT_TO;
+static NSMutableDictionary * TSZF_DICT_FR;
+
 @interface PYXmlElement(){
 }
 -(instancetype) initWithDeep:(int) deep parent:(PYXmlElement *) parent;
@@ -19,10 +22,38 @@ kPNA unsigned int deep;
 @end
 
 @implementation PYXmlDocument
+
++(void) initialize{
+    static dispatch_once_t onceToken; dispatch_once(&onceToken, (^{
+        TSZF_DICT_TO = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"&":@"#A#AND#A#"
+        }];
+        TSZF_DICT_FR = [NSMutableDictionary new];
+        for (NSString * key in TSZF_DICT_TO) {
+            TSZF_DICT_FR[TSZF_DICT_TO[key]] = key;
+        }
+    }));
+}
+
++(NSString *) TSZF_DICT_TO:(NSString *) string{
+    for (NSString * key in TSZF_DICT_TO) {
+        if(![string containsString:key]) continue;
+            string = [string stringByReplacingOccurrencesOfString:key withString:TSZF_DICT_TO[key]];
+    }
+    return string;
+}
++(NSString *) TSZF_DICT_FR:(NSString *) string{
+    for (NSString * key in TSZF_DICT_FR) {
+        if(![string containsString:key]) continue;
+            string = [string stringByReplacingOccurrencesOfString:key withString:TSZF_DICT_FR[key]];
+    }
+    return string;
+}
+
 +(nullable instancetype) instanceWithXmlString:(nonnull NSString *) xmlString{
     PYXmlDocument * xml = [PYXmlDocument new];
+    xmlString = [PYXmlDocument TSZF_DICT_TO:xmlString];
     NSXMLParser *par = [[NSXMLParser alloc] initWithData:[xmlString dataUsingEncoding:NSUTF8StringEncoding]];
-//    NSLog(@"\n%@\n",xmlString);
     [par setDelegate:xml];
     [par parse];
     return xml;
@@ -133,12 +164,13 @@ kPNA unsigned int deep;
     [stringValue appendString:xmlDom.elementName];
     if(xmlDom.attributes.count){
         for (NSString * key in xmlDom.attributes) {
-            [stringValue appendFormat:@" %@=\"%@\"", key, xmlDom.attributes[key]];
+            NSString * ky = [PYXmlDocument TSZF_DICT_FR:key];
+            [stringValue appendFormat:@" %@=\"%@\"", ky, [PYXmlDocument TSZF_DICT_FR:xmlDom.attributes[ky]]];
         }
     }
     [stringValue appendString:@">"];
     if(xmlDom.string){
-        [stringValue appendString:xmlDom.string];
+        [stringValue appendString:[PYXmlDocument TSZF_DICT_FR:xmlDom.string]];
     }
     if(xmlDom.cData){
         [stringValue appendFormat:@"<![CDATA[%@]]>",[xmlDom.cData toString]];

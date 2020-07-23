@@ -9,6 +9,8 @@
 
 #import <UIKit/UIKit.h>
 
+int     printf(const char * __restrict, ...) __printflike(1, 2);
+
 #define is64BitArm  __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
 
 #define kRGB(R,G,B) [UIColor colorWithRed:(R)/255.0 green:(G)/255.0 blue:(B)/255.0 alpha:1.0]
@@ -55,6 +57,9 @@
 #define kPNSNN                        @property (nonatomic, strong, nonnull)
 #define kPNRNA                         @property (nonatomic, readonly, nullable)
 #define kPNRNN                        @property (nonatomic, readonly, nonnull)
+#define kPCNSNA                         @property (class, nonatomic, strong, nullable)
+#define kPCNRNN                        @property (class, nonatomic, readonly, nonnull)
+#define kPCNRA                        @property (class, nonatomic, readonly, assign)
 //==============
 #define kPNCNA                         @property (nonatomic, copy, nullable)
 #define kPNCNN                        @property (nonatomic, copy, nonnull)

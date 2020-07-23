@@ -138,7 +138,6 @@
     Method* methods = class_copyMethodList(clazz, &outCount);
     NSMutableArray<NSDictionary*> *methodDics = [[NSMutableArray<NSDictionary*> alloc] init];
     for (int i = 0; i<outCount; i++) {
-        printf("===>%d\n",i);
         Method method = methods[i];
         [methodDics addObject:[self getMethodInfoWithMethod:method]];
     }

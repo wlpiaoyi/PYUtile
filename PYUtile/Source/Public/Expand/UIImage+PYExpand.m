@@ -41,14 +41,42 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
     UIGraphicsEndImageContext();
     return newImage;
 }
--(UIImage*) cutImage:(CGRect) cutValue{
+-(UIImage*) cutImage:(CGRect) rect{
     if(![self isKindOfClass:[UIImage class]]){// like the java's instandOf
         return nil;
     }
-    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage],cutValue);
-    UIImage *image = [UIImage imageWithCGImage:imageRef];
+    CGFloat (^rad)(CGFloat) = ^CGFloat(CGFloat deg) {
+        return deg / 180.0f * (CGFloat) M_PI;
+    };
+
+    // determine the orientation of the image and apply a transformation to the crop rectangle to shift it to the correct position
+    CGAffineTransform rectTransform;
+    switch (self.imageOrientation) {
+        case UIImageOrientationLeft:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(rad(90)), 0, -self.size.height);
+            break;
+        case UIImageOrientationRight:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(rad(-90)), -self.size.width, 0);
+            break;
+        case UIImageOrientationDown:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(rad(-180)), -self.size.width, -self.size.height);
+            break;
+        default:
+            rectTransform = CGAffineTransformIdentity;
+    };
+    // adjust the transformation scale based on the image scale
+    rectTransform = CGAffineTransformScale(rectTransform, self.scale, self.scale);
+
+    // apply the transformation to the rect to create a new, shifted rect
+    CGRect transformedCropSquare = CGRectApplyAffineTransform(rect, rectTransform);
+    // use the rect to crop the image
+    CGImageRef imageRef = CGImageCreateWithImageInRect(self.CGImage, transformedCropSquare);
+    // create a new UIImage and set the scale and orientation appropriately
+    UIImage *result = [UIImage imageWithCGImage:imageRef scale:self.scale orientation:self.imageOrientation];
+    // memory cleanup
     CGImageRelease(imageRef);
-    return  image;
+    
+    return result;
 }
 -(UIImage*) cutImageFit:(CGSize) size{
     CGSize temp;

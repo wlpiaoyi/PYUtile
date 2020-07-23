@@ -153,6 +153,10 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     kAssign(self);
     [self iteratorWithObject:object clazz:clazz userInfo:dict blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull filedName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
         kStrong(self);
+        NSRange range = [filedName rangeOfString:@"__remove_dict"];
+        if(range.length == 13 && range.location == 0){
+            return;
+        }
         NSMutableDictionary *dict = userInfo;
         id returnValue = nil;
         if(isIvar){
