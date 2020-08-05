@@ -12,6 +12,7 @@
 kPNAR CGFloat value;
 kPNAR BOOL isSafe;
 kPNRNA UIView * toItem;
+kPNAR BOOL isReversal;
 
 @end
 
@@ -55,22 +56,22 @@ kPNRNA UIView * toItem;
 /**
  * 添加top对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationTop:(CGFloat) top toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe;
+-(nullable UIView *) py_setAutolayoutRelationTop:(CGFloat) top toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse;
 
 /**
  * 添加Bottom对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationBottom:(CGFloat) bottom toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe;
+-(nullable UIView *) py_setAutolayoutRelationBottom:(CGFloat) bottom toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse;
 
 /**
  * 添加Left对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationLeft:(CGFloat) left toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe;
+-(nullable UIView *) py_setAutolayoutRelationLeft:(CGFloat) left toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse;
 
 /**
  * 添加Right对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationRight:(CGFloat) right toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe;
+-(nullable UIView *) py_setAutolayoutRelationRight:(CGFloat) right toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse;
 
 @end
 
@@ -106,19 +107,19 @@ kPNRNA UIView * toItem;
         
         if(make.top){
             PYConstraint * constraint = make.top;
-            [self py_setAutolayoutRelationTop:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe];
+            [self py_setAutolayoutRelationTop:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe isReverse:constraint.isReversal];
         }
         if(make.bottom){
             PYConstraint * constraint = make.bottom;
-            [self py_setAutolayoutRelationBottom:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe];
+            [self py_setAutolayoutRelationBottom:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe isReverse:constraint.isReversal];
         }
         if(make.left){
             PYConstraint * constraint = make.left;
-            [self py_setAutolayoutRelationLeft:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe];
+            [self py_setAutolayoutRelationLeft:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe isReverse:constraint.isReversal];
         }
         if(make.right){
             PYConstraint * constraint = make.right;
-            [self py_setAutolayoutRelationRight:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe];
+            [self py_setAutolayoutRelationRight:constraint.value toItems:constraint.toItem isInSafe:constraint.isSafe isReverse:constraint.isReversal];
         }
     }
     return [self py_getAllLayoutContarint];
@@ -231,7 +232,7 @@ kPNRNA UIView * toItem;
 /**
  * 添加top对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationTop:(CGFloat) top toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe{
+-(nullable UIView *) py_setAutolayoutRelationTop:(CGFloat) top toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterY];
     if(constraint) [self.superview removeConstraint:constraint];
     constraint = [self py_getAutolayoutRelationTop];
@@ -241,7 +242,8 @@ kPNRNA UIView * toItem;
     }else{
         UIEdgeInsets relationmargins = UIEdgeInsetsMake(top, DisableConstrainsValueMAX, DisableConstrainsValueMAX, DisableConstrainsValueMAX);
         PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
-         eii.topActive = isInSafe;
+        eii.topActive = isInSafe;
+        eii.topReverse = isReverse;
          if(toItems) eii.top = (__bridge void * _Nullable)(toItems);
          [PYViewAutolayoutCenter persistConstraint:self relationmargins:relationmargins relationToItems:eii];
     }
@@ -251,7 +253,7 @@ kPNRNA UIView * toItem;
 /**
  * 添加Bottom对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationBottom:(CGFloat) bottom toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe{
+-(nullable UIView *) py_setAutolayoutRelationBottom:(CGFloat) bottom toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterY];
     if(constraint) [self.superview removeConstraint:constraint];
     constraint = [self py_getAutolayoutRelationBottom];
@@ -262,6 +264,7 @@ kPNRNA UIView * toItem;
         UIEdgeInsets relationmargins = UIEdgeInsetsMake(DisableConstrainsValueMAX, DisableConstrainsValueMAX, bottom,  DisableConstrainsValueMAX);
          PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
          eii.bottomActive = isInSafe;
+         eii.bottomReverse = isReverse;
          if(toItems) eii.bottom = (__bridge void * _Nullable)(toItems);
          [PYViewAutolayoutCenter persistConstraint:self relationmargins:relationmargins relationToItems:eii];
     }
@@ -271,7 +274,7 @@ kPNRNA UIView * toItem;
 /**
  * 添加Left对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationLeft:(CGFloat) left toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe{
+-(nullable UIView *) py_setAutolayoutRelationLeft:(CGFloat) left toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterX];
     if(constraint) [self.superview removeConstraint:constraint];
     constraint = [self py_getAutolayoutRelationLeft];
@@ -281,6 +284,7 @@ kPNRNA UIView * toItem;
         UIEdgeInsets relationmargins = UIEdgeInsetsMake(DisableConstrainsValueMAX, left, DisableConstrainsValueMAX,  DisableConstrainsValueMAX);
         PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
         eii.leftActive = isInSafe;
+        eii.leftReverse = isReverse;
          if(toItems) eii.left = (__bridge void * _Nullable)(toItems);
          [PYViewAutolayoutCenter persistConstraint:self relationmargins:relationmargins relationToItems:eii];
     }
@@ -290,7 +294,7 @@ kPNRNA UIView * toItem;
 /**
  * 添加Right对其约束
 */
--(nullable UIView *) py_setAutolayoutRelationRight:(CGFloat) right toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe{
+-(nullable UIView *) py_setAutolayoutRelationRight:(CGFloat) right toItems:(nullable UIView *) toItems isInSafe:(BOOL) isInSafe isReverse:(BOOL) isReverse{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterX];
     if(constraint) [self.superview removeConstraint:constraint];
     constraint = [self py_getAutolayoutRelationRight];
@@ -300,6 +304,7 @@ kPNRNA UIView * toItem;
         UIEdgeInsets relationmargins = UIEdgeInsetsMake(DisableConstrainsValueMAX, DisableConstrainsValueMAX,  DisableConstrainsValueMAX, right);
          PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
          eii.rightActive = isInSafe;
+        eii.rightReverse = isReverse;
          if(toItems) eii.right = (__bridge void * _Nullable)(toItems);
          [PYViewAutolayoutCenter persistConstraint:self relationmargins:relationmargins relationToItems:eii];
     }

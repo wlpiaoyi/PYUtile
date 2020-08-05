@@ -12,8 +12,8 @@
 
 kPNAR CGFloat value;
 kPNAR BOOL isSafe;
+kPNAR BOOL isReversal;
 kPNRNA UIView * toItem;
-
 kPNA PYConstraintMaker * maker;
 kPNA BOOL isInstall;
 @end
@@ -60,6 +60,18 @@ kPNA BOOL isInstall;
     };
 }
 
+#pragma mark 布局参考对象,反转
+#pragma mark 布局参考对象,反转
+- (nonnull PYConstraint* (^)(BOOL isReversal)) py_toReversal;{
+    kAssign(self);
+    return ^id(BOOL isReversal) {
+        kStrong(self);
+        self->_isReversal = isReversal;
+        [self __synConstraints];
+        return self;
+    };
+}
+
 -(NSMutableArray<PYConstraint *> *) __synConstraints{
     self.isInstall = YES;
     NSMutableArray<PYConstraint *> * constraints = [NSMutableArray new];
@@ -92,6 +104,7 @@ kPNA BOOL isInstall;
     constrain->_value = self->_value;
     constrain->_toItem = self->_toItem;
     constrain->_isSafe = self->_isSafe;
+    constrain->_isReversal = self->_isReversal;
     [constraints addObject:constrain];
 }
 

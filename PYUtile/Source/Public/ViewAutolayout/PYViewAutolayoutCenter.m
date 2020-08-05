@@ -50,12 +50,17 @@ const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
     #pragma mark margin top
     if ([self isValueEnable:margins.top]) {
         if(toItems.top){
-            superAtt = NSLayoutAttributeBottom;
             layoutGuide = (__bridge NSObject *)(toItems.top);
         }else{
+            toItems.topReverse = YES;
             layoutGuide = [subView superview];
-            superAtt = NSLayoutAttributeTop;
         }
+        if(toItems.topReverse){
+            superAtt = NSLayoutAttributeTop;
+        }else{
+            superAtt = NSLayoutAttributeBottom;
+        }
+        
         NSLayoutConstraint * marginsTop = nil;
         if (@available(iOS 11.0, *) ) {
             if(toItems.topActive && layoutGuide == [subView superview]){
@@ -73,11 +78,15 @@ const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
     #pragma mark margin buttom
     if ([self isValueEnable:margins.bottom]) {
         if(toItems.bottom){
-            superAtt = NSLayoutAttributeTop;
             layoutGuide = (__bridge NSObject *)(toItems.bottom);
         }else{
+            toItems.bottomReverse = YES;
             layoutGuide = [subView superview];
+        }
+        if(toItems.bottomReverse){
             superAtt = NSLayoutAttributeBottom;
+        }else{
+            superAtt = NSLayoutAttributeTop;
         }
         NSLayoutConstraint * marginsBottom = nil;
         if (@available(iOS 11.0, *) ) {
@@ -96,11 +105,15 @@ const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
     #pragma mark margin left
     if ([self isValueEnable:margins.left]) {
         if(toItems.left){
-            superAtt = NSLayoutAttributeRight;
             layoutGuide = (__bridge NSObject *)(toItems.left);
         }else{
+            toItems.leftReverse = YES;
             layoutGuide = [subView superview];
+        }
+        if(toItems.leftReverse){
             superAtt = NSLayoutAttributeLeft;
+        }else{
+            superAtt = NSLayoutAttributeRight;
         }
         NSLayoutConstraint *marginsLeft = nil;
         
@@ -124,11 +137,16 @@ const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
     #pragma mark margin right
     if ([self isValueEnable:margins.right]) {
         if(toItems.right){
-            superAtt = NSLayoutAttributeLeft;
             layoutGuide = (__bridge NSObject *)(toItems.right);
         }else{
             layoutGuide = [subView superview];
+            toItems.rightReverse = YES;
+        }
+        
+        if(toItems.rightReverse){
             superAtt = NSLayoutAttributeRight;
+        }else{
+            superAtt = NSLayoutAttributeLeft;
         }
         NSLayoutConstraint *marginsRight = nil;
         if (@available(iOS 11.0, *) ) {

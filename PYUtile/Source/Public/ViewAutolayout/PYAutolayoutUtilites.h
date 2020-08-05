@@ -79,4 +79,7 @@ static inline id _PYBoxValue(const char *type, ...) {
 #define py_inSafe(...)                 _py_inSafe(PYBoxValue((__VA_ARGS__)))
 #define _py_inSafe(...)                     py_inSafe(__VA_ARGS__)
 
+#define py_toReversal(...)                 _py_toReversal(PYBoxValue((__VA_ARGS__)))
+#define _py_toReversal(...)                     py_toReversal(__VA_ARGS__)
+
 NS_ASSUME_NONNULL_END

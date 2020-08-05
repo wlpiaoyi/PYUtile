@@ -41,6 +41,20 @@
         NSLog(@"11");
     }];
     threadJoinGlobal(^{
+        
+        [NSThread sleepForTimeInterval:2];
+        threadJoinMain(^{
+            [UIView animateWithDuration:.2 animations:^{
+                [subView py_removeAllLayoutContarint];
+                UIView * item = [self.view viewWithTag:1860022];
+                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
+                    make.top.left.bottom.right.py_toReversal(YES).py_toItem(item).py_constant(0);
+                }];
+                [self.view layoutIfNeeded];
+            }];
+            NSLog(@"11");
+        });
+        
         [NSThread sleepForTimeInterval:2];
         threadJoinMain(^{
             [UIView animateWithDuration:.2 animations:^{
