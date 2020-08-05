@@ -10,16 +10,16 @@
 #import <UIKit/UIKit.h>
 #import "PYUtile.h"
 
-extern const NSString * PYAtltSuperTop;
-extern const NSString * PYAtltSuperBottom ;
-extern const NSString * PYAtltSuperLeft;
-extern const NSString * PYAtltSuperRight;
-extern const NSString * PYAtltSelfWith;
-extern const NSString * PYAtltSelfHeight;
-extern const NSString * PYAtltSelfCenterX;
-extern const NSString * PYAtltSelfCenterY;
-extern const NSString * PYAtltEquelsWidth;
-extern const NSString * PYAtltEquelsHeight;
+extern const NSString * _Nonnull PYAtltSuperTop;
+extern const NSString * _Nonnull PYAtltSuperBottom ;
+extern const NSString * _Nonnull PYAtltSuperLeft;
+extern const NSString * _Nonnull PYAtltSuperRight;
+extern const NSString * _Nonnull PYAtltSelfWith;
+extern const NSString * _Nonnull PYAtltSelfHeight;
+extern const NSString * _Nonnull PYAtltSelfCenterX;
+extern const NSString * _Nonnull PYAtltSelfCenterY;
+extern const NSString * _Nonnull PYAtltEquelsWidth;
+extern const NSString * _Nonnull PYAtltEquelsHeight;
 
 extern const CGFloat DisableConstrainsValueMAX;
 extern const CGFloat DisableConstrainsValueMIN;

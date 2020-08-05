@@ -12,16 +12,16 @@
 
 const CGFloat DisableConstrainsValueMAX = CGFLOAT_MAX - 1;
 const CGFloat DisableConstrainsValueMIN  = -DisableConstrainsValueMAX;
-const NSString * PYAtltSuperTop = @"superTop";
-const NSString * PYAtltSuperBottom = @"superBottom";
-const NSString * PYAtltSuperLeft = @"superLeft";
-const NSString * PYAtltSuperRight = @"superRight";
-const NSString * PYAtltSelfWith = @"selfWith";
-const NSString * PYAtltSelfHeight = @"selfHeight";
-const NSString * PYAtltSelfCenterX = @"selfCenterX";
-const NSString * PYAtltSelfCenterY = @"selfCenterY";
-const NSString * PYAtltEquelsWidth = @"equelsWidth";
-const NSString * PYAtltEquelsHeight = @"equelsHeight";
+const NSString * _Nonnull PYAtltSuperTop = @"superTop";
+const NSString * _Nonnull PYAtltSuperBottom = @"superBottom";
+const NSString * _Nonnull PYAtltSuperLeft = @"superLeft";
+const NSString * _Nonnull PYAtltSuperRight = @"superRight";
+const NSString * _Nonnull PYAtltSelfWith = @"selfWith";
+const NSString * _Nonnull PYAtltSelfHeight = @"selfHeight";
+const NSString * _Nonnull PYAtltSelfCenterX = @"selfCenterX";
+const NSString * _Nonnull PYAtltSelfCenterY = @"selfCenterY";
+const NSString * _Nonnull PYAtltEquelsWidth = @"equelsWidth";
+const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
 
 @implementation PYViewAutolayoutCenter
 
@@ -66,6 +66,7 @@ const NSString * PYAtltEquelsHeight = @"equelsHeight";
             marginsTop = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:layoutGuide attribute:superAtt multiplier:1 constant:margins.top];
         }
         marginsTop.active = toItems.topActive;
+        
         [[subView superview] addConstraint:marginsTop];
         dictResult[PYAtltSuperTop] = marginsTop;
     }
@@ -198,6 +199,7 @@ const NSString * PYAtltEquelsHeight = @"equelsHeight";
 +(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsWithForView:(nonnull UIView *) view target:(nonnull UIView *) target{
     return [self persistEqualsWithForView:view target:target multiplier:1 constant:0];
 }
+
 /**
  等宽约束
  */
@@ -218,9 +220,9 @@ const NSString * PYAtltEquelsHeight = @"equelsHeight";
  等高约束
  */
 +(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistEqualsHeightForView:(nonnull UIView *) view target:(nonnull UIView *) target multiplier:(CGFloat) multiplier constant:(CGFloat) constant{
-    NSLayoutConstraint *equalsConstraint= [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:target attribute:NSLayoutAttributeWidth multiplier:multiplier constant:constant];
+    NSLayoutConstraint *equalsConstraint= [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:target attribute:NSLayoutAttributeHeight multiplier:multiplier constant:constant];
     [view.superview addConstraint:equalsConstraint];
-    return @{PYAtltEquelsWidth: equalsConstraint};
+    return @{PYAtltEquelsHeight: equalsConstraint};
 }
 
 /**
