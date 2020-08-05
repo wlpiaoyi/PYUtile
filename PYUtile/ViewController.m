@@ -33,13 +33,11 @@
 ////    [PYViewAutolayoutCenter persistConstraint:view relationmargins:UIEdgeInsetsZero relationToItems:eii];
     
     UIView * subView = [UIView new];
-//    subView.py_constant(@"xxxx");
     subView.backgroundColor = [UIColor redColor];
     [self.view addSubview:subView];
     __block NSArray * obj;
     obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//        make.width.py_constant(10).height.py_constant(100).centerX.py_constant(0).centerY.py_constant(0);
-         make.top.py_inSafe(YES).py_constant(10).bottom.py_constant(0).left.py_constant(10).right.py_constant(10);
+    make.top.bottom.py_inSafe(YES).py_constant(10).left.right.py_constant(10);
         NSLog(@"11");
     }];
     threadJoinGlobal(^{
@@ -48,18 +46,41 @@
             [UIView animateWithDuration:.2 animations:^{
                 [subView py_removeAllLayoutContarint];
                 obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-                    make.width.py_constant(100).height.py_constant(100).centerX.py_constant(0).centerY.py_constant(0);
+                    make.width.height.py_constant(100).centerX.centerY.py_constant(0);
                 }];
                 [self.view layoutIfNeeded];
             }];
         });
         [NSThread sleepForTimeInterval:2];
         threadJoinMain(^{
-            
             [UIView animateWithDuration:.2 animations:^{
                 UIView * item = [self.view viewWithTag:1860022];
                 [subView py_removeAllLayoutContarint];
-                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) { make.width.py_toItem(item).py_constant(0).height.py_toItem(item).py_constant(-40).centerX.py_constant(0).centerY.py_constant(0);
+                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
+                    make.width.height.py_toItem(item).py_constant(-20).centerX.centerY.py_toItem(item).py_constant(0);
+                }];
+                [self.view layoutIfNeeded];
+            }];
+            NSLog(@"11");
+        });
+        [NSThread sleepForTimeInterval:2];
+        threadJoinMain(^{
+            [UIView animateWithDuration:.2 animations:^{
+                UIView * item = [self.view viewWithTag:1860022];
+                [subView py_removeAllLayoutContarint];
+                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
+                    make.width.height.py_toItem(item).py_constant(0).centerX.centerY.py_constant(0);
+                }];
+                [self.view layoutIfNeeded];
+            }];
+            NSLog(@"11");
+        });
+        [NSThread sleepForTimeInterval:2];
+        threadJoinMain(^{
+            [UIView animateWithDuration:.2 animations:^{
+                [subView py_removeAllLayoutContarint];
+                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
+                    make.top.left.bottom.right.py_inSafe(YES).py_constant(30);
                 }];
                 [self.view layoutIfNeeded];
             }];

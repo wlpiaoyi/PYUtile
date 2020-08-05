@@ -57,6 +57,10 @@ kUTILE_STATIC_INLINE PYEdgeInsetsItem PYEdgeInsetsItemNull() {
  新增布局约束
  */
 +(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(nonnull UIView*) subView centerPointer:(CGPoint) pointer;
+/*
+ 新增布局约束
+ */
++(nonnull NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(nonnull UIView*) subView centerPointer:(CGPoint) pointer toItem:(nullable UIView *) toItem;
 /**
  等宽约束
  */

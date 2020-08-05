@@ -7,6 +7,13 @@
 //
 
 #import "UIView+PYAutolayout.h"
+@interface PYConstraint()
+
+kPNAR CGFloat value;
+kPNAR BOOL isSafe;
+kPNRNA UIView * toItem;
+
+@end
 
 @interface UIView(PYAutolayoutSet)
 
@@ -29,20 +36,16 @@
  * 添加高约束
  */
 -(nonnull UIView *) py_setAutolayoutEqulesHeight:(CGFloat) height toItem:(nonnull UIView *) toItem;
-/**
- * 添加Size约束
- */
--(nonnull UIView *) py_setAutolayoutSize:(CGSize) size;
 
 /**
  * 添加居中X约束
  */
--(nullable UIView *) py_setAutolayoutCenterX:(CGFloat) x;
+-(nullable UIView *) py_setAutolayoutCenterX:(CGFloat) x  toItem:(nonnull UIView *) toItem;
 
 /**
  * 添加居中Y约束
  */
--(nullable UIView *) py_setAutolayoutCenterY:(CGFloat) y;
+-(nullable UIView *) py_setAutolayoutCenterY:(CGFloat) y  toItem:(nonnull UIView *) toItem;
 
 /**
  * 添加居中Point约束
@@ -94,11 +97,11 @@
         }
         if(make.centerX){
             PYConstraint * constraint = make.centerX;
-            [self py_setAutolayoutCenterX:constraint.value];
+            [self py_setAutolayoutCenterX:constraint.value toItem:constraint.toItem];
         }
         if(make.centerY){
             PYConstraint * constraint = make.centerY;
-            [self py_setAutolayoutCenterY:constraint.value];
+            [self py_setAutolayoutCenterY:constraint.value toItem:constraint.toItem];
         }
         
         if(make.top){
@@ -181,32 +184,14 @@
 }
 
 /**
- * 添加Size约束
- */
--(nonnull UIView *) py_setAutolayoutSize:(CGSize) size{
-    NSLayoutConstraint * constraintWith = [self py_getAutolayoutWidth];
-    NSLayoutConstraint * constraintHeight = [self py_getAutolayoutHeight];
-    if(constraintWith){
-        constraintWith.constant = size.width;
-        size.width = DisableConstrainsValueMAX;
-    }
-    if(constraintHeight){
-        constraintHeight.constant = size.height;
-        size.height = DisableConstrainsValueMAX;
-    }
-    [PYViewAutolayoutCenter persistConstraint:self size:size];
-    return self;
-}
-
-/**
  * 添加居中X约束
  */
--(nullable UIView *) py_setAutolayoutCenterX:(CGFloat) x {
+-(nullable UIView *) py_setAutolayoutCenterX:(CGFloat) x toItem:(nonnull UIView *) toItem{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterX];
      if(constraint){
          constraint.constant = x;
      }else{
-         [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(x, DisableConstrainsValueMAX)];
+         [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(x, DisableConstrainsValueMAX) toItem:toItem];
      }
     return self;
 }
@@ -214,12 +199,12 @@
 /**
  * 添加居中Y约束
  */
--(nullable UIView *) py_setAutolayoutCenterY:(CGFloat) y{
+-(nullable UIView *) py_setAutolayoutCenterY:(CGFloat) y  toItem:(nonnull UIView *) toItem{
     NSLayoutConstraint * constraint = [self py_getAutolayoutCenterY];
      if(constraint){
          constraint.constant = y;
      }else{
-         [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(DisableConstrainsValueMAX, y)];
+         [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(DisableConstrainsValueMAX, y) toItem:toItem];
      }
     return self;
 }

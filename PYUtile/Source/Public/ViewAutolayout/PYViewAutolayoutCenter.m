@@ -169,22 +169,31 @@ const NSString * _Nonnull PYAtltEquelsHeight = @"equelsHeight";
     
     return dictResult;
 }
+
 /*
  新增布局约束
  */
 +(NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(UIView*) subView centerPointer:(CGPoint) pointer{
+    return [self persistConstraint:subView centerPointer:pointer toItem:nil];
+}
+
+/*
+ 新增布局约束
+ */
++(NSDictionary<NSString *, NSLayoutConstraint *> *) persistConstraint:(UIView*) subView centerPointer:(CGPoint) pointer toItem:(nullable UIView *) toItem{
     subView.translatesAutoresizingMaskIntoConstraints = NO;
     UIView *superView = [subView superview];
+    toItem = toItem ? : superView;
     NSMutableDictionary<NSString *, NSLayoutConstraint *> * dictResult = [NSMutableDictionary new];
     
     if ([self isValueEnable:pointer.x]) {
-        NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:superView attribute:NSLayoutAttributeCenterX multiplier:1 constant:pointer.x];
+        NSLayoutConstraint *centerX = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:toItem attribute:NSLayoutAttributeCenterX multiplier:1 constant:pointer.x];
         [superView addConstraint:centerX];
         
         dictResult[PYAtltSelfCenterX] = centerX;
     }
     if ([self isValueEnable:pointer.y]) {
-        NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:superView attribute:NSLayoutAttributeCenterY multiplier:1 constant:pointer.y];
+        NSLayoutConstraint *centerY = [NSLayoutConstraint constraintWithItem:subView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:toItem attribute:NSLayoutAttributeCenterY multiplier:1 constant:pointer.y];
         [superView addConstraint:centerY];
         
         dictResult[PYAtltSelfCenterY] = centerY;

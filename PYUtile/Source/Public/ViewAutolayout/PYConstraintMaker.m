@@ -9,14 +9,23 @@
 #import "PYConstraintMaker.h"
 
 @interface PYConstraint()
+
+kPNAR CGFloat value;
+kPNAR BOOL isSafe;
+kPNRNA UIView * toItem;
+
 kPNA PYConstraintMaker * maker;
+kPNA BOOL isInstall;
 @end
 
 @implementation PYConstraint
 
+@synthesize width, height,centerX, centerY, top, bottom, left, right;
+
 +(instancetype) instanceWithMaker:(nonnull PYConstraintMaker *) maker{
     PYConstraint * contraint = [PYConstraint new];
     contraint.maker = maker;
+    contraint.isInstall = NO;
     return contraint;
 }
 
@@ -25,6 +34,7 @@ kPNA PYConstraintMaker * maker;
     return ^PYConstraintMaker *(id value) {
         kStrong(self);
         self->_value = ((NSNumber *)value).doubleValue;
+        [self __synConstraints];
         return self.maker;
     };
 }
@@ -34,6 +44,7 @@ kPNA PYConstraintMaker * maker;
     return ^PYConstraint *(BOOL isSafe) {
         kStrong(self);
         self->_isSafe = isSafe;
+        [self __synConstraints];
         return self;
     };
     
@@ -44,8 +55,101 @@ kPNA PYConstraintMaker * maker;
     return ^id(UIView * toItem) {
         kStrong(self);
         self->_toItem = toItem;
+        [self __synConstraints];
         return self;
     };
+}
+
+-(NSMutableArray<PYConstraint *> *) __synConstraints{
+    self.isInstall = YES;
+    NSMutableArray<PYConstraint *> * constraints = [NSMutableArray new];
+    PYConstraint * constrain = width;
+    [self __synConstraint:constrain name:@"width" constraints:constraints];
+    constrain = height;
+    [self __synConstraint:constrain name:@"height" constraints:constraints];
+    constrain = bottom;
+    [self __synConstraint:constrain name:@"bottom" constraints:constraints];
+    constrain = centerX;
+    [self __synConstraint:constrain name:@"centerX" constraints:constraints];
+    constrain = centerY;
+    [self __synConstraint:constrain name:@"centerY" constraints:constraints];
+    constrain = top;
+    [self __synConstraint:constrain name:@"top" constraints:constraints];
+    constrain = bottom;
+    [self __synConstraint:constrain name:@"bottom" constraints:constraints];
+    constrain = left;
+    [self __synConstraint:constrain name:@"left" constraints:constraints];
+    constrain = right;
+    [self __synConstraint:constrain name:@"right" constraints:constraints];
+    self.isInstall = NO;
+    return constraints;
+}
+
+-(void) __synConstraint:(PYConstraint *) constrain name:(NSString *) name constraints:(NSMutableArray<PYConstraint *> *) constraints{
+    if(!constrain) return;
+    if(constrain == self) return;
+    [self.maker setValue:constrain forKey:name];
+    constrain->_value = self->_value;
+    constrain->_toItem = self->_toItem;
+    constrain->_isSafe = self->_isSafe;
+    [constraints addObject:constrain];
+}
+
+-(PYConstraint *) width{
+    if(!_isInstall && width == nil){
+        width = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) height{
+    if(!_isInstall && height == nil){
+        height = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) centerY{
+    if(!_isInstall && centerY == nil){
+        centerY = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) centerX{
+    if(!_isInstall && centerX == nil){
+        centerX = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+
+-(PYConstraint *) top{
+    if(!_isInstall && top == nil){
+        top = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) bottom{
+    if(!_isInstall && bottom == nil){
+        bottom = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) left{
+    if(!_isInstall && left == nil){
+        left = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
+}
+
+-(PYConstraint *) right{
+    if(!_isInstall && right == nil){
+        right = [PYConstraint instanceWithMaker:self.maker];
+    }
+    return self;
 }
 
 @end
@@ -67,7 +171,7 @@ kPNA BOOL isInstall;
 
 
 -(PYConstraint *) width{
-    if(!_isInstall &&  width == nil){
+    if(!_isInstall && width == nil){
         width = [PYConstraint instanceWithMaker:self];
     }
     return width;

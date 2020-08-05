@@ -33,9 +33,17 @@ kPNRNA PYConstraint * right;
 
 
 @interface PYConstraint : NSObject
-kPNAR CGFloat value;
-kPNAR BOOL isSafe;
-kPNRNA UIView * toItem;
+
+kPNRNA PYConstraint * width;
+kPNRNA PYConstraint * height;
+kPNRNA PYConstraint * centerX;
+kPNRNA PYConstraint * centerY;
+
+kPNRNA PYConstraint * top;
+kPNRNA PYConstraint * bottom;
+kPNRNA PYConstraint * left;
+kPNRNA PYConstraint * right;
+
 +(instancetype) instanceWithMaker:(nonnull PYConstraintMaker *) maker;
 #pragma mark 布局值
 - (nonnull PYConstraintMaker* (^)(id value)) py_constant;
