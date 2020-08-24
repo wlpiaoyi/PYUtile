@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3RR-53-Sek">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3RR-53-Sek">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="2304" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,8 +33,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wMR-fJ-Gfv">
-                                <rect key="frame" x="51" y="107" width="240" height="128"/>
+                                <rect key="frame" x="0.0" y="107" width="375" height="128"/>
+                                <subviews>
+                                    <view tag="186333" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ObR-CE-REd">
+                                        <rect key="frame" x="2" y="1" width="370" height="123"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ObR-CE-REd" secondAttribute="trailing" constant="3" id="02Q-Tu-gOY"/>
+                                    <constraint firstItem="ObR-CE-REd" firstAttribute="leading" secondItem="wMR-fJ-Gfv" secondAttribute="leading" constant="2" id="4J0-Sz-tEu"/>
+                                    <constraint firstAttribute="bottom" secondItem="ObR-CE-REd" secondAttribute="bottom" constant="4" id="dAK-NU-qLH"/>
+                                    <constraint firstItem="ObR-CE-REd" firstAttribute="top" secondItem="wMR-fJ-Gfv" secondAttribute="top" constant="1" id="xTS-xh-r23"/>
+                                </constraints>
                             </view>
                             <view tag="1860022" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tGu-KU-o7E">
                                 <rect key="frame" x="155" y="244" width="200" height="403"/>
@@ -54,10 +66,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="i7k-tO-rYJ" firstAttribute="trailing" secondItem="wMR-fJ-Gfv" secondAttribute="trailing" constant="84" id="2nA-VY-UlC"/>
+                            <constraint firstItem="i7k-tO-rYJ" firstAttribute="trailing" secondItem="wMR-fJ-Gfv" secondAttribute="trailing" id="2nA-VY-UlC"/>
                             <constraint firstItem="KJv-UR-iqY" firstAttribute="centerX" secondItem="tGu-KU-o7E" secondAttribute="centerX" id="41k-XP-ZBj"/>
                             <constraint firstItem="i7k-tO-rYJ" firstAttribute="bottom" secondItem="wMR-fJ-Gfv" secondAttribute="bottom" constant="432" id="HJE-Ct-4SI"/>
-                            <constraint firstItem="wMR-fJ-Gfv" firstAttribute="leading" secondItem="i7k-tO-rYJ" secondAttribute="leading" constant="51" id="MMJ-W6-GQX"/>
+                            <constraint firstItem="wMR-fJ-Gfv" firstAttribute="leading" secondItem="i7k-tO-rYJ" secondAttribute="leading" id="MMJ-W6-GQX"/>
                             <constraint firstItem="tGu-KU-o7E" firstAttribute="top" secondItem="i7k-tO-rYJ" secondAttribute="top" constant="200" id="RCG-5G-67B"/>
                             <constraint firstItem="KJv-UR-iqY" firstAttribute="centerY" secondItem="i7k-tO-rYJ" secondAttribute="centerY" id="XxF-Ee-QZG"/>
                             <constraint firstItem="i7k-tO-rYJ" firstAttribute="trailing" secondItem="tGu-KU-o7E" secondAttribute="trailing" constant="20" id="YDX-QP-cX1"/>

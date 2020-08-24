@@ -17,20 +17,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    UIImageView * imageView = [self.view viewWithTag:186003];
-//    imageView.image = [UIImage createQRCodeImageWithString:@"xxxx" withSize:100];
-//    self.navigationController.navigationBar.hidden = NO;
-//    self.title = @"adfad";
-//    UIView * view = [UIView new];
-//    [view setCornerRadiusAndBorder:1 borderWidth:1 borderColor:[UIColor systemRedColor]];
-//    [self.view addSubview:view];
-//    [PYViewAutolayoutCenter persistConstraint:view relationmargins:UIEdgeInsetsZero controller:self];
-////    PYEdgeInsetsItem eii = PYEdgeInsetsItemNull();
-////    eii.top = (__bridge void * _Nullable)(self.topLayoutGuide);
-////    eii.bottom = (__bridge void * _Nullable)(self.bottomLayoutGuide);
-////    eii.topActive = true;
-////    eii.bottomActive = true;
-////    [PYViewAutolayoutCenter persistConstraint:view relationmargins:UIEdgeInsetsZero relationToItems:eii];
+    NSArray<NSLayoutConstraint *> * lcs =[[self.view viewWithTag:186333] py_getAllLayoutContarint];
+    
+    NSLayoutConstraint * lc1 = [[self.view viewWithTag:186333] py_getAutolayoutRelationTop];
+    NSLayoutConstraint * lc2 = [[self.view viewWithTag:186333] py_getAutolayoutRelationLeading];
+    NSLayoutConstraint * lc3 = [[self.view viewWithTag:186333] py_getAutolayoutRelationBottom];
+    NSLayoutConstraint * lc4 = [[self.view viewWithTag:186333] py_getAutolayoutRelationTrailing];
     
     UIView * subView = [UIView new];
     subView.backgroundColor = [UIColor redColor];

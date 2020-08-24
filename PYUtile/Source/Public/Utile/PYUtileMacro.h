@@ -9,7 +9,9 @@
 
 #import <UIKit/UIKit.h>
 
-int     printf(const char * __restrict, ...) __printflike(1, 2);
+int  printf(const char * __restrict, ...) __printflike(1, 2);
+
+#define PYRefreshDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
 
 #define is64BitArm  __LP64__ || (TARGET_OS_EMBEDDED && !TARGET_OS_IPHONE) || TARGET_OS_WIN32 || NS_BUILD_32_LIKE_64
 
@@ -57,9 +59,10 @@ int     printf(const char * __restrict, ...) __printflike(1, 2);
 #define kPNSNN                        @property (nonatomic, strong, nonnull)
 #define kPNRNA                         @property (nonatomic, readonly, nullable)
 #define kPNRNN                        @property (nonatomic, readonly, nonnull)
+#define kPCNA                        @property (class, nonatomic, assign)
+#define kPCNRA                        @property (class, nonatomic, readonly, assign)
 #define kPCNSNA                         @property (class, nonatomic, strong, nullable)
 #define kPCNRNN                        @property (class, nonatomic, readonly, nonnull)
-#define kPCNRA                        @property (class, nonatomic, readonly, assign)
 //==============
 #define kPNCNA                         @property (nonatomic, copy, nullable)
 #define kPNCNN                        @property (nonatomic, copy, nonnull)

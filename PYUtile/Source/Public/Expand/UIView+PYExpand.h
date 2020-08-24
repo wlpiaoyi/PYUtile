@@ -25,15 +25,6 @@
 @property (nonatomic) CGFloat frameHeight;
 
 /**
- x,y 距离中心点的距离
- w,h 宽度和高度
- top,left,bottom,right 边框距离
- topActive,leftActive,bottomActive,rightActive 是否在安全区
- topPoint,leftPoint,bottomPoint,rightPoint 边距参照对象
- */
--(nonnull NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(nonnull NSDictionary<NSString *, id> *) autoLayoutDict;
-
-/**
  获取相对于目标视图的位置
  */
 -(CGPoint) getAbsoluteOrigin:(UIView * _Nonnull) superView;
@@ -57,10 +48,13 @@
  从xib加载数据，序列号要和当前class名称相同
  */
 +(instancetype _Nullable) loadXib;
+
 -(UIImage * _Nullable) drawView;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale;
 
 
 -(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;NS_DEPRECATED_IOS(2_0, 7_0, "Use addTapGestureWithTarget:action");
+
+-(nonnull NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(nonnull NSDictionary<NSString *, id> *) autoLayoutDict NS_DEPRECATED_IOS(2_0, 7_0, "NO Use");
 @end

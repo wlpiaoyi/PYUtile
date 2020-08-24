@@ -118,6 +118,7 @@
 		15CECCA7228BAE6C008173E0 /* NSObject+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */; };
 		15CECCA8228BB6D2008173E0 /* NSObject+Hook.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15CECCA5228BAE6C008173E0 /* NSObject+Hook.h */; };
 		15CECCA9228BB6F2008173E0 /* NSObject+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */; };
+		15D3955C24DB050F005F8F06 /* NSArray+PYAutolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 15D3955B24DB050F005F8F06 /* NSArray+PYAutolayout.m */; };
 		15DB05B824DA4AEA00EF5CE4 /* PYConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DB05B724DA4AEA00EF5CE4 /* PYConstraintMaker.m */; };
 		15DB05C024DA820D00EF5CE4 /* PYConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DB05B724DA4AEA00EF5CE4 /* PYConstraintMaker.m */; };
 		15DB05C124DA821800EF5CE4 /* PYAutolayoutUtilites.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FB8C2B24DA48AF005F0F8D /* PYAutolayoutUtilites.h */; };
@@ -295,6 +296,8 @@
 		15CCFD6324D95F86008BBE8F /* UIView+PYAutolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+PYAutolayout.h"; sourceTree = "<group>"; };
 		15CECCA5228BAE6C008173E0 /* NSObject+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Hook.h"; sourceTree = "<group>"; };
 		15CECCA6228BAE6C008173E0 /* NSObject+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Hook.m"; sourceTree = "<group>"; };
+		15D3955A24DB050F005F8F06 /* NSArray+PYAutolayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+PYAutolayout.h"; sourceTree = "<group>"; };
+		15D3955B24DB050F005F8F06 /* NSArray+PYAutolayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PYAutolayout.m"; sourceTree = "<group>"; };
 		15DB05B624DA4AEA00EF5CE4 /* PYConstraintMaker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYConstraintMaker.h; sourceTree = "<group>"; };
 		15DB05B724DA4AEA00EF5CE4 /* PYConstraintMaker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYConstraintMaker.m; sourceTree = "<group>"; };
 		15DB171E1DF687AB00182429 /* py_hook_encode_type.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = py_hook_encode_type.c; sourceTree = "<group>"; };
@@ -594,6 +597,8 @@
 				15C5FB2C1DF66A7900FF2C75 /* PYViewAutolayoutCenter.m */,
 				15DB05B624DA4AEA00EF5CE4 /* PYConstraintMaker.h */,
 				15DB05B724DA4AEA00EF5CE4 /* PYConstraintMaker.m */,
+				15D3955A24DB050F005F8F06 /* NSArray+PYAutolayout.h */,
+				15D3955B24DB050F005F8F06 /* NSArray+PYAutolayout.m */,
 			);
 			path = ViewAutolayout;
 			sourceTree = "<group>";
@@ -802,6 +807,7 @@
 				15422DBA21E5B4A30038D09E /* PYArchiveParse.m in Sources */,
 				15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */,
 				15BFDF121DF5034A0044EDAA /* UIView+Hook.m in Sources */,
+				15D3955C24DB050F005F8F06 /* NSArray+PYAutolayout.m in Sources */,
 				15BFDF0D1DF5034A0044EDAA /* UILable+PYExpand.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

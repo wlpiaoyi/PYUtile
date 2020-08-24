@@ -10,12 +10,14 @@
 
 @interface PYConstraint()
 
+kPNRNA UIView * toItem;
 kPNAR CGFloat value;
 kPNAR BOOL isSafe;
 kPNAR BOOL isReversal;
-kPNRNA UIView * toItem;
-kPNA PYConstraintMaker * maker;
 kPNA BOOL isInstall;
+
+kPNA PYConstraintMaker * maker;
+
 @end
 
 @implementation PYConstraint
@@ -25,8 +27,17 @@ kPNA BOOL isInstall;
 +(instancetype) instanceWithMaker:(nonnull PYConstraintMaker *) maker{
     PYConstraint * contraint = [PYConstraint new];
     contraint.maker = maker;
-    contraint.isInstall = NO;
     return contraint;
+}
+
+-(instancetype) init{
+    if(self = [super init]){
+        _value = 0;
+        _isSafe = NO;
+        _isInstall = NO;
+        _isReversal = NO;
+    }
+    return self;
 }
 
 - (nonnull PYConstraintMaker* (^)(id value)) py_constant{
@@ -169,17 +180,18 @@ kPNA BOOL isInstall;
 
 
 @interface PYConstraintMaker()
-kPNA UIView * view;
 kPNA BOOL isInstall;
 @end
 
 @implementation PYConstraintMaker
+
 @synthesize width, height,centerX, centerY, top, bottom, left, right;
-+(instancetype) instanceWithView:(nonnull UIView *) view{
-    PYConstraintMaker * maker = [PYConstraintMaker new];
-    maker.view = view;
-    maker.isInstall = NO;
-    return maker;
+
+-(instancetype) init{
+    if(self = [super init]){
+        self.isInstall = NO;
+    }
+    return self;
 }
 
 

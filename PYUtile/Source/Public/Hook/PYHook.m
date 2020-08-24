@@ -36,7 +36,6 @@ SEL py_gethookSel(SEL action){
             selector = hookSelector;
         }
     }
-    
     return [self hookmethodSignatureForSelector:selector];
 }
 - (void) hookforwardInvocation:(NSInvocation *)anInvocation{
