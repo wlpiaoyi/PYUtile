@@ -430,9 +430,6 @@ kPNAR BOOL isReversal;
 -(nullable NSLayoutConstraint *) py_getAutolayoutContraintWithFirstAttribute:(NSLayoutAttribute) firstAttribute relation:(NSLayoutRelation) relation firstItem:(nullable UIView *) firstItem secondItem:(nullable UIView *) secondItem {
     NSArray<__kindof NSLayoutConstraint *> *constraints = self.constraints;
     for (NSLayoutConstraint * constraint in constraints) {
-        if(constraint.firstItem == firstItem){
-            NSLog(@"");
-        }
         if(constraint.firstAttribute == firstAttribute &&
            constraint.relation == relation &&
            constraint.firstItem == firstItem){

@@ -69,6 +69,7 @@ int  printf(const char * __restrict, ...) __printflike(1, 2);
 #define kPNCRNA                       @property (nonatomic, copy, readonly, nullable)
 #define kPNCRNN                      @property (nonatomic, copy, readonly, nonnull)
 //==============
+#define kPRA                              @property (nonatomic,readonly, assign)
 #define kPNA                              @property (nonatomic, assign)
 #define kPNANA                         @property (nonatomic, assign, nullable)
 #define kPNANN                        @property (nonatomic, assign, nonnull)

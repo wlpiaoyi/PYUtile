@@ -54,7 +54,7 @@ kPNA PYConstraintMaker * maker;
     kAssign(self);
     return ^PYConstraint *(BOOL isSafe) {
         kStrong(self);
-        self->_isSafe = isSafe;
+        self->_isSafe = isSafe;// && ((NSNumber *)isSafe).boolValue;
         [self __synConstraints];
         return self;
     };
@@ -73,11 +73,11 @@ kPNA PYConstraintMaker * maker;
 
 #pragma mark 布局参考对象,反转
 #pragma mark 布局参考对象,反转
-- (nonnull PYConstraint* (^)(BOOL isReversal)) py_toReversal;{
+- (nonnull PYConstraint* (^)(id isReversal)) py_toReversal;{
     kAssign(self);
-    return ^id(BOOL isReversal) {
+    return ^id(id isReversal) {
         kStrong(self);
-        self->_isReversal = isReversal;
+        self->_isReversal = isReversal && ((NSNumber *)isReversal).boolValue;
         [self __synConstraints];
         return self;
     };

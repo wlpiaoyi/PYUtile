@@ -19,6 +19,9 @@
  #param direction:0 title在上 1 title在下
  */
 -(void) parseImagetitleForOffH:(CGFloat) offH maxHeight:(CGFloat) maxHeight direction:(short) direction{
+    return [self parseImagetitleForOffH:offH maxHeight:maxHeight offTop:0 direction:direction];
+}
+-(void) parseImagetitleForOffH:(CGFloat) offH maxHeight:(CGFloat) maxHeight offTop:(CGFloat) offTop direction:(short) direction{
     UIImage * imageNormal;
     UIImage * imageSelected;
     UIImage * imageHigthlight;
@@ -26,16 +29,16 @@
     
     UIButton * button = self;
     UIControlState state = UIControlStateNormal;
-    imageNormal = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight direction:direction];
+    imageNormal = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight offTop:offTop direction:direction];
     
     state = UIControlStateSelected;
-    imageSelected = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight direction:direction];
+    imageSelected = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight offTop:offTop direction:direction];
     
     state = UIControlStateHighlighted;
-    imageHigthlight = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight direction:direction];
+    imageHigthlight = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight offTop:offTop direction:direction];
     
     state = UIControlStateDisabled;
-    imageDisabled = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight direction:direction];
+    imageDisabled = [UIButton PYIPAu_getImageForButton:button state:state offH:offH maxHeight:maxHeight offTop:offTop direction:direction];
     
     
     state = UIControlStateNormal;
@@ -64,7 +67,7 @@
 
 }
 
-+(nullable UIImage *) PYIPAu_getImageForButton:(nonnull UIButton *) button state:(UIControlState) state offH:(CGFloat) offH maxHeight:(CGFloat) maxHeight direction:(short) direction{
++(nullable UIImage *) PYIPAu_getImageForButton:(nonnull UIButton *) button state:(UIControlState) state offH:(CGFloat) offH maxHeight:(CGFloat) maxHeight offTop:(CGFloat) offTop direction:(short) direction{
     UIImage * image = [button imageForState:state];
     NSString * title = [button titleForState:state];
     if(!image || ![NSString isEnabled:title]){
@@ -75,9 +78,10 @@
         NSString * titlen = [button titleForState:UIControlStateNormal];
         if(imagen == image && title == titlen) return nil;
     }
-    image = [UIImage createImageWithTitle:title font:button.titleLabel.font color:[button titleColorForState:state] image:image offH:offH imageOffH:maxHeight - image.size.height direction:direction];
+    image = [UIImage createImageWithTitle:title font:button.titleLabel.font color:[button titleColorForState:state] image:image offH:offH imageOffH:maxHeight - image.size.height offTop:offTop direction:direction];
     return image;
 };
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

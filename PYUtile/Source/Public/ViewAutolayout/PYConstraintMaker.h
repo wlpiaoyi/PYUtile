@@ -51,7 +51,7 @@ kPNRNA PYConstraint * right;
 #pragma mark 布局参考对象, 默认是superView
 - (nonnull PYConstraint* (^)(UIView * toItem)) py_toItem;
 #pragma mark 布局参考对象,反转
-- (nonnull PYConstraint* (^)(BOOL isReversal)) py_toReversal;
+- (nonnull PYConstraint* (^)(id isReversal)) py_toReversal;
 
 @end
 

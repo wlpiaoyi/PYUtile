@@ -167,7 +167,7 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
 /**
  创建上下结构的文字图片结构
  */
-+(UIImage *) createImageWithTitle:(NSString *) title font:(UIFont *) font color:(UIColor *) color image:(UIImage *) image offH:(CGFloat) offH imageOffH:(CGFloat) imageOffH direction:(short) direction{
++(UIImage *) createImageWithTitle:(NSString *) title font:(UIFont *) font color:(UIColor *) color image:(UIImage *) image offH:(CGFloat) offH imageOffH:(CGFloat) imageOffH offTop:(CGFloat) offTop direction:(short) direction{
     NSAttributedString * attribute = [[NSAttributedString alloc] initWithString:title attributes:@{(NSString *)kCTForegroundColorAttributeName:color,(NSString *)kCTFontAttributeName:font}];
     CGSize tSize = [PYUtile getBoundSizeWithAttributeTxt:attribute size:CGSizeMake(999, [PYUtile getFontHeightWithSize:font.pointSize fontName:font.fontName])];
     UIImage * tImage = [UIImage imageWithSize:tSize blockDraw:^(CGContextRef  _Nonnull context, CGRect rect) {
@@ -193,6 +193,8 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
             break;
     }
     UIGraphicsBeginImageContextWithOptions(tS, NO, [UIScreen mainScreen].scale);
+    tFrame.origin.y += offTop;
+    iFrame.origin.y += offTop;
     [tImage drawInRect:tFrame];
     [image drawInRect:iFrame];
     image = UIGraphicsGetImageFromCurrentImageContext();

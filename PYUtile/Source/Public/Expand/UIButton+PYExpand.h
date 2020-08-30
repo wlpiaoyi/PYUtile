@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  #param direction:0 title在上 1 title在下
  */
 -(void) parseImagetitleForOffH:(CGFloat) offH maxHeight:(CGFloat) maxHeight direction:(short) direction;
+-(void) parseImagetitleForOffH:(CGFloat) offH maxHeight:(CGFloat) maxHeight offTop:(CGFloat) offTop direction:(short) direction;
 
 @end
 
