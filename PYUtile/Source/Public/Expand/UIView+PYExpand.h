@@ -54,7 +54,7 @@
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale;
 
 
--(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action;NS_DEPRECATED_IOS(2_0, 7_0, "Use addTapGestureWithTarget:action");
+-(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action API_DEPRECATED_WITH_REPLACEMENT("addTapGestureWithTarget:action", ios(1.0, 2.0));
 
--(nonnull NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(nonnull NSDictionary<NSString *, id> *) autoLayoutDict NS_DEPRECATED_IOS(2_0, 7_0, "NO Use");
+-(nonnull NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(nonnull NSDictionary<NSString *, id> *) autoLayoutDict NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, "NO Use");
 @end

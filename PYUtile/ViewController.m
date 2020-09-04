@@ -29,9 +29,9 @@
     [self.view addSubview:subView];
     __block NSArray * obj;
     obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-        make.left.right.py_inSafe(NO).py_constant(0);
-        make.bottom.py_inSafe(YES).py_constant(0);
-        make.height.py_constant(56);
+//        make.left.right.py_inSafe(NO).py_constant(0);
+        make.bottom.py_inArea(NO).py_constant(-20);
+//        make.height.py_constant(56);
         NSLog(@"11");
     }];
     threadJoinGlobal(^{
@@ -42,7 +42,7 @@
                 [subView py_removeAllLayoutContarint];
                 UIView * item = [self.view viewWithTag:1860022];
                 obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-                    make.top.left.bottom.right.py_inSafe(YES).py_constant(0);
+                    make.top.left.bottom.right.py_inArea(YES).py_constant(0);
                 }];
                 [self.view layoutIfNeeded];
             }];
@@ -100,7 +100,7 @@
             [UIView animateWithDuration:.2 animations:^{
                 [subView py_removeAllLayoutContarint];
                 obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-                    make.top.left.bottom.right.py_inSafe(YES).py_constant(30);
+                    make.top.left.bottom.right.py_inArea(YES).py_constant(30);
                 }];
                 [self.view layoutIfNeeded];
             }];

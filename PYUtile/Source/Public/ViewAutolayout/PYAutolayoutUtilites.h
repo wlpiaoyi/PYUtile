@@ -76,8 +76,8 @@ static inline id _PYBoxValue(const char *type, ...) {
 #define py_toItem(...)                 _py_toItem(PYBoxValue((__VA_ARGS__)))
 #define _py_toItem(...)                     py_toItem(__VA_ARGS__)
 
-#define py_inSafe(...)                 _py_inSafe(PYBoxValue((__VA_ARGS__)))
-#define _py_inSafe(...)                     py_inSafe(__VA_ARGS__)
+#define py_inArea(...)                 _py_inArea(PYBoxValue((__VA_ARGS__)))
+#define _py_inArea(...)                     py_inArea(__VA_ARGS__)
 
 #define py_toReversal(...)                 _py_toReversal(PYBoxValue((__VA_ARGS__)))
 #define _py_toReversal(...)                     py_toReversal(__VA_ARGS__)

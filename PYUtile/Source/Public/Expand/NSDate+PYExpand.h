@@ -60,5 +60,5 @@
 +(nonnull NSDate *) dateEndOfWeek;
 +(nonnull NSDate *) getTodayZero;
 
--(nonnull NSDate *) setCompentsWithBinary:(int) binary NS_DEPRECATED_IOS(2_0, 7_0, "Use clearedWithBinary:");
+-(nonnull NSDate *) setCompentsWithBinary:(int) binary API_DEPRECATED_WITH_REPLACEMENT("clearedWithBinary:", ios(1.0, 2.0));
 @end

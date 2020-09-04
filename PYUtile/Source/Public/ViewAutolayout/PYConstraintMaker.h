@@ -47,7 +47,7 @@ kPNRNA PYConstraint * right;
 #pragma mark 布局值
 - (nonnull PYConstraintMaker* (^)(id value)) py_constant;
 #pragma mark 布局是否在安全区域
-- (nonnull PYConstraint* (^)(BOOL isSafe)) py_inSafe;
+- (nonnull PYConstraint* (^)(id isSafe)) py_inArea;
 #pragma mark 布局参考对象, 默认是superView
 - (nonnull PYConstraint* (^)(UIView * toItem)) py_toItem;
 #pragma mark 布局参考对象,反转

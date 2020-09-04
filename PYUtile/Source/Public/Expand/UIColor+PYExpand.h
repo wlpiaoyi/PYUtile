@@ -13,6 +13,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "PYUtileMacro.h"
 
 @interface UIColor (PYExpand)
 @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;
@@ -22,7 +23,7 @@
 @property (nonatomic, readonly) CGFloat blue; // Only valid if canProvideRGBComponents is YES
 @property (nonatomic, readonly) CGFloat white; // Only valid if colorSpaceModel == kCGColorSpaceModelMonochrome
 @property (nonatomic, readonly) CGFloat alpha;
-@property (nonatomic, readonly) UInt32 rgbHex;
+@property (nonatomic, readonly) UInt32 hexNumber;
 
 - (NSString *)colorSpaceString;
 
@@ -41,14 +42,16 @@
 - (UIColor *)       colorByAddingColor:(UIColor *)color;
 - (UIColor *) colorByLighteningToColor:(UIColor *)color;
 - (UIColor *)  colorByDarkeningToColor:(UIColor *)color;
++ (UIColor *)colorWithHexString:(NSString *)stringToConvert API_DEPRECATED_WITH_REPLACEMENT("colorWithHexNumber:", ios(1.0, 2.0));
 
 - (NSString *)stringFromColor;
 - (NSString *)hexStringFromColor;
 
 + (UIColor *)randomColor;
 + (UIColor *)colorWithString:(NSString *)stringToConvert;
-+ (UIColor *)colorWithRGBHex:(UInt32)hex;//0xFFEEDDEE
-+ (UIColor *)colorWithHexString:(NSString *)stringToConvert;
+
++ (UIColor *)colorWithHexNumber:(UInt32)hex;//0xFFEEDDEE
++ (UIColor *)colorWithRGBHex:(UInt32)hex API_DEPRECATED_WITH_REPLACEMENT("colorWithHexNumber:", ios(1.0, 2.0));
 
 + (UIColor *)colorWithName:(NSString *)cssColorName;
 

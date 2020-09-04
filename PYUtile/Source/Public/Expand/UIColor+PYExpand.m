@@ -157,7 +157,7 @@ static NSMutableDictionary *colorNameCache = nil;
 	return CGColorGetAlpha(self.CGColor);
 }
 
-- (UInt32)rgbHex {
+- (UInt32)hexNumber {
 	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use rgbHex");
 	
 	CGFloat r,g,b,a;
@@ -291,7 +291,7 @@ static NSMutableDictionary *colorNameCache = nil;
 }
 
 - (NSString *)hexStringFromColor {
-	return [NSString stringWithFormat:@"%0.6X", (unsigned int)self.rgbHex];
+	return [NSString stringWithFormat:@"%0.6X", (unsigned int)self.hexNumber];
 }
 
 + (UIColor *)colorWithString:(NSString *)stringToConvert {
@@ -336,16 +336,21 @@ static NSMutableDictionary *colorNameCache = nil;
 						   alpha:1.0f];
 }
 
-+ (UIColor *)colorWithRGBHex:(UInt32)hex {
+
++ (UIColor *)colorWithHexNumber:(UInt32)hex {
     int r = (hex >> 24) & 0xFF;
-	int g = (hex >> 16) & 0xFF;
-	int b = (hex >> 8) & 0xFF;
-	int p = (hex) & 0xFF;
-	
-	return [UIColor colorWithRed:r / 255.0f
-						   green:g / 255.0f
-							blue:b / 255.0f
-						   alpha:p / 255.0f];
+    int g = (hex >> 16) & 0xFF;
+    int b = (hex >> 8) & 0xFF;
+    int p = (hex) & 0xFF;
+    
+    return [UIColor colorWithRed:r / 255.0f
+                           green:g / 255.0f
+                            blue:b / 255.0f
+                           alpha:p / 255.0f];
+}
+
++ (UIColor *)colorWithRGBHex:(UInt32)hex {
+    return [self colorWithHexNumber:hex];
 }
 
 // Returns a UIColor by scanning the string for a hex number and passing that to +[UIColor colorWithRGBHex:]

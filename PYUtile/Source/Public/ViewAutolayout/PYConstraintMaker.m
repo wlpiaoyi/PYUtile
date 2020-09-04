@@ -50,16 +50,16 @@ kPNA PYConstraintMaker * maker;
     };
 }
 
-- (nonnull PYConstraint* (^)(BOOL isSafe)) py_inSafe{
+- (nonnull PYConstraint* (^)(id inArea)) py_inArea{
     kAssign(self);
-    return ^PYConstraint *(BOOL isSafe) {
+    return ^PYConstraint *(id inArea) {
         kStrong(self);
-        self->_isSafe = isSafe;// && ((NSNumber *)isSafe).boolValue;
+        self->_isSafe = ((NSNumber *)inArea).boolValue;
         [self __synConstraints];
         return self;
     };
-    
 }
+
 
 - (nonnull PYConstraint* (^)(UIView * toItem)) py_toItem{
     kAssign(self);
