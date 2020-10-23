@@ -16,7 +16,7 @@
 #import "PYParseDictionary.h"
 #import "NSString+PYExpand.h"
 
-id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = nil;
+//id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding) = nil;
 
 @implementation NSObject(PYDictionary)
 

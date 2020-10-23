@@ -79,6 +79,9 @@ NSTimer * timer;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSString * arg = @"2020-10-14T15:00:35.000+00:00";//
+    [arg dateFormateString:nil];
+    [NSString matchArg:arg regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2})$"];
 //    NSString *  args  = @"<p dir=\"auto\" style=\"font-family:'Times New Roman';font-size:16px;\"><img src=\"http://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&f=JPEG?w=900&h=1350\" /><span style=\"color:#505050;\"><br />testtesttest<br /></span><a href=\"https://www.baidu.com\"><span style=\"color:#0000ee;text-decoration:underline;\">wewe</span></a><span style=\"color:#505050;\"><br />testtesttest2</span></p>\n";
 //    PYXmlDocument * doc =[PYXmlDocument instanceWithXmlString:args];
 //    SMEBudgetListParam * params = [SMEBudgetListParam new];

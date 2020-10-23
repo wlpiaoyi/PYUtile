@@ -180,139 +180,6 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     }
     return dict;
 }
-//+(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
-//    id result = [self valueArchive:object clazz:clazz];// [self __PY_NSOBJECT_EXPAND_OBJ_PARSET:object CLASS:clazz];
-//    if(result) return result;
-//
-//    result = [self checkObject:object deep:deep fliteries:fliteries];// [self __PY_NSOBJECT_EXPAND_OBJ_CHECK:object DEEP:deep FILTERIRES:fliteries];
-//    if(result) return result;
-//    if(!clazz) clazz = [object class];
-//
-//    if([object isKindOfClass:[NSDictionary class]]){
-//        NSMutableDictionary * tempDict = [NSMutableDictionary new];
-//        for (NSString * key in (NSDictionary *)object) {
-//            NSObject * value = ((NSDictionary *)object)[key];
-//            if(!value) continue;
-//            if ([PYArchiveParse canParset:value.class]){
-//                value = [self valueArchive:value clazz:nil];// [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:value CLASS:clazz];
-//            }else{
-//                value = [self archvie:value clazz:nil deep:deep++ fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:value CLAZZ:clazz DEEP:deep+1 FLITERIES:fliteries];
-//            }
-//            if(!value) continue;
-//            tempDict[key] = value;
-//        }
-//        if(tempDict.count == 0){
-//            NSMutableString * key = [NSMutableString new];
-//            [key appendString:[NSString stringWithUTF8String:PYObjectParsedictFailedKey]];
-//            [key appendString:@"_nodictvalue"];
-//            return @{key : [object description]};
-//        }
-//        return tempDict;
-//    }else if([object isKindOfClass:[NSArray class]]){
-//        NSMutableArray * tempArray = [NSMutableArray new];
-//        int tempDeep = deep + 1;
-//        for (id obj in (NSArray *)object) {
-//            [tempArray addObject:[self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]];
-//        }
-//        return tempArray;
-//    }else if([object isKindOfClass:[NSSet class]]){
-//        NSMutableSet * tempSet = [NSMutableSet new];
-//        int tempDeep = deep + 1;
-//        for (id obj in (NSSet *)object) {
-//            [tempSet addObject:[self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]];
-//        }
-//        return tempSet;
-//    }
-//
-//    NSMutableDictionary *dict = [NSMutableDictionary new];
-//    unsigned int outCount;
-//    objc_property_t *properties = class_copyPropertyList(clazz, &outCount);
-//
-//    unsigned int outCount2;
-//    Ivar *ivars = class_copyIvarList(clazz, &outCount2);
-//    @try {
-//        NSArray<NSString *> * parseKeys = nil;
-//        if([object conformsToProtocol:@protocol(PYObjectParseProtocol)]){
-//            if([object respondsToSelector:@selector(pyObjectGetKeysForParseValue)]){
-//                parseKeys = [object performSelector:@selector(pyObjectGetKeysForParseValue)];
-//            }
-//        }
-//        NSMutableArray<NSString *> * removePNames = [NSMutableArray new];
-//        for (int i = 0; i < outCount; i++) {
-//            objc_property_t property = properties[i];
-//            NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
-//            if(parseKeys && ![parseKeys containsObject:propertyName]){
-//                continue;
-//            }
-//            if(propertyName.length == 0) continue;
-//            const char * typeEncoding;
-//            bool flagCanExcute = true;
-//            unsigned int count;
-//            objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
-//            typeEncoding = attribute[0].value;
-//            char * ivarChars = "";
-//            for (int i = 0; i < count; i++) {
-//                if(strcasecmp("V", attribute[i].name) != 0) continue;
-//                ivarChars = (char *) attribute[i].value;
-//            }
-//            if(strcasecmp("", ivarChars) != 0){
-//                [removePNames addObject:[NSString stringWithUTF8String:ivarChars]];
-//            }
-//            unsigned long tedl = strlen(typeEncoding);
-//            if(strcasecmp(typeEncoding, @encode(id)) == 0
-//               || (tedl >= 4
-//                   && typeEncoding[0] == '@'
-//                   && typeEncoding[1] == '\"'
-//                   && typeEncoding[tedl - 1] == '\"')){
-//                   flagCanExcute = false;
-//                   for (int j = 0; j < count; j++) {//如果是弱连接则不会归档，因为指针值可能已经回收
-//                       if(strcasecmp(attribute[j].name, "&") == 0
-//                          || strcasecmp(attribute[j].name, "C") == 0){
-//                           flagCanExcute = true;
-//                           break;
-//                       }
-//                   }
-//               }
-//            if(!flagCanExcute){
-//                kPrintLogln("the property '%s' type '%s' is assign, we can't archived it", propertyName.UTF8String, typeEncoding);
-//                continue;
-//            }
-//            id returnValue = [PYArchiveObject archvieForDict:dict object:object varName:propertyName typeEncoding:typeEncoding];
-//            if(!returnValue) continue;
-//            if(![PYArchiveParse canParset:[returnValue class]]){
-//                returnValue = [self archvie:returnValue clazz:[PYArchiveParse classFromTypeEncoding:typeEncoding] deep:deep + 1 fliteries:fliteries];
-//            }
-//            [self __PY_ARCHIVE_PARSE:returnValue dict:dict varName:propertyName clazz:clazz deep:deep fliteries:fliteries];
-//        }
-//
-//        for (int i = 0; i < outCount2; i++) {
-//            Ivar ivar = ivars[i];
-//            NSString * ivarName = [NSString stringWithUTF8String:ivar_getName(ivar)];
-//            if([removePNames containsObject:ivarName]){
-//                continue;
-//            }
-//            if(parseKeys && ![parseKeys containsObject:ivarName]){
-//                continue;
-//            }
-//            if([dict valueForKey:ivarName] != nil) continue;
-//            const char * typeEncoding = ivar_getTypeEncoding(ivar);
-//            id returnValue = [PYArchiveObject archvieForDict:dict object:object varName:ivarName typeEncoding:typeEncoding];
-//            if(!returnValue) continue;
-//            [self __PY_ARCHIVE_PARSE:returnValue dict:dict varName:ivarName clazz:clazz deep:deep fliteries:fliteries];
-//        }
-//    }
-//    @finally {
-//        free(properties);
-//        free(ivars);
-//    }
-//    if(dict.count == 0){
-//        NSMutableString * key = [NSMutableString new];
-//        [key appendString:[NSString stringWithUTF8String:PYObjectParsedictFailedKey]];
-//        [key appendString:@"_properyandivar"];
-//        return @{key : [object description]};
-//    }
-//    return dict;
-//}
 
 +(void) __PY_ARCHIVE_PARSE:(nonnull id) returnValue dict:(nonnull NSDictionary *) dict varName:(nonnull NSString *) varName clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
     if ([returnValue isKindOfClass:[NSArray class]]) {
@@ -346,74 +213,81 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 +(nullable NSObject *) archvieForDict:(nonnull NSMutableDictionary *) dict object:(nonnull NSObject *) object varName:(NSString *) varName typeEncoding:(const char *) typeEncoding{
 
     if(((NSNumber *)PY_OBJ_PROPER_NAME_DICT[varName]).boolValue) return nil;//过滤Obj特殊属性
+    if((typeEncoding[0] == '@' && typeEncoding[1] == '?')){//如果是block则不取值
+        kPrintExceptionln("%s","block archiving is not supported at this time");
+        return nil;
+    }
     NSObject * returnValue = nil;
     size_t tedl = strlen(typeEncoding);
     if(tedl == 0) return nil;
-    
-    if(typeEncoding[0] == '@' && typeEncoding[1] == '?'){//如果是block则不取值
-        kPrintExceptionln("%s","block archiving is not supported at this time");
-        return nil;
-    }else if(((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}'))){//如果是未知结构体则不取值
-        returnValue = [object valueForKey:varName];
-//        NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
-//        if(invocation == nil) return nil;
-//        if(strcasecmp(typeEncoding, @encode(CGSize)) == 0){
-//            CGRect ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(CGPoint)) == 0){
-//            CGPoint ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(CGRect)) == 0){
-//            CGRect ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(NSRange)) == 0){
-//            NSRange ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(UIEdgeInsets)) == 0){
-//            UIEdgeInsets ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(CGRectEdge)) == 0){
-//            CGRectEdge ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(CGVector)) == 0){
-//            CGVector ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(strcasecmp(typeEncoding, @encode(UIOffset)) == 0){
-//            UIOffset ptr;
-//            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//            NSUInteger size = invocation.methodSignature.methodReturnLength;
-//            returnValue = [NSData dataWithBytes:&ptr length:size];
-//        }else if(PYBlocktodictParsetStruct){
-//            returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
-//        }else return nil;
-    }else if(strcasecmp(typeEncoding, @encode(SEL)) == 0){
-        NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
-        if(invocation == nil) return nil;
-        SEL ptr;
-        [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-        NSUInteger size = invocation.methodSignature.methodReturnLength;
-        returnValue = [NSData dataWithBytes:&ptr length:size];
-    }else{
-        @try {
+
+    @try {
+        if(strcasecmp(typeEncoding, @encode(SEL)) == 0){//如果是SEL
+            NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
+            if(invocation == nil) return nil;
+            SEL ptr;
+            [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+            NSUInteger size = invocation.methodSignature.methodReturnLength;
+            returnValue = [NSData dataWithBytes:&ptr length:size];
+        }else if(((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}'))){//如果是结构体
+            NSValue * value = [object valueForKey:varName];
+            NSUInteger size;
+            NSGetSizeAndAlignment(typeEncoding, &size, NULL);
+            void * ptr = malloc(size);
+            [value getValue:ptr];
+            returnValue = [NSData dataWithBytes:ptr length:size];
+            free(ptr);
+//            NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
+//            if(invocation == nil) return nil;
+//            if(strcasecmp(typeEncoding, @encode(CGSize)) == 0){
+//                CGRect ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(CGPoint)) == 0){
+//                CGPoint ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(CGRect)) == 0){
+//                CGRect ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(NSRange)) == 0){
+//                NSRange ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(UIEdgeInsets)) == 0){
+//                UIEdgeInsets ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(CGRectEdge)) == 0){
+//                CGRectEdge ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(CGVector)) == 0){
+//                CGVector ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(strcasecmp(typeEncoding, @encode(UIOffset)) == 0){
+//                UIOffset ptr;
+//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+//                NSUInteger size = invocation.methodSignature.methodReturnLength;
+//                returnValue = [NSData dataWithBytes:&ptr length:size];
+//            }else if(PYBlocktodictParsetStruct){
+//                returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
+//            }else return nil;
+        }else{
             returnValue = [object valueForKey:varName];
-        } @catch (NSException *exception) {
-            returnValue = nil;
-            kPrintExceptionln("there has no value for propery or ivar that name is %s: [%s:%s]", varName.UTF8String, exception.name.UTF8String, exception.reason.UTF8String);
         }
+    } @catch (NSException *exception) {
+        returnValue = nil;
+        kPrintExceptionln("there has no value for propery or ivar that name is %s: [%s:%s]", varName.UTF8String, exception.name.UTF8String, exception.reason.UTF8String);
     }
     
     if(!returnValue) return nil;
@@ -422,7 +296,6 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     if(!(returnValue = [PYArchiveObject valueArchive:returnValue clazz:clazz])){
         return value;
     }
-    
     [dict setObject:returnValue forKey:[PYArchiveParse parseVarToKey:varName]];
     return nil;
 }

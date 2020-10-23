@@ -85,7 +85,7 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
     }
     return NSOrderedSame;
 }
--(NSDate*) dateFormateString:(NSString*) formatePattern{
+-(NSDate*) dateFormateString:(NSString*) formatePattern{//
     if(formatePattern == nil || formatePattern.length == 0){
         if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2})$"]){
             formatePattern = @"yyyy-MM-dd";
@@ -95,6 +95,8 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
             formatePattern = @"yyyy-MM-dd HH:mm";
         }else if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2} \\d{2}:\\d{2}:\\d{2})$"]){
             formatePattern = @"yyyy-MM-dd HH:mm:ss";
+        }else if([NSString matchArg:self regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}\\+\\d{2}\\:\\d{2})$"]){
+            formatePattern = @"yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
         }else return nil;
     }
     NSDateFormatter *dft = [[NSDateFormatter alloc]init];

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
+//extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Nonnull invocatioin, const char * _Nonnull typeEncoding);
 
 @protocol PYObjectParseProtocol <NSObject>
 

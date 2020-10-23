@@ -15,6 +15,24 @@ BOOL isExcuteUIViewHookMethod;
 
 @implementation UIView(Hook)
 
+-(void) exchangeLayoutSubviews{
+    BOOL isExcute = true;
+    NSHashTable<id<UIViewHookDelegate>> * delegates = [UIView delegateViews];
+    for (id<UIViewHookDelegate> delegate in delegates){
+        if (delegate && [delegate respondsToSelector:@selector(beforeExcuteLayoutSubviews:target:)]) {
+            [delegate beforeExcuteLayoutSubviews:&isExcute target:self];
+        }
+    }
+    if (isExcute) {
+        [self exchangeLayoutSubviews];
+    }
+    for (id<UIViewHookDelegate> delegate in delegates){
+        if (delegate && [delegate respondsToSelector:@selector(afterExcuteLayoutSubviewsWithTarget:)]) {
+            [delegate afterExcuteLayoutSubviewsWithTarget:self];
+        }
+    }
+}
+
 -(void) exchangeAddSubview:(UIView *) view{
     BOOL isExcute = true;
     NSHashTable<id<UIViewHookDelegate>> * delegates = [UIView delegateViews];

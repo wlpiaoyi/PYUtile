@@ -195,14 +195,11 @@
     return [self drawViewWithBounds:bounds scale:[[UIScreen mainScreen] scale]];
 }
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale{
-    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, -bounds.origin.x, -bounds.origin.y);
-    [self.layer renderInContext:context];
-    __block UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, .38);
+    [self drawViewHierarchyInRect:bounds  afterScreenUpdates:NO];
+    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    NSData *imageData = UIImageJPEGRepresentation(image, 1);
-    return [UIImage imageWithData:imageData];
+    return image;
 }
 
 #pragma undefined
@@ -226,6 +223,47 @@
     return NO;
 }
 
+/**
+ 截屏
+ */
++(UIImage * _Nullable) screenshot{
+    CGSize imageSize = CGSizeZero;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
+        imageSize = [UIScreen mainScreen].bounds.size;
+    } else {
+        imageSize = CGSizeMake([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+    }
+
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
+        CGContextSaveGState(context);
+        CGContextTranslateCTM(context, window.center.x, window.center.y);
+        CGContextConcatCTM(context, window.transform);
+        CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -window.bounds.size.height * window.layer.anchorPoint.y);
+        if (orientation == UIInterfaceOrientationLandscapeLeft) {
+            CGContextRotateCTM(context, M_PI_2);
+            CGContextTranslateCTM(context, 0, -imageSize.width);
+        } else if (orientation == UIInterfaceOrientationLandscapeRight) {
+            CGContextRotateCTM(context, -M_PI_2);
+            CGContextTranslateCTM(context, -imageSize.height, 0);
+        } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            CGContextRotateCTM(context, M_PI);
+            CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
+        }
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            [window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
+        } else {
+            [window.layer renderInContext:context];
+        }
+        CGContextRestoreGState(context);
+    }
+
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 
 -(UITapGestureRecognizer*) py_addTarget:(id)target action:(SEL)action{return [self addTapGestureWithTarget:target action:action];}-(NSDictionary<NSString *, NSDictionary<NSString *, NSLayoutConstraint *> *> *) setAutotLayotDict:(NSDictionary<NSString *, id> *) autoLayoutDict{NSNumber * x = autoLayoutDict[@"x"];NSNumber * y = autoLayoutDict[@"y"];NSNumber * w = autoLayoutDict[@"w"];NSNumber * h = autoLayoutDict [@"h"];NSNumber * top = autoLayoutDict [@"top"];NSNumber * topActive = autoLayoutDict [@"topActive"];UIResponder * topPoint = autoLayoutDict [@"topPoint"];NSNumber * left = autoLayoutDict [@"left"];NSNumber * leftActive = autoLayoutDict [@"leftActive"];UIResponder * leftPoint = autoLayoutDict [@"leftPoint"];NSNumber * bottom = autoLayoutDict [@"bottom"];NSNumber * bottomActive = autoLayoutDict [@"bottomActive"];UIResponder * bottomPoint = autoLayoutDict [@"bottomPoint"];NSNumber * right = autoLayoutDict [@"right"];NSNumber * rightActive = autoLayoutDict [@"rightActive"];UIResponder * rightPoint = autoLayoutDict [@"rightPoint"];NSDictionary * point = [PYViewAutolayoutCenter persistConstraint:self centerPointer:CGPointMake(x ? x.doubleValue : DisableConstrainsValueMAX, y ? y.doubleValue : DisableConstrainsValueMAX)];NSDictionary * size =[PYViewAutolayoutCenter persistConstraint:self size:CGSizeMake(w ? w.doubleValue : DisableConstrainsValueMAX, h ? h.doubleValue : DisableConstrainsValueMAX)];UIEdgeInsets e = UIEdgeInsetsZero;e.top = top ? top.doubleValue : DisableConstrainsValueMAX;e.left = left ? left.doubleValue : DisableConstrainsValueMAX;e.bottom = bottom ? bottom.doubleValue : DisableConstrainsValueMAX;e.right = right ? right.doubleValue : DisableConstrainsValueMAX;PYEdgeInsetsItem ei = PYEdgeInsetsItemNull();ei.top = topPoint ? ((__bridge void *)topPoint) : nil;ei.topActive = topActive ? topActive.boolValue : false;ei.left = leftPoint ? ((__bridge void *)leftPoint) : nil;ei.leftActive = leftActive ? leftActive.boolValue : false;ei.bottom = bottomPoint ? ((__bridge void *)bottomPoint) : nil;ei.bottomActive = bottomActive ? bottomActive.boolValue : false;ei.right = rightPoint ? ((__bridge void *)rightPoint) : nil;ei.rightActive = rightActive ? rightActive.boolValue : false;NSDictionary * margin = [PYViewAutolayoutCenter persistConstraint:self relationmargins:e relationToItems:ei];NSMutableDictionary * result = [NSMutableDictionary new];if(point.count) result[@"point"] = point;if(size.count) result[@"size"] = size;if(margin.count) result[@"margin"] = margin;return result;}
 

@@ -14,7 +14,7 @@
 
 @implementation PYParseDictionary
 
-+(BOOL)getTypeEncoding:(const char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key{
++(BOOL)getTypeEncoding:(char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key{
     objc_property_t property = class_getProperty(clazz, key.UTF8String);
     Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
     if(property || ivar){
@@ -25,7 +25,7 @@
     return YES;
 }
 
-+(const char *) getTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar{
++(char *) getTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar{
     if(property){
         unsigned int count;
         objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
@@ -55,7 +55,7 @@
         if (value == nil || value == [NSNull null]) {
             continue;
         }
-        __block const char * typeEncoding = "";
+        char * typeEncoding = "";
         if(![PYParseDictionary getTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
             fieldKey = [NSString stringWithFormat:@"_%@",fieldKey];
             if(![PYParseDictionary getTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
@@ -95,14 +95,18 @@
                 Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
                 value = [self instanceClazz:cClazz dictionary:value];
             }
-        }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
+        }else if((typeEncoding[0] == '@' && typeEncoding[1] == '?')){
 //            NSData * tempData = value;
-//            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
+//            void * ptr;
+//            [tempData getBytes:&ptr length:9999];
+//            value = (__bridge id)(ptr);
+        }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
+            NSData * tempData = value;
+            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
         }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
             NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
             NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
-            if (invocation
-                && [value isKindOfClass:[NSString class]]){
+            if (invocation && [value isKindOfClass:[NSString class]]){
                 NSData * tempData = [((NSString *) value) toData];
                 value = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
                 value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];

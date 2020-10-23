@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 @protocol UIViewHookDelegate<NSObject>
-@optional
+
+-(void) beforeExcuteLayoutSubviews:(nonnull BOOL *) isExcute target:(nonnull UIView *) target;
+-(void) afterExcuteLayoutSubviewsWithTarget:(nonnull UIView *) target;
+
 -(void) beforeExcuteAddSubview:(nonnull UIView *)view isExcute:(nonnull BOOL *) isExcute target:(nonnull UIView *) target;
 -(void) afterExcuteAddSubview:(nonnull UIView *)view target:(nonnull UIView *) target;
 

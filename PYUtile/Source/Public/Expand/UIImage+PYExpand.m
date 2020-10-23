@@ -293,65 +293,63 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
  */
 -(UIImage * _Nonnull) applyEffect:(CGFloat)blur tintColor:(nullable UIColor *) tintColor{
     
-    CGImageRef img = self.CGImage;
+    CGImageRef imageRef = self.CGImage;
     vImage_Buffer inBuffer, outBuffer;
-    vImage_Error error;
-    void *pixelBuffer;
+    void * pixelBuffer;
     
     //create vImage_Buffer with data from CGImageRef
-    CGDataProviderRef inProvider = CGImageGetDataProvider(img);
+    CGDataProviderRef inProvider = CGImageGetDataProvider(imageRef);
     CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
-    
-    inBuffer.width = CGImageGetWidth(img);
-    inBuffer.height = CGImageGetHeight(img);
-    inBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
+    //宽，高，字节/行，data
+    inBuffer.width = CGImageGetWidth(imageRef);
+    inBuffer.height = CGImageGetHeight(imageRef);
+    inBuffer.rowBytes = CGImageGetBytesPerRow(imageRef);
     inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
     
     //create vImage_Buffer for output
-    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
+    pixelBuffer = malloc(CGImageGetBytesPerRow(imageRef) * CGImageGetHeight(imageRef));
     
     if(pixelBuffer == NULL){
         NSLog(@"No pixelbuffer");
     }
     
     outBuffer.data = pixelBuffer;
-    outBuffer.width = CGImageGetWidth(img);
-    outBuffer.height = CGImageGetHeight(img);
-    outBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
-    // Create a third buffer for intermediate processing
-    void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
-    vImage_Buffer outBuffer2;
-    outBuffer2.data = pixelBuffer2;
-    outBuffer2.width = CGImageGetWidth(img);
-    outBuffer2.height = CGImageGetHeight(img);
-    outBuffer2.rowBytes = CGImageGetBytesPerRow(img);
-    
+    outBuffer.width = CGImageGetWidth(imageRef);
+    outBuffer.height = CGImageGetHeight(imageRef);
+    outBuffer.rowBytes = CGImageGetBytesPerRow(imageRef);
+
     
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
-    uint32_t boxSize = (uint32_t)(blur * MIN(outBuffer.width, outBuffer2.height) * .1);
+    uint32_t boxSize = (uint32_t)(blur * MIN(outBuffer.width, outBuffer.height));
     boxSize = boxSize - (boxSize % 2) + 1;
     
     //perform convolution
-    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer2, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-    error = vImageBoxConvolve_ARGB8888(&outBuffer2, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    vImage_Error error;
     error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-    
     if (error) {
         NSLog(@"error from convolution %ld", error);
+        return nil;
     }
+//    error = vImageBoxConvolve_ARGB8888(&outBuffer, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+//    if (error) {
+//        NSLog(@"error from convolution %ld", error);
+//        return nil;
+//    }
+//    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+//    if (error) {
+//        NSLog(@"error from convolution %ld", error);
+//        return nil;
+//    }
     
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef outputContext = CGBitmapContextCreate(outBuffer.data,
                                              outBuffer.width,
                                              outBuffer.height,
-                                             8,
+                                             CGImageGetBitsPerComponent(imageRef),
                                              outBuffer.rowBytes,
-                                             colorSpace,
-                                             kCGImageAlphaNoneSkipLast);
+                                             CGImageGetColorSpace(imageRef),
+                                             CGImageGetAlphaInfo(imageRef));
     
     // Add in color tint.
     if (tintColor) {
@@ -361,21 +359,16 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
         CGContextFillRect(outputContext, imageRect);
         CGContextRestoreGState(outputContext);
     }
-    
-    CGImageRef imageRef = CGBitmapContextCreateImage(outputContext);
+    imageRef = CGBitmapContextCreateImage(outputContext);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
     
     //clean up
     CGContextRelease(outputContext);
-    CGColorSpaceRelease(colorSpace);
     
     free(pixelBuffer);
-    free(pixelBuffer2);
     
     CFRelease(inBitmapData);
     CGImageRelease(imageRef);
-    
-    
     
     return returnImage;
 }

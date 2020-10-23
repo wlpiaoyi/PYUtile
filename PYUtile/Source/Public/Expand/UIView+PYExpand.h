@@ -52,6 +52,10 @@
 -(UIImage * _Nullable) drawView;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds;
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale;
+/**
+ 截屏
+ */
++(UIImage * _Nullable) screenshot;
 
 
 -(UITapGestureRecognizer * _Nonnull) py_addTarget:(id _Nonnull) target action:(SEL _Nonnull)action API_DEPRECATED_WITH_REPLACEMENT("addTapGestureWithTarget:action", ios(1.0, 2.0));
