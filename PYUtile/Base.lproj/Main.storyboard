@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3RR-53-Sek">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3RR-53-Sek">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="2304" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -37,10 +38,10 @@
                                 <subviews>
                                     <view tag="186333" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ObR-CE-REd">
                                         <rect key="frame" x="2" y="1" width="370" height="123"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="ObR-CE-REd" secondAttribute="trailing" constant="3" id="02Q-Tu-gOY"/>
                                     <constraint firstItem="ObR-CE-REd" firstAttribute="leading" secondItem="wMR-fJ-Gfv" secondAttribute="leading" constant="2" id="4J0-Sz-tEu"/>
@@ -55,15 +56,16 @@
                                     <constraint firstAttribute="width" constant="200" id="hiE-Re-Ign"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJv-UR-iqY">
+                            <view tag="186332" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJv-UR-iqY">
                                 <rect key="frame" x="245" y="345.5" width="20" height="20"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="MxP-pq-OLP"/>
                                     <constraint firstAttribute="height" constant="20" id="VV9-ID-RCt"/>
                                 </constraints>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="i7k-tO-rYJ"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="i7k-tO-rYJ" firstAttribute="trailing" secondItem="wMR-fJ-Gfv" secondAttribute="trailing" id="2nA-VY-UlC"/>
@@ -76,7 +78,6 @@
                             <constraint firstItem="wMR-fJ-Gfv" firstAttribute="top" secondItem="i7k-tO-rYJ" secondAttribute="top" constant="63" id="igg-fJ-GxY"/>
                             <constraint firstItem="i7k-tO-rYJ" firstAttribute="bottom" secondItem="tGu-KU-o7E" secondAttribute="bottom" constant="20" id="oON-8h-KD2"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="i7k-tO-rYJ"/>
                     </view>
                     <navigationItem key="navigationItem" id="cl4-8e-2JO"/>
                 </viewController>
@@ -93,4 +94,9 @@
             <point key="canvasLocation" x="138" y="152"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

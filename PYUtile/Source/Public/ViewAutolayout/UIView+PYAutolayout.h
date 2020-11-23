@@ -41,13 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
  * 获取left对其约束
  */
 -(nullable NSLayoutConstraint *) py_getAutolayoutRelationLeft;
--(nullable NSLayoutConstraint *) py_getAutolayoutRelationLeading;
 
 /**
  * 获取right对其约束
  */
 -(nullable NSLayoutConstraint *) py_getAutolayoutRelationRight;
--(nullable NSLayoutConstraint *) py_getAutolayoutRelationTrailing;
 
 /**
  * 获取宽约束
@@ -108,13 +106,11 @@ NS_ASSUME_NONNULL_BEGIN
  * 删除left对其约束
  */
 -(nullable NSLayoutConstraint *) py_removeAutolayoutRelationLeft;
--(nullable NSLayoutConstraint *) py_removeAutolayoutRelationLeading;
 
 /**
  * 删除right对其约束
  */
 -(nullable NSLayoutConstraint *) py_removeAutolayoutRelationRight;
--(nullable NSLayoutConstraint *) py_removeAutolayoutRelationTrailing;
 
 /**
  * 删除宽约束

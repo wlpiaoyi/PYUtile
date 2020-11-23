@@ -256,5 +256,26 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
     return 100.0 - 100.0*matrix[n][m]/self.length;
     
 }
+
+- (NSString *) pyEncodeToPercentEscapeString: (NSString *) input{
+    input = input ? input : @"!*'();:@&=+$,/?%#[]";
+    NSString *outputStr = (NSString *)
+    CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                                              (CFStringRef)self,
+                                                              NULL,
+                                                              (CFStringRef)input,
+                                                              kCFStringEncodingUTF8));
+    return outputStr;
+}
+ 
+//- (NSString *) pyDecodeFromPercentEscapeString: (NSString *) input{
+//    NSMutableString *outputStr = [NSMutableString stringWithString:input];
+//    [outputStr replaceOccurrencesOfString:@"+"
+//                               withString:@" "
+//                                  options:NSLiteralSearch
+//                                    range:NSMakeRange(0, [outputStr length])];
+// 
+//    return [outputStr stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//}
 @end
 #pragma clang diagnostic pop

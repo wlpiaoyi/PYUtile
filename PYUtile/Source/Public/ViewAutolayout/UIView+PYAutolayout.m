@@ -359,27 +359,26 @@ kPNAR BOOL isReversal;
  */
 -(nullable NSLayoutConstraint *) py_getAutolayoutRelationBottom{
     return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeBottom relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
-//    return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeBottom relation:NSLayoutRelationEqual firstItem:self.superview secondItem:self];
 }
 
 /**
  * 获取left对其约束
  */
 -(nullable NSLayoutConstraint *) py_getAutolayoutRelationLeft{
-    return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeLeft relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
-}
--(nullable NSLayoutConstraint *) py_getAutolayoutRelationLeading{
-    return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeLeading relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
+    NSLayoutConstraint * lc = [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeLeft relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
+    if(lc) return lc;
+    lc = [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeLeading relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
+    return lc;
 }
 
 /**
  * 获取right对其约束
  */
 -(nullable NSLayoutConstraint *) py_getAutolayoutRelationRight{
-   return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeRight relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
-}
--(nullable NSLayoutConstraint *) py_getAutolayoutRelationTrailing{
-    return [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeTrailing relation:NSLayoutRelationEqual firstItem:self.superview secondItem:self];
+    NSLayoutConstraint * lc = [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeRight relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
+    if(lc) return lc;
+    lc = [self.superview py_getAutolayoutContraintWithFirstAttribute:NSLayoutAttributeTrailing relation:NSLayoutRelationEqual firstItem:self secondItem:self.superview];
+    return lc;
 }
 
 /**
@@ -531,22 +530,12 @@ kPNAR BOOL isReversal;
      if(layoutConstraint) [self.superview removeConstraint:layoutConstraint];
      return layoutConstraint;
  }
- -(nullable NSLayoutConstraint *) py_removeAutolayoutRelationLeading{
-     NSLayoutConstraint * layoutConstraint = [self py_getAutolayoutRelationLeading];
-     if(layoutConstraint) [self.superview removeConstraint:layoutConstraint];
-     return layoutConstraint;
- }
 
 /**
  * 删除right对其约束
  */
 -(nullable NSLayoutConstraint *) py_removeAutolayoutRelationRight{
     NSLayoutConstraint * layoutConstraint = [self py_getAutolayoutRelationRight];
-    if(layoutConstraint) [self.superview removeConstraint:layoutConstraint];
-    return layoutConstraint;
-}
--(nullable NSLayoutConstraint *) py_removeAutolayoutRelationTrailing{
-    NSLayoutConstraint * layoutConstraint = [self py_getAutolayoutRelationTrailing];
     if(layoutConstraint) [self.superview removeConstraint:layoutConstraint];
     return layoutConstraint;
 }

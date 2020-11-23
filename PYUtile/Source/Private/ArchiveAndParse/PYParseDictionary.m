@@ -6,6 +6,32 @@
 //  Copyright © 2019 wlpiaoyi. All rights reserved.
 //
 
+//// 字符串拷贝函数的实现
+//char *strcpy(char *dest, const char *src)
+//{
+//    if ( !dest || !src )
+//    {
+//        return "";
+//    }
+//
+//    if ( dest == src)
+//    {
+//        return dest ;
+//    }
+//
+//    char *temp = dest ;
+//
+//    while( (*src) != '/0')
+//    {
+//        *dest = *src;
+//        src++;
+//        dest++;
+//    }
+//
+//    dest = temp;
+//    return dest;
+//}
+
 #import "PYParseDictionary.h"
 #import "PYArchiveParse.h"
 #import "PYUtile.h"
@@ -14,24 +40,34 @@
 
 @implementation PYParseDictionary
 
-+(BOOL)getTypeEncoding:(char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key{
++(BOOL) copyTypeEncoding:(char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key{
     objc_property_t property = class_getProperty(clazz, key.UTF8String);
     Ivar ivar = class_getInstanceVariable(clazz, key.UTF8String);
     if(property || ivar){
-        *typeEncoding = [self getTypeEncodingFromeProperty:property ivar:ivar];
+        char * chars = [self copyTypeEncodingFromeProperty:property ivar:ivar];
+        *typeEncoding = chars;
     } else {
         return NO;
     }
     return YES;
 }
 
-+(char *) getTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar{
++(char *) copyTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar{
     if(property){
         unsigned int count;
         objc_property_attribute_t * attribute = property_copyAttributeList(property, &count);
-        return attribute[0].value;
+        const char * typeEnoding =  attribute[0].value;
+        int l = strlen(typeEnoding);
+        char * chars = malloc(l);
+        chars = strcpy(chars, typeEnoding);
+        free(attribute);
+        return chars;
     }else if(ivar){
-        return ivar_getTypeEncoding(ivar);
+        const char * typeEnoding  = ivar_getTypeEncoding(ivar);
+        int l = strlen(typeEnoding);
+        char * chars = malloc(l);
+        chars = strcpy(chars, typeEnoding);
+        return chars;
     }
     return "";
 }
@@ -55,74 +91,77 @@
         if (value == nil || value == [NSNull null]) {
             continue;
         }
-        char * typeEncoding = "";
-        if(![PYParseDictionary getTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
+        char * typeEncoding = NULL;
+        if(![PYParseDictionary  copyTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
             fieldKey = [NSString stringWithFormat:@"_%@",fieldKey];
-            if(![PYParseDictionary getTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
+            if(![PYParseDictionary  copyTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
                 kPrintLogln("the class [%s] has no ivar [%s] type [%s]", NSStringFromClass(clazz).UTF8String, fieldKey.UTF8String, NSStringFromClass([value class]).UTF8String);
                 continue;
             }
         }
-        
-        if(strlen(typeEncoding) <= 0){
+        if(typeEncoding == NULL){
             kPrintExceptionln("the class [%s]'s ivar [%s] has not found typeEncoding", NSStringFromClass(clazz).UTF8String, fieldKey.UTF8String);
             continue;
         }
-        
-        size_t tedl = strlen(typeEncoding);
-        if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-            Class cClazz = [PYArchiveParse classFromTypeEncoding:typeEncoding];
-            if(cClazz == nil){
-                value = nil;
-                continue;
-            }
-            if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
-                objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",fieldKey].UTF8String);
-                Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",fieldKey].UTF8String);
-                Class valuesClazz = nil;
-                if(cproperty || civar){
-                    const char * teding = [PYParseDictionary getTypeEncodingFromeProperty:cproperty ivar:civar];
-                    valuesClazz = [PYArchiveParse classFromTypeEncoding:teding];
+        @try {
+                size_t tedl = strlen(typeEncoding);
+                if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
+                    Class cClazz = [PYArchiveParse classFromTypeEncoding:typeEncoding];
+                    if(cClazz == nil){
+                        value = nil;
+                        continue;
+                    }
+                    if ([cClazz isSubclassOfClass:[NSArray class]] || [cClazz isSubclassOfClass:[NSSet class]]) {
+                        objc_property_t cproperty = class_getProperty(clazz, [NSString stringWithFormat:@"property_%@",fieldKey].UTF8String);
+                        Ivar civar = class_getInstanceVariable(clazz, [NSString stringWithFormat:@"ivar_%@",fieldKey].UTF8String);
+                        Class valuesClazz = nil;
+                        if(cproperty || civar){
+                            const char * teding = [PYParseDictionary copyTypeEncodingFromeProperty:cproperty ivar:civar];
+                            valuesClazz = [PYArchiveParse classFromTypeEncoding:teding];
+                            free(teding);
+                        }
+                        if(valuesClazz){
+                            value = [self forEachValue:value clazz:valuesClazz];
+                        }else{
+                            value = value;
+                        }
+                    }else if([PYArchiveParse canParset:cClazz]){
+                        value = [PYArchiveParse parseValue:value clazz:cClazz];
+                    }else{
+                        Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
+                        value = [self instanceClazz:cClazz dictionary:value];
+                    }
+                }else if((typeEncoding[0] == '@' && typeEncoding[1] == '?')){
+        //            NSData * tempData = value;
+        //            void * ptr;
+        //            [tempData getBytes:&ptr length:9999];
+        //            value = (__bridge id)(ptr);
+                }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
+                    NSData * tempData = value;
+                    value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
+                }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
+                    NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
+                    NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
+                    if (invocation && [value isKindOfClass:[NSString class]]){
+                        NSData * tempData = [((NSString *) value) toData];
+                        value = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
+                        value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];
+                        SEL v;
+                        [value getValue:&v];
+                        [PYInvoke setInvoke:&v index:2 invocation:invocation];
+                        [PYInvoke excuInvoke:nil returnType:nil invocation:invocation];
+                    }
+                    value = nil;
                 }
-                if(valuesClazz){
-                    value = [self forEachValue:value clazz:valuesClazz];
-                }else{
-                    value = value;
+                if(value){
+                    @try {
+                        [target setValue:value forKey:fieldKey];
+                    } @catch (NSException *exception) {
+                        kPrintExceptionln("%s:%s [key:%@ value:%@]",exception.name.UTF8String, exception.reason.UTF8String, fieldKey, value);
+                    }
                 }
-            }else if([PYArchiveParse canParset:cClazz]){
-                value = [PYArchiveParse parseValue:value clazz:cClazz];
-            }else{
-                Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
-                value = [self instanceClazz:cClazz dictionary:value];
-            }
-        }else if((typeEncoding[0] == '@' && typeEncoding[1] == '?')){
-//            NSData * tempData = value;
-//            void * ptr;
-//            [tempData getBytes:&ptr length:9999];
-//            value = (__bridge id)(ptr);
-        }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋值
-            NSData * tempData = value;
-            value = [NSValue valueWithBytes:tempData.bytes objCType:typeEncoding];
-        }else if (strcasecmp(typeEncoding, @encode(SEL)) == 0){
-            NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
-            NSInvocation *invocation = [PYInvoke startInvoke:target action:sel_getUid(setActionName.UTF8String)];
-            if (invocation && [value isKindOfClass:[NSString class]]){
-                NSData * tempData = [((NSString *) value) toData];
-                value = [[NSData alloc] initWithBase64EncodedData:tempData options:0];
-                value = [NSValue valueWithBytes:((NSData*)value).bytes objCType:typeEncoding];
-                SEL v;
-                [value getValue:&v];
-                [PYInvoke setInvoke:&v index:2 invocation:invocation];
-                [PYInvoke excuInvoke:nil returnType:nil invocation:invocation];
-            }
-            value = nil;
-        }
-        if(value){
-            @try {
-                [target setValue:value forKey:fieldKey];
-            } @catch (NSException *exception) {
-                kPrintExceptionln("%s:%s [key:%@ value:%@]",exception.name.UTF8String, exception.reason.UTF8String, fieldKey, value);
-            }
+        } @finally {
+            free(typeEncoding);
         }
     }
     

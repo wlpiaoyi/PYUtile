@@ -125,8 +125,8 @@
  设置阴影层
  */
 -(void) setShadowColor:(nonnull CGColorRef) shadowColor shadowRadius :(CGFloat) shadowRadius {
-    [self setClipsToBounds:NO];
     
+    [self setClipsToBounds:NO];
     self.layer.shadowOffset = CGSizeMake(0,0);//shadowOffset阴影偏移，默认(0, -3),这个跟shadowRadius配合使用
     self.layer.shadowOpacity = 1;//阴影透明度，默认0
     self.layer.shadowColor = shadowColor;//shadowColor阴影颜色

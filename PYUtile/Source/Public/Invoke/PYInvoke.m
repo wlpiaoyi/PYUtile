@@ -114,6 +114,7 @@
         objc_property_t property = propertyList[index];
         [propertyInfos addObject:[self getPropertyInfoWithProperty:property]];
     }
+    free(propertyList);
     return propertyInfos;
 }
 

@@ -13,8 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PYParseDictionary : NSObject
 
-+(BOOL)getTypeEncoding:(char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key;
-+(char *) getTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar;
++(BOOL) copyTypeEncoding:(char * *) typeEncoding clazz:(Class) clazz key:(NSString *) key;
++(char *) copyTypeEncodingFromeProperty:(objc_property_t) property ivar:(Ivar) ivar;
 +(nullable id) instanceClazz:(Class) clazz dictionary:(NSObject*) dictionary;
 
 @end

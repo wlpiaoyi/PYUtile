@@ -178,7 +178,7 @@ const NSString *PYColorMatrixCIVignetteEffect = @"CIVignetteEffect";
     tImage = [tImage setImageSize:tSize];
     
     tSize = tImage.size;
-    CGSize tS = CGSizeMake(MAX(tSize.width, image.size.width), tSize.height + offH + image.size.height + imageOffH);
+    CGSize tS = CGSizeMake(MAX(tSize.width, image.size.width), tSize.height + offH + image.size.height + imageOffH + offTop * 2 );
     CGRect tFrame, iFrame;
     switch (direction) {
         case 0:{

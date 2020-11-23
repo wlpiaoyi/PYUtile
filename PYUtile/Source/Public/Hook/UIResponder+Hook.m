@@ -17,15 +17,17 @@
 @implementation UIResponder(Hook)
 
 -(void) exchangeDealloc{
-    
+
     NSHashTable<id<UIResponderHookBaseDelegate>> * delegates = [self.class delegateBaseHook];
     if(delegates) for (id<UIResponderHookBaseDelegate> delegate in delegates){
         if (delegate && [delegate respondsToSelector:@selector(beforeExcuteDeallocWithTarget:)]) {
             [delegate beforeExcuteDeallocWithTarget:self];
         }
     }
-    if([self conformsToProtocol:@protocol(UITextInput)] && [self isFirstResponder])[self resignFirstResponder];
+    if([self conformsToProtocol:@protocol(UITextInput)] && [self isFirstResponder])
+        [self resignFirstResponder];
     objc_removeAssociatedObjects(self);
+    
     [self exchangeDealloc];
 }
 

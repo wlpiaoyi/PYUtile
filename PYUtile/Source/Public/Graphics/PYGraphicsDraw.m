@@ -197,6 +197,7 @@
     // Clean up
     CFRelease(framesetter);
     CFRelease(frameRef);
+    CFRelease(pathRef);
     
     return coreTextSize;
 }

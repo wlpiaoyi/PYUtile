@@ -77,7 +77,8 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
                            break;
                        }
                    }
-               }
+            }
+            free(attribute);
             if(!flagCanExcute){
                 kPrintLogln("the property '%s' type '%s' is assign, we can't iterator it", propertyName.UTF8String, typeEncoding);
                 continue;

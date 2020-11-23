@@ -97,6 +97,12 @@
 -(nullable NSArray<NSTextCheckingResult *> *) matchesForRegex:(nonnull NSString *) regexstr;
 
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
+
+
+- (nullable NSString *) pyEncodeToPercentEscapeString: (NSString *) input;
+
+//- (NSString *) pyDecodeFromPercentEscapeString: (NSString *) input;
+
 #pragma 字符串验证<=================================
 
 @end
