@@ -310,15 +310,14 @@ id synProgressObj;
 +(nullable UIWindow *) getCurrenWindow{
     
     UIWindow *topWindow = kKeyWindow;
-    if (!topWindow)  return nil;
+    Class pywindow = NSClassFromString(@"PYInterflowWindow");
+    if(pywindow && [topWindow isKindOfClass:pywindow]) topWindow = nil;
+    if (topWindow)  return topWindow;
     
-    if (topWindow.windowLevel != UIWindowLevelNormal) {
-        NSArray *windows = [kApplication windows];
-        for(topWindow in windows){
-            if (topWindow.windowLevel == UIWindowLevelNormal)break;
-        }
+    NSArray *windows = [kApplication windows];
+    for(topWindow in windows){
+        if (topWindow.windowLevel == UIWindowLevelNormal)break;
     }
-    
     return topWindow;
 }
 
