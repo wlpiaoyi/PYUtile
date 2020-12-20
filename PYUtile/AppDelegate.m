@@ -17,6 +17,7 @@
     NSString * ivarString;
     PYParseTest * ivarTest;
 }
+
 kPNA int keyId;
 kPNA int keyNewVar;
 kPNA CGRect pRect;
@@ -25,7 +26,7 @@ kPNSNA NSString * keyDescription;
 kPNSNA PYParseTest * pTest;
 kPNSNA NSArray<PYParseTest *> * pTests;
 kPNSNA NSArray<NSArray<PYParseTest *> *> * pTestss;
-kPNSNA NSArray * trainPassengers;
+//kPNSNA NSArray * trainPassengers;
 
 
 kPNSNA PYParseTest * property_pTests;
@@ -83,9 +84,11 @@ NSTimer * timer;
 //    NSString *  args  = @"<p dir=\"auto\" style=\"font-family:'Times New Roman';font-size:16px;\"><img src=\"http://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&f=JPEG?w=900&h=1350\" /><span style=\"color:#505050;\"><br />testtesttest<br /></span><a href=\"https://www.baidu.com\"><span style=\"color:#0000ee;text-decoration:underline;\">wewe</span></a><span style=\"color:#505050;\"><br />testtesttest2</span></p>\n";
 //    PYXmlDocument * doc =[PYXmlDocument instanceWithXmlString:args];
     SMEBudgetListParam * params = [SMEBudgetListParam new];
+    params.keyId = 1;
     params.params = @[[SMEBudgetListParam new]];
     params.param = [SMEBudgetListParam new];
-    id obj = [params objectToDictionary];
+    id subfix = [params objectToFormWithSuffix:@"" deepClass:[PYParseTest class]];
+    id obj = [params objectToDictionaryWithDeepClass:[PYParseTest class]];
     params = [SMEBudgetListParam objectWithDictionary:obj];
 //    NSLog(doc.rootElement.stringValue);
 

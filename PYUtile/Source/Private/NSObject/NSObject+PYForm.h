@@ -15,6 +15,11 @@
 /**
  将当前对象装换成form表单
  如果数组需要index, 这要使用has_index_{propertyname}标记
+ */
+-(nullable NSString *) objectToFormWithSuffix;
+/**
+ 将当前对象装换成form表单
+ 如果数组需要index, 这要使用has_index_{propertyname}标记
  @param suffix 表单前缀
  */
 -(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix;
@@ -22,9 +27,9 @@
  将当前对象装换成form表单
  如果数组需要index, 这要使用has_index_{propertyname}标记
  @param suffix 表单前缀
- @param clazz 类型
+ @param deepClazz 类型
  */
--(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix clazz:(nullable Class) clazz;
+-(nullable NSString *) objectToFormWithSuffix:(nullable NSString *) suffix deepClass:(nullable Class) deepClazz;
 #pragma 对象转化成表单==========================================<
 
 @end

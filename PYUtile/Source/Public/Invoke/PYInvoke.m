@@ -10,7 +10,13 @@
 #import <objc/runtime.h>
 #import "py_hook_encode_type.h"
 
+NSArray<NSString *> * PYInvokeRemoveIvarNames;
+
 @implementation PYInvoke
+
++(void) load{
+    PYInvokeRemoveIvarNames = @[@"hash", @"superclass", @"description", @"debugDescription"];
+}
 
 //==>分布执行方法
 + (nullable id) startInvoke:(nonnull id) target action:(nonnull SEL)action{
@@ -112,7 +118,9 @@
     NSMutableArray<NSDictionary*> *propertyInfos = [NSMutableArray<NSDictionary*> new];
     for (unsigned int index = 0; index < outCount; index++) {
         objc_property_t property = propertyList[index];
-        [propertyInfos addObject:[self getPropertyInfoWithProperty:property]];
+        NSDictionary * propertyInfo = [self getPropertyInfoWithProperty:property];
+        if(!propertyInfo) continue;;
+        [propertyInfos addObject:propertyInfo];
     }
     free(propertyList);
     return propertyInfos;
@@ -158,6 +166,8 @@
     });
     
     NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
+    if([PYInvokeRemoveIvarNames containsObject:propertyName]) return nil;
+    
     NSString *propertyType = [NSString stringWithUTF8String:property_getAttributes(property)];
     propertyType = [[propertyType componentsSeparatedByString:@","].firstObject substringFromIndex:1];
     propertyType = [NSString stringWithUTF8String:[PYInvoke pyParseEncodeTpe:propertyType.UTF8String isBaseType:nil]];

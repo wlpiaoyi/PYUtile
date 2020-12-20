@@ -205,7 +205,7 @@ static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
             returnValue = [NSData __PY_PARSE:value];
         }else if([self clazz:clazz isMemberForClazz:[NSURL class]]){
             returnValue = [NSURL __PY_PARSE:value];
-        }
+        }else returnValue = value;
     }
     return returnValue;
 }
