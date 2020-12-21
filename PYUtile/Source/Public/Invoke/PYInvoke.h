@@ -41,4 +41,7 @@
  获取所有的方法信息
  */
 +(nonnull NSArray<NSDictionary*>*) getInstanceMethodInfosWithClass:(nonnull Class) clazz;
+
++(SEL) parseFieldKeyToSetSel:(nonnull NSString *) fieldKey;
+
 @end

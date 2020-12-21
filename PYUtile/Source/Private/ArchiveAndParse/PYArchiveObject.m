@@ -10,8 +10,16 @@
 #import "PYInvoke.h"
 #import "PYUtile.h"
 #import "PYArchiveParse.h"
+
 #import "NSObject+PYDictionary.h"
+#import "NSObject+PYExpand.h"
+#import "NSData+PYExpand.h"
+#import "NSString+PYExpand.h"
+
 #import <objc/runtime.h>
+#import <CoreLocation/CoreLocation.h>
+
+
 
 NSDictionary * PY_OBJ_PROPER_NAME_DICT;
 NSDictionary * PY_OBJ_IVAR_NAME_DICT;
@@ -99,6 +107,15 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             const char * typeEncoding = ivar_getTypeEncoding(ivar);
             blockExcute(object, ivarName, typeEncoding, userInfo, YES);
         }
+        
+        clazz = class_getSuperclass(clazz);
+        if(!clazz) return;
+        if(clazz == [NSObject class]) return;
+        if(clazz == [UIResponder class]) return;
+        if(clazz == [UIView class]) return;
+        if(clazz == [UIViewController class]) return;
+        if([clazz isNativelibraryClass]) return;
+        [self  iteratorWithObject:object clazz:clazz userInfo:userInfo blockExcute:blockExcute];
     }
     @finally {
         free(properties);
@@ -231,58 +248,56 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             NSUInteger size = invocation.methodSignature.methodReturnLength;
             returnValue = [NSData dataWithBytes:&ptr length:size];
         }else if(((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}'))){//如果是结构体
-            NSValue * value = [object valueForKey:varName];
-            NSUInteger size;
-            NSGetSizeAndAlignment(typeEncoding, &size, NULL);
-            void * ptr = malloc(size);
-            [value getValue:ptr];
-            returnValue = [NSData dataWithBytes:ptr length:size];
-            free(ptr);
-//            NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
-//            if(invocation == nil) return nil;
-//            if(strcasecmp(typeEncoding, @encode(CGSize)) == 0){
-//                CGRect ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+            
+            NSInvocation *invocation = [PYInvoke startInvoke:object action:sel_getUid(varName.UTF8String)];
+            if(invocation == nil) return nil;
 //                NSUInteger size = invocation.methodSignature.methodReturnLength;
 //                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(CGPoint)) == 0){
-//                CGPoint ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(CGRect)) == 0){
-//                CGRect ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(NSRange)) == 0){
-//                NSRange ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(UIEdgeInsets)) == 0){
-//                UIEdgeInsets ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(CGRectEdge)) == 0){
-//                CGRectEdge ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(CGVector)) == 0){
-//                CGVector ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(strcasecmp(typeEncoding, @encode(UIOffset)) == 0){
-//                UIOffset ptr;
-//                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
-//                NSUInteger size = invocation.methodSignature.methodReturnLength;
-//                returnValue = [NSData dataWithBytes:&ptr length:size];
-//            }else if(PYBlocktodictParsetStruct){
-//                returnValue = PYBlocktodictParsetStruct(invocation,typeEncoding);
-//            }else return nil;
+            if(strcasecmp(typeEncoding, @encode(CGSize)) == 0){
+                CGSize ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromCGSize(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(CGPoint)) == 0){
+                CGPoint ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromCGPoint(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(CGRect)) == 0){
+                CGRect ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromCGRect(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(NSRange)) == 0){
+                NSRange ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromRange(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(UIEdgeInsets)) == 0){
+                UIEdgeInsets ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromUIEdgeInsets(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(CGVector)) == 0){
+                CGVector ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromCGVector(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(UIOffset)) == 0){
+                UIOffset ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = NSStringFromUIOffset(ptr);
+            }else if(strcasecmp(typeEncoding, @encode(CLLocationCoordinate2D)) == 0){
+                CLLocationCoordinate2D ptr;
+                [PYInvoke excuInvoke:&ptr returnType:nil invocation:invocation];
+                returnValue = @{@"latitude":@(ptr.latitude), @"longitude":@(ptr.longitude)};
+            }else{
+                returnValue = nil;
+//                NSValue * value = [object valueForKey:varName];
+//                NSUInteger size;
+//                NSGetSizeAndAlignment(typeEncoding, &size, NULL);
+//                void * ptr = malloc(size);
+//                [value getValue:ptr];
+//                NSData * data = [NSData dataWithBytes:ptr length:size];
+//                if(data.length){
+//                    returnValue = [data toBase64String];
+//                }else returnValue = nil;
+//                free(ptr);
+            }
         }else{
             returnValue = [object valueForKey:varName];
         }

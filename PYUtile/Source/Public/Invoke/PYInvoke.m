@@ -220,6 +220,12 @@ NSArray<NSString *> * PYInvokeRemoveIvarNames;
                  keyReturEncode:[NSString stringWithUTF8String:returnEncode]};
     }
 }
+
++(SEL) parseFieldKeyToSetSel:(nonnull NSString *) fieldKey{
+    NSString * setActionName = [NSString stringWithFormat:@"set%@%@:", [[fieldKey uppercaseString] substringToIndex:1], [fieldKey substringFromIndex:1]];
+    return sel_getUid(setActionName.UTF8String);
+}
+
 +(char*) pyParseEncodeTpe:(const char *) encodeType isBaseType:(bool*) isBaseType{
     char *type = "";
     bool flagBaseType = true;

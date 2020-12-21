@@ -95,7 +95,10 @@ kPNA unsigned int deep;
 }
 //step 3:获取头节点间内容
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
-    _curElement.string = string;
+    PYXmlElement * stringNode = [[PYXmlElement alloc] initWithDeep:_deep parent:_curElement];
+    stringNode.elementName = @"PYNode";
+    stringNode.string = string;
+    [_curElement addSubElement:stringNode];
 }
 
 //step 4 ：解析完当前节点
@@ -160,6 +163,10 @@ kPNA unsigned int deep;
 }
 
 +(void) stringValue:(NSMutableString *) stringValue xmlDom:(PYXmlElement *) xmlDom{
+    if([xmlDom.elementName isEqual:@"PYNode"]){
+        [stringValue appendString:[PYXmlDocument TSZF_DICT_FR:xmlDom.string]];
+        return;
+    }
     [stringValue appendString:@"<"];
     [stringValue appendString:xmlDom.elementName];
     if(xmlDom.attributes.count){
@@ -169,16 +176,16 @@ kPNA unsigned int deep;
         }
     }
     [stringValue appendString:@">"];
+    if(xmlDom.elements && xmlDom.elements.count){
+        for (PYXmlElement * item in xmlDom.elements) {
+            [self stringValue:stringValue xmlDom:item];
+        }
+    }
     if(xmlDom.string){
         [stringValue appendString:[PYXmlDocument TSZF_DICT_FR:xmlDom.string]];
     }
     if(xmlDom.cData){
         [stringValue appendFormat:@"<![CDATA[%@]]>",[xmlDom.cData toString]];
-    }
-    if(xmlDom.elements && xmlDom.elements.count){
-        for (PYXmlElement * item in xmlDom.elements) {
-            [self stringValue:stringValue xmlDom:item];
-        }
     }
     [stringValue appendFormat:@"</%@>", xmlDom.elementName];
 }

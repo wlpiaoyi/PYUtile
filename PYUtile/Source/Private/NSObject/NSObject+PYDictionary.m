@@ -21,14 +21,19 @@
 @implementation NSObject(PYDictionary)
 
 /**
- 通过JSON初始化对象
+ 支持的property类型有:Object对象 ,CGSize,CGPoint,CGRect,NSRange,UIEdgeInsets,CGVector,UIOffset,CLLocationCoordinate2D
+ @param dictionary
  */
+#pragma mark 通过JSON初始化对象
 +(instancetype) objectWithDictionary:(NSObject*) dictionary{
     return [self objectWithDictionary:dictionary clazz:self];
 }
+
 /**
- 通过JSON初始化对象
+ @param dictionary
+ @param clazz
  */
+#pragma mark 通过JSON初始化对象
 +(nullable id) objectWithDictionary:(NSObject*) dictionary clazz:(Class) clazz{
     return [PYParseDictionary instanceClazz:clazz dictionary:dictionary];
 }
@@ -36,8 +41,9 @@
 -(NSObject*) objectToDictionary{
     return [self objectToDictionaryWithFliteries:nil];
 }
--(NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries{
-    return [PYArchiveObject archvie:self clazz:self.class deep:0 fliteries:fliteries];
+
+-(NSObject *) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries{
+    return [PYArchiveObject archvie:self clazz:nil deep:0 fliteries:fliteries];
 }
 
 /**

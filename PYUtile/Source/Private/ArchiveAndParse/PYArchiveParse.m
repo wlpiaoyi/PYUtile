@@ -20,11 +20,11 @@ char * __PY_ARCHIVE_DATE_PARSE_NUMBERX1 = "_date_to_numberx1";
 #pragma 日期装换成毫秒
 char * __PY_ARCHIVE_DATE_PARSE_NUMBERX3 = "_date_to_numberx3";
 
-static NSArray * __PY_OBJ_TO_DICT_CLASS;
-static NSDictionary * __PY_PARSE_VAR_TO_KEY;
-static NSDictionary * __PY_PARSE_VAR_HEAD_TO_KEY;
-static NSDictionary * __PY_PARSE_KEY_TO_VAR;
-static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
+NSArray * __PY_OBJ_TO_DICT_CLASS;
+NSDictionary * __PY_PARSE_VAR_TO_KEY;
+NSDictionary * __PY_PARSE_VAR_HEAD_TO_KEY;
+NSDictionary * __PY_PARSE_KEY_TO_VAR;
+NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 
 
 @implementation NSData(__PY_ARC_PAR)
@@ -119,7 +119,7 @@ static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 @end
 
 @implementation PYArchiveParse
-+(void) initialize{
++(void) load{
     static dispatch_once_t onceToken; dispatch_once(&onceToken, ^{
         __PY_OBJ_TO_DICT_CLASS = @[
                                    [NSString class]
@@ -238,8 +238,9 @@ static NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 +(nonnull NSString *) parseKeyToVar:(nonnull NSString *) name{
     NSString * pname = __PY_PARSE_KEY_TO_VAR[name];
     if(pname) return pname;
-    NSEnumerator<NSString *> *objectEnumerator = __PY_PARSE_KEY_TO_VAR_HEAD.objectEnumerator;
-    NSEnumerator<NSString *> *keyEnumerator = __PY_PARSE_KEY_TO_VAR_HEAD.keyEnumerator;
+    NSDictionary * dict = __PY_PARSE_KEY_TO_VAR_HEAD;
+    NSEnumerator<NSString *> *objectEnumerator = dict.objectEnumerator;
+    NSEnumerator<NSString *> *keyEnumerator = dict.keyEnumerator;
     NSString * keyValue;
     NSString * objectValue;
     while ((keyValue = keyEnumerator.nextObject) && (objectValue = objectEnumerator.nextObject)) {
