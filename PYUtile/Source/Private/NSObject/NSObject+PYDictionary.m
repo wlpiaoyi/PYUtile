@@ -39,28 +39,22 @@
 }
 
 -(NSObject*) objectToDictionary{
-    return [self objectToDictionaryWithFliteries:nil];
+    return [self objectToDictionaryWithClass:nil];
 }
 
--(NSObject *) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries{
-    return [PYArchiveObject archvie:self clazz:nil deep:0 fliteries:fliteries];
+-(nullable NSObject*) objectToDictionaryWithClass:(nullable Class) clazz{
+    return [PYArchiveObject archvie:self clazz:clazz deep:0];
 }
 
 /**
  通过对象生成JSON
  */
 -(nullable NSObject*) objectToDictionaryWithDeepClass:(Class) deepClass{
-    return [self objectToDictionaryWithFliteries:nil deepClass:deepClass];
-}
-/**
- 通过对象生成JSON
- */
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(Class) deepClass{
     NSMutableDictionary *  result = [NSMutableDictionary new];
     Class clazz = [self class];
     while (true)  {
         if(clazz == [NSObject class]) break;
-        NSDictionary * dict = (NSDictionary *)[PYArchiveObject archvie:self clazz:clazz deep:0 fliteries:fliteries];
+        NSDictionary * dict = (NSDictionary *)[PYArchiveObject archvie:self clazz:clazz deep:0];
         if([dict isKindOfClass:[NSDictionary class]]){
             for (NSString * key in dict) {
                 result[key] = dict[key];

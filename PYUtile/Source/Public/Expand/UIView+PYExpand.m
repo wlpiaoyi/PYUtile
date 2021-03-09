@@ -195,7 +195,7 @@
     return [self drawViewWithBounds:bounds scale:[[UIScreen mainScreen] scale]];
 }
 -(UIImage * _Nullable) drawViewWithBounds:(CGRect) bounds scale:(short) scale{
-    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, .38);
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, scale);
     [self drawViewHierarchyInRect:bounds  afterScreenUpdates:NO];
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

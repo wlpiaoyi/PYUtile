@@ -167,6 +167,9 @@ kPNA unsigned int deep;
         [stringValue appendString:[PYXmlDocument TSZF_DICT_FR:xmlDom.string]];
         return;
     }
+    if([xmlDom.elementName isEqual:@"return"]){
+        NSLog(@"");
+    }
     [stringValue appendString:@"<"];
     [stringValue appendString:xmlDom.elementName];
     if(xmlDom.attributes.count){

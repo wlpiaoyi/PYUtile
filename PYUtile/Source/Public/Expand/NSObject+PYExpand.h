@@ -60,36 +60,41 @@ extern id _Nullable (^ _Nullable PYBlocktodictParsetStruct) (NSInvocation * _Non
 
 #pragma 数据对象化=========================================>
 /**
- 通过JSON初始化对象
+ @param dictionary
  */
-+(nullable instancetype) objectWithDictionary:(nonnull NSObject*) dictionary;
+#pragma mark 通过JSON初始化对象
++(nullable instancetype) objectWithDictionary:(nonnull NSObject *) dictionary;
+
 /**
- 通过JSON初始化对象
+ 支持的property类型有:Object对象 ,CGSize,CGPoint,CGRect,NSRange,UIEdgeInsets,CGVector,UIOffset,CLLocationCoordinate2D
+ @param dictionary
+ @param clazz
  */
-+(nullable id) objectWithDictionary:(nonnull NSObject*) dictionary clazz:(nonnull Class) clazz;
+#pragma mark 通过JSON初始化对象
++(nullable id) objectWithDictionary:(nonnull NSObject*) dictionary clazz:(nullable Class) clazz;
 #pragma 数据对象化=========================================<
 
 
 #pragma 归档对象=========================================>
-/**
- 通过对象生成JSON
- */
+
+#pragma mark 通过对象生成JSON
 -(nullable NSObject*) objectToDictionary;
 /**
- 通过对象生成JSON
+ 支持的property类型有:Object对象 ,CGSize,CGPoint,CGRect,NSRange,UIEdgeInsets,CGVector,UIOffset,CLLocationCoordinate2D
+ @param fliteries 过滤标识
+ @param deepClass 遍历深度标识
  */
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries;
-/**
- 通过对象生成JSON
- */
--(nullable NSObject*) objectToDictionaryWithDeepClass:(nullable Class) deepClass;
-/**
- 通过对象生成JSON
- #param fliteries 过滤标识
- #param deepClass 遍历深度标识
- */
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(nullable Class) deepClass;
+#pragma mark 通过对象生成JSON
+-(nullable NSObject*) objectToDictionaryWithClass:(nullable Class) clazz;
+
+
 #pragma 归档对象=========================================<
+
+/**
+ @param dictionary
+ */
+#pragma mark 通过dictionary解析出实体结构
++(nullable NSString *) dictionaryAnalysisForClass:(nonnull NSDictionary*) dictionary;
 
 
 #pragma 对象转化成表单==========================================>

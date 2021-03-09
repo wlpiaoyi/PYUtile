@@ -19,7 +19,8 @@
     [super viewDidLoad];
     UIView * view = [self.view viewWithTag:186332];
     [view py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-        make.width.py_constant(100);
+        make.top.left.right.py_constant(0);
+        make.height.py_constant(0);
     }];
     NSLayoutConstraint * lcw  = view.py_getAutolayoutWidth;
     NSLayoutConstraint * lcH  = view.py_getAutolayoutHeight;

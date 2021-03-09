@@ -119,7 +119,7 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 @end
 
 @implementation PYArchiveParse
-+(void) load{
++(void) initialize{
     static dispatch_once_t onceToken; dispatch_once(&onceToken, ^{
         __PY_OBJ_TO_DICT_CLASS = @[
                                    [NSString class]

@@ -10,92 +10,44 @@
 #import "pyutilea.h"
 #import <objc/runtime.h>
 #import "PYXml.h"
-@interface PYParseTest : NSObject<PYObjectParseProtocol>{
-@public
-    int ivarInt;
-    CGRect ivarRect;
-    NSString * ivarString;
-    PYParseTest * ivarTest;
-}
-
-kPNA int keyId;
-kPNA int keyNewVar;
-kPNA CGRect pRect;
-kPNSNA NSDate * date;
-kPNSNA NSString * keyDescription;
-kPNSNA PYParseTest * pTest;
-kPNSNA NSArray<PYParseTest *> * pTests;
-kPNSNA NSArray<NSArray<PYParseTest *> *> * pTestss;
-//kPNSNA NSArray * trainPassengers;
+#import "PYKeychain.h"
 
 
-kPNSNA PYParseTest * property_pTests;
-kPNSNA PYParseTest * property_pTestss;
-@end
+@interface ZLTLawModel : NSObject
 
-@interface SMEBudgetListParam : PYParseTest
+kPNSNA NSString * ldi;//    String    2001/10/27 00:00:00
+kPNSNA NSString * lato;//    String    中华人民共和国商标法(2001修正)第二十二条
+kPNSNA NSString * lao;//    String    中华人民共和国商标法(2001修正)第二十二条:注册商标需要改变其标志的，应当重新提出注册申请。
+kPNSNA NSString * lsd;//    String    1983/03/01 00:00:00
+kPNSNA NSString * ltio;//    String    中华人民共和国商标法(2001修正)
+kPNSNA NSString * cid;//   String    10048022001
 
-kPNSNA NSString * __remove_dict_obj;
-
-kPNA NSInteger pageIndex;//=DEFAULT_PAGE_INDEX;
-kPNA NSInteger pageSize;//=DEFAULT_PAGE_SIZE;
-
-kPNSNA NSArray<SMEBudgetListParam *> * params;
-kPNSNA SMEBudgetListParam * property_params;
-kPNSNA SMEBudgetListParam * param;
+kPNRNA NSString * locationPath;
 
 @end
 
-@implementation SMEBudgetListParam
-
--(instancetype) init{
-    self = [super init];
-    self.pageIndex = 1;
-    self.pageSize = 20;
-    self.__remove_dict_obj = @"444";
-    return self;
-}
-
-@end
-@implementation PYParseTest
-
-//-(nullable NSArray *) pyObjectGetKeysForParseValue{
-//    return @[@"keyNewVar",@"ketId"];
-//}
+@implementation ZLTLawModel
 @end
 
-NSTimer * timer;
-@interface AppDelegate (){
-//    PYNetworkReachabilityNotification * nrn;
-}
+@interface AppDelegate ()
+kPNSNA PYMotionNotification * motionNotify;
 @end
 
 @implementation AppDelegate
 
-- (int)test01:(int )v {
-    return 2 + v;
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-//    NSString * value = [@"http://qn.100csc.com/1603684533296-jāyh.png" pyEncodeToPercentEscapeString:@"!*'();@&=+$,%#[]"];
-//    NSString * arg = @"2020-10-14T15:00:35.000+00:00";//
-//    [arg dateFormateString:nil];
-//    [NSString matchArg:arg regex:@"^(\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}:\\d{2}:\\d{2})$"];
-//    NSString *  args  = @"<p dir=\"auto\" style=\"font-family:'Times New Roman';font-size:16px;\"><img src=\"http://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&f=JPEG?w=900&h=1350\" /><span style=\"color:#505050;\"><br />testtesttest<br /></span><a href=\"https://www.baidu.com\"><span style=\"color:#0000ee;text-decoration:underline;\">wewe</span></a><span style=\"color:#505050;\"><br />testtesttest2</span></p>\n";
-//    PYXmlDocument * doc =[PYXmlDocument instanceWithXmlString:args];
-    SMEBudgetListParam * params = [SMEBudgetListParam new];
-    params.keyId = 1;
-    params.params = @[[SMEBudgetListParam new]];
-    params.param = [SMEBudgetListParam new];
-    id subfix = [params objectToFormWithSuffix:@"" deepClass:[PYParseTest class]];
-    id obj = [params objectToDictionaryWithDeepClass:[PYParseTest class]];
-    params = [SMEBudgetListParam objectWithDictionary:obj];
-//    NSLog(doc.rootElement.stringValue);
+    
+    _motionNotify = [PYMotionNotification new];
+    [_motionNotify addListener:self];
+    id obj = [ZLTLawModel objectWithDictionary:@{
+        @"lato":@"中华人民共和国商标法(2019年修正)",
+        @"locationPath":@"法律法规/商标/中华人民共和国商标法(2019年修正).docx",
+    }];
 
     return YES;
 }
 
--(void) test{
+- (void)motionBeganWithEvent:(nullable UIEvent *)event{
     
 }
 - (void)applicationWillResignActive:(UIApplication *)application {

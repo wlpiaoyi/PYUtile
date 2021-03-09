@@ -74,4 +74,8 @@ kPNRNN PYXmlElement * rootElement;
  装换成只字符串
  */
 -(nullable NSString *) stringValue;
+
++(nullable NSString *) TSZF_DICT_TO:(nullable NSString *) string;
++(nullable NSString *) TSZF_DICT_FR:(nullable NSString *) string;
+
 @end

@@ -167,8 +167,12 @@ NSString * __PY_REGEX_MONEYCN = @"^(￥\\d{0,}\\.{0,1}\\d{1,})|(\\d{0,}\\.{0,1}\
 
 
 +(BOOL) matchArg:(NSString*) arg regex:(NSString*) regex{
-    NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    return [pred evaluateWithObject:arg];
+    @try {
+        NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        return [pred evaluateWithObject:arg];
+    } @catch (NSException *exception) {
+        return NO;
+    }
 }
 
 #warning 待定的功能

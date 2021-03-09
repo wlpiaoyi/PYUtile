@@ -38,7 +38,7 @@
     if(![fromObj.class isMemberForClazz:clazz]) return nil;
     if(![toObj.class isMemberForClazz:clazz]) return nil;
     
-    [PYArchiveObject iteratorWithObject:fromObj clazz:clazz userInfo:toObj blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull keyName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
+    [PYArchiveObject iteratorWithObject:fromObj clazz:clazz hasGoDeep:true userInfo:toObj blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull keyName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
         NSObject * fromObj = object;
         NSObject * toObj = userInfo;
         id value = [fromObj valueForKey:keyName];

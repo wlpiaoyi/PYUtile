@@ -36,7 +36,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     });
 }
 
-+(void) iteratorWithObject:(nonnull NSObject *) object clazz:(nullable Class) clazz userInfo:(nullable id) userInfo
++(void) iteratorWithObject:(nonnull NSObject *) object clazz:(nullable Class) clazz hasGoDeep:(BOOL) hasGoDeep userInfo:(nullable id) userInfo
      blockExcute:(void (^_Nonnull)(NSObject * object, NSString * filedName, const char * typeEncoding, id userInfo, BOOL isIvar)) blockExcute{
  
     unsigned int outCount;
@@ -107,7 +107,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             const char * typeEncoding = ivar_getTypeEncoding(ivar);
             blockExcute(object, ivarName, typeEncoding, userInfo, YES);
         }
-        
+        if(!hasGoDeep) return;
         clazz = class_getSuperclass(clazz);
         if(!clazz) return;
         if(clazz == [NSObject class]) return;
@@ -115,7 +115,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
         if(clazz == [UIView class]) return;
         if(clazz == [UIViewController class]) return;
         if([clazz isNativelibraryClass]) return;
-        [self  iteratorWithObject:object clazz:clazz userInfo:userInfo blockExcute:blockExcute];
+        [self iteratorWithObject:object clazz:clazz hasGoDeep:hasGoDeep userInfo:userInfo blockExcute:blockExcute];
     }
     @finally {
         free(properties);
@@ -123,11 +123,12 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     }
 }
 
-+(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
++(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep{
+    BOOL hasGoDeep = clazz ? NO : YES;
     id result = [self valueArchive:object clazz:clazz];// [self __PY_NSOBJECT_EXPAND_OBJ_PARSET:object CLASS:clazz];
     if(result) return result;
     
-    result = [self checkObject:object deep:deep fliteries:fliteries];// [self __PY_NSOBJECT_EXPAND_OBJ_CHECK:object DEEP:deep FILTERIRES:fliteries];
+    result = [self checkObject:object deep:deep];// [self __PY_NSOBJECT_EXPAND_OBJ_CHECK:object DEEP:deep FILTERIRES:fliteries];
     if(result) return result;
     if(!clazz) clazz = [object class];
     
@@ -139,7 +140,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             if ([PYArchiveParse canParset:value.class]){
                 value = [self valueArchive:value clazz:nil];// [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:value CLASS:clazz];
             }else{
-                value = [self archvie:value clazz:nil deep:deep++ fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:value CLAZZ:clazz DEEP:deep+1 FLITERIES:fliteries];
+                value = [self archvie:value clazz:nil deep:deep + 1]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:value CLAZZ:clazz DEEP:deep+1 FLITERIES:fliteries];
             }
             if(!value) continue;
             tempDict[key] = value;
@@ -155,21 +156,21 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
         NSMutableArray * tempArray = [NSMutableArray new];
         int tempDeep = deep + 1;
         for (id obj in (NSArray *)object) {
-            [tempArray addObject:[self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]];
+            [tempArray addObject:[self archvie:obj clazz:[obj class] deep:tempDeep]];
         }
         return tempArray;
     }else if([object isKindOfClass:[NSSet class]]){
         NSMutableSet * tempSet = [NSMutableSet new];
         int tempDeep = deep + 1;
         for (id obj in (NSSet *)object) {
-            [tempSet addObject:[self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]];
+            [tempSet addObject:[self archvie:obj clazz:[obj class] deep:tempDeep]];
         }
         return tempSet;
     }
     
     NSMutableDictionary *dict = [NSMutableDictionary new];
     kAssign(self);
-    [self iteratorWithObject:object clazz:clazz userInfo:dict blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull filedName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
+    [self iteratorWithObject:object clazz:clazz hasGoDeep:hasGoDeep userInfo:dict blockExcute:^(NSObject * _Nonnull object, NSString * _Nonnull filedName, const char * _Nonnull typeEncoding, id  _Nonnull userInfo, BOOL isIvar) {
         kStrong(self);
         NSRange range = [filedName rangeOfString:@"__remove_dict"];
         if(range.length == 13 && range.location == 0){
@@ -186,9 +187,9 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             if(!returnValue) return;
         }
         if(![PYArchiveParse canParset:[returnValue class]]){
-            returnValue = [self archvie:returnValue clazz:[PYArchiveParse classFromTypeEncoding:typeEncoding] deep:deep + 1 fliteries:fliteries];
+            returnValue = [self archvie:returnValue clazz:[PYArchiveParse classFromTypeEncoding:typeEncoding] deep:deep + 1];
         }
-        [self __PY_ARCHIVE_PARSE:returnValue dict:dict varName:filedName clazz:clazz deep:deep fliteries:fliteries];
+        [self __PY_ARCHIVE_PARSE:returnValue dict:dict varName:filedName clazz:clazz deep:deep];
     }];
     if(dict.count == 0){
         NSMutableString * key = [NSMutableString new];
@@ -199,12 +200,12 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     return dict;
 }
 
-+(void) __PY_ARCHIVE_PARSE:(nonnull id) returnValue dict:(nonnull NSDictionary *) dict varName:(nonnull NSString *) varName clazz:(nullable Class) clazz deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
++(void) __PY_ARCHIVE_PARSE:(nonnull id) returnValue dict:(nonnull NSDictionary *) dict varName:(nonnull NSString *) varName clazz:(nullable Class) clazz deep:(int) deep{
     if ([returnValue isKindOfClass:[NSArray class]]) {
         NSMutableArray * objs = [NSMutableArray new];
         for (id obj in (NSArray*)returnValue) {
             int tempDeep = deep + 1;
-            id value = [self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
+            id value = [self archvie:obj clazz:[obj class] deep:tempDeep]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
@@ -212,16 +213,16 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
         NSMutableArray * objs = [NSMutableArray new];
         for (NSObject * obj in (NSSet*)returnValue) {
             int tempDeep = deep + 1;
-            NSObject * value = [self archvie:obj clazz:[obj class] deep:tempDeep fliteries:fliteries]; // [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
+            NSObject * value = [self archvie:obj clazz:[obj class] deep:tempDeep]; // [NSObject __PY_OBJ_TO_DICT_WITH_OBJ:obj CLAZZ:[obj class] DEEP:deep+1 FLITERIES:fliteries];
             if(value)[objs addObject:value];
         }
         returnValue = objs;
     }else if ([returnValue isKindOfClass:[NSDictionary class]]) {
-        returnValue = [self archvie:returnValue clazz:nil deep:deep + 1 fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1 FLITERIES:fliteries];
+        returnValue = [self archvie:returnValue clazz:nil deep:deep + 1]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1 FLITERIES:fliteries];
     }else {
-        id tempValue = [self archvie:returnValue clazz:clazz deep:deep + 1 fliteries:fliteries]; // [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:returnValue CLASS:clazz];
+        id tempValue = [self archvie:returnValue clazz:clazz deep:deep + 1]; // [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:returnValue CLASS:clazz];
         if(tempValue) returnValue = tempValue;
-        else returnValue = [self archvie:returnValue clazz:nil deep:deep + 1 fliteries:fliteries]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1  FLITERIES:fliteries];
+        else returnValue = [self archvie:returnValue clazz:nil deep:deep + 1]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:returnValue CLAZZ:nil DEEP:deep+1  FLITERIES:fliteries];
     }
     if(!returnValue) return;
     [dict setValue:returnValue forKey:[PYArchiveParse parseVarToKey:varName]];
@@ -328,15 +329,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 }
 
 
-+(nullable NSObject *) checkObject:(NSObject *) object deep:(int) deep fliteries:(nullable NSArray<Class> *) fliteries{
-    
-    if(fliteries && fliteries.count > 0 && [fliteries containsObject:object.class]){
-        NSMutableString * key = [NSMutableString new];
-        [key appendString:[NSString stringWithUTF8String:PYObjectParsedictFailedKey]];
-        [key appendString:@"_fliteries"];
-        return @{key : [object description]};
-    }
-    
++(nullable NSObject *) checkObject:(NSObject *) object deep:(int) deep{
     if(deep > 10){
         NSMutableString * key = [NSMutableString new];
         [key appendString:[NSString stringWithUTF8String:PYObjectParsedictFailedKey]];

@@ -20,6 +20,12 @@ static PYMotionNotification * xPYMotionNotification;
 
 @end
 
+@implementation UIWindow(__PYHook)
+
+
+
+@end
+
 @implementation PYMotionNotification
 +(nonnull instancetype) instanceSingle{
     @synchronized(self) {

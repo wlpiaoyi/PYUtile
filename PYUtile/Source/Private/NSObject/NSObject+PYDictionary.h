@@ -32,7 +32,7 @@
  @param clazz
  */
 #pragma mark 通过JSON初始化对象
-+(nullable instancetype) objectWithDictionary:(nonnull NSObject *) dictionary clazz:(nullable Class) clazz;
++(nullable id) objectWithDictionary:(nonnull NSObject*) dictionary clazz:(nullable Class) clazz;
 #pragma 数据对象化=========================================<
 
 
@@ -40,25 +40,15 @@
 
 #pragma mark 通过对象生成JSON
 -(nullable NSObject*) objectToDictionary;
-
-/**
- @param fliteries 过滤标识
- */
-#pragma mark 通过对象生成JSON
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries;
-/**
- @param deepClass 遍历深度标识
- */
-#pragma mark 通过对象生成JSON
--(nullable NSObject*) objectToDictionaryWithDeepClass:(nullable Class) deepClass;
-
 /**
  支持的property类型有:Object对象 ,CGSize,CGPoint,CGRect,NSRange,UIEdgeInsets,CGVector,UIOffset,CLLocationCoordinate2D
  @param fliteries 过滤标识
  @param deepClass 遍历深度标识
  */
 #pragma mark 通过对象生成JSON
--(nullable NSObject*) objectToDictionaryWithFliteries:(nullable NSArray<Class> *) fliteries deepClass:(nullable Class) deepClass;
+-(nullable NSObject*) objectToDictionaryWithClass:(nullable Class) clazz;
+
+
 #pragma 归档对象=========================================<
 
 /**
