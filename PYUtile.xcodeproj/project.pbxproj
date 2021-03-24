@@ -215,6 +215,7 @@
 		15242A661DF6580100C361E4 /* PYOrientationNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYOrientationNotification.m; sourceTree = "<group>"; };
 		15242A731DF6592400C361E4 /* PYInvoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYInvoke.h; sourceTree = "<group>"; };
 		15242A741DF6592400C361E4 /* PYInvoke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYInvoke.m; sourceTree = "<group>"; };
+		1527234426097DCD0067CA81 /* Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
 		153B97741F1DE566000F007C /* PYXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYXml.h; sourceTree = "<group>"; };
 		153B97751F1DE566000F007C /* PYXml.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYXml.m; sourceTree = "<group>"; };
 		15422DB821E5B4A30038D09E /* PYArchiveParse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYArchiveParse.h; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 		15BFDEA21DF4FFF20044EDAA = {
 			isa = PBXGroup;
 			children = (
+				1527234426097DCD0067CA81 /* Location.gpx */,
 				15BFDEAD1DF4FFF20044EDAA /* PYUtile */,
 				15C5FACA1DF6688600FF2C75 /* pyutilea */,
 				15BFDEAC1DF4FFF20044EDAA /* Products */,
