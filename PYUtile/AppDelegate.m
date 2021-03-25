@@ -36,7 +36,8 @@ kPNSNA PYMotionNotification * motionNotify;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    NSString * str = [NSString stringWithContentsOfFile:@"/Users/wlpiaoyi/Documents/Source/iOS/PYUtile/Location.gpx" encoding:NSUTF8StringEncoding error:nil];
+    PYXmlDocument * doc = [PYXmlDocument instanceWithXmlString:str];
     _motionNotify = [PYMotionNotification new];
     [_motionNotify addListener:self];
     id obj = [ZLTLawModel objectWithDictionary:@{
