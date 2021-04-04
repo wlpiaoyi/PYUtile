@@ -8,12 +8,17 @@
 
 #import "UIView+PYAutolayout.h"
 #import "PYViewAutolayoutCenter.h"
+
+
 @interface PYConstraint()
 
+kPNRNA UIView * toItem;
 kPNAR CGFloat value;
 kPNAR BOOL isSafe;
-kPNRNA UIView * toItem;
 kPNAR BOOL isReversal;
+kPNA BOOL isInstall;
+
+kPNA PYConstraintMaker * maker;
 
 @end
 
@@ -128,6 +133,41 @@ kPNAR BOOL isReversal;
 @end
 
 @implementation UIView (PYAutolayoutSet)
+
+
+-(void) setPy_topRelation:(NSLayoutConstraint *)py_topRelation{
+    [self.superview removeConstraint:self.py_topRelation];
+}
+
+/**
+ * 获取top对其约束
+ */
+-(nullable NSLayoutConstraint *) py_topRelation{
+    NSArray<__kindof NSLayoutConstraint *> *constraints = self.superview.constraints;
+    for (NSLayoutConstraint * constraint in constraints) {
+        if(constraint.secondItem == self.superview  &&
+           constraint.firstItem == self &&
+           constraint.firstAttribute == NSLayoutAttributeTop){
+            return constraint;
+        }
+    }
+    return nil;
+}
+
+/**
+ * 获取top对其约束
+ */
+-(nullable NSLayoutConstraint *) py_getAutolayoutRelationSaftTop{
+    if (@available(iOS 11.0, *)) {
+        for (NSLayoutConstraint * constraint in self.superview.constraints) {
+            if(constraint.secondAnchor == self.superview.safeAreaLayoutGuide.topAnchor &&
+               constraint.firstItem == self){
+                return constraint;
+            }
+        }
+    }
+    return nil;
+}
 
 /**
  * 添加宽约束
@@ -316,6 +356,20 @@ kPNAR BOOL isReversal;
 
 @implementation UIView (PYAutolayoutGet)
 
+/**
+ * 获取top对其约束
+ */
+-(nullable NSLayoutConstraint *) py_topRelation{
+    NSArray<__kindof NSLayoutConstraint *> *constraints = self.superview.constraints;
+    for (NSLayoutConstraint * constraint in constraints) {
+        if(constraint.secondItem == self.superview  &&
+           constraint.firstItem == self &&
+           constraint.firstAttribute == NSLayoutAttributeTop){
+            return constraint;
+        }
+    }
+    return nil;
+}
 
 /**
  * 获取top对其约束
@@ -331,6 +385,7 @@ kPNAR BOOL isReversal;
     }
     return nil;
 }
+
 /**
  * 获取top对其约束
  */

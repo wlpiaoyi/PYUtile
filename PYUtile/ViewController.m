@@ -7,113 +7,71 @@
 //
 
 #import "ViewController.h"
-#import "pyutilea.h"
-#import "UIView+PYAutolayout.h"
+//#import "pyutilea.h"
+#import "UIView+PYLayoutGetSet.h"
+#import "UIView+PYExpand.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lcHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lcWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lcTralling;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lcBottom;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIView * view = [self.view viewWithTag:186332];
-    [view py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-        make.top.left.right.py_constant(0);
-        make.height.py_constant(0);
-    }];
-    NSLayoutConstraint * lcw  = view.py_getAutolayoutWidth;
-    NSLayoutConstraint * lcH  = view.py_getAutolayoutHeight;
-    NSLog(@"");
-//    NSArray<NSLayoutConstraint *> * lcs =[[self.view viewWithTag:186333] py_getAllLayoutContarint];
-//    
-//    NSLayoutConstraint * lc1 = [[self.view viewWithTag:186333] py_getAutolayoutRelationTop];
-//    NSLayoutConstraint * lc3 = [[self.view viewWithTag:186333] py_getAutolayoutRelationBottom];
-//    
-//    UIView * subView = [UIView new];
-//    subView.backgroundColor = [UIColor redColor];
-//    [self.view addSubview:subView];
-//    __block NSArray * obj;
-//    obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-////        make.left.right.py_inSafe(NO).py_constant(0);
-//        make.bottom.py_inArea(NO).py_constant(-20);
-////        make.height.py_constant(56);
-//        NSLog(@"11");
-//    }];
-//    threadJoinGlobal(^{
-//        [NSThread sleepForTimeInterval:2];
-//        
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                [subView py_removeAllLayoutContarint];
-//                UIView * item = [self.view viewWithTag:1860022];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.top.left.bottom.right.py_inArea(YES).py_constant(0);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//            NSLog(@"11");
-//        });
-//        [NSThread sleepForTimeInterval:2];
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                [subView py_removeAllLayoutContarint];
-//                UIView * item = [self.view viewWithTag:1860022];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.top.left.bottom.right.py_toReversal(YES).py_toItem(item).py_constant(0);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//            NSLog(@"11");
-//        });
-//        
-//        [NSThread sleepForTimeInterval:2];
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                [subView py_removeAllLayoutContarint];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.width.height.py_constant(100).centerX.centerY.py_constant(0);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//        });
-//        [NSThread sleepForTimeInterval:2];
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                UIView * item = [self.view viewWithTag:1860022];
-//                [subView py_removeAllLayoutContarint];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.width.height.py_toItem(item).py_constant(-20).centerX.centerY.py_toItem(item).py_constant(0);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//            NSLog(@"11");
-//        });
-//        [NSThread sleepForTimeInterval:2];
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                UIView * item = [self.view viewWithTag:1860022];
-//                [subView py_removeAllLayoutContarint];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.width.height.py_toItem(item).py_constant(0).centerX.centerY.py_constant(0);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//            NSLog(@"11");
-//        });
-//        [NSThread sleepForTimeInterval:2];
-//        threadJoinMain(^{
-//            [UIView animateWithDuration:.2 animations:^{
-//                [subView py_removeAllLayoutContarint];
-//                obj = [subView py_makeConstraints:^(PYConstraintMaker * _Nonnull make) {
-//                    make.top.left.bottom.right.py_inArea(YES).py_constant(30);
-//                }];
-//                [self.view layoutIfNeeded];
-//            }];
-//            NSLog(@"11");
-//        });
-//    });
+    UIView * view = [self.view viewWithTag:186001];
+    UIView * view2 = [self.view viewWithTag:186002];
+    UIView * view3 = [self.view viewWithTag:186003];
+    UIView * view4 = [self.view viewWithTag:186004];
+    UIView * view5 = [self.view viewWithTag:186005];
+    [view setCornerRadiusAndBorder:1 borderWidth:5 borderColor:[UIColor grayColor]];
+    [view2 setCornerRadiusAndBorder:1 borderWidth:5 borderColor:[UIColor greenColor]];
+    [view3 setCornerRadiusAndBorder:1 borderWidth:5 borderColor:[UIColor yellowColor]];
+    [view4 setCornerRadiusAndBorder:1 borderWidth:5 borderColor:[UIColor blueColor]];
+    [view5 setCornerRadiusAndBorder:1 borderWidth:5 borderColor:[UIColor orangeColor]];
+    NSArray<__kindof NSLayoutConstraint *> *constraints;
     
+    id top = view.py_layoutTopSafe;
+    id left = view.py_layoutLeadingSafe;
+    id bottom = view.py_layoutBottomSafe;
+    id rigt = view.py_layoutTrailingSafe;
+    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", top, left,bottom, rigt);
+    
+    top = view2.py_layoutTop;
+    left = view2.py_layoutLeading;
+    bottom = view2.py_layoutBottom;
+    rigt = view2.py_layoutTrailing;
+    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", top, left,bottom, rigt);
+    
+    id width = view3.py_layoutWidth;
+    id height = view3.py_layoutHeight;
+    id centerX = view3.py_layoutCenterX;
+    id centerY = view3.py_layoutCenterY;
+    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", width, height, centerX, centerY);
+    
+    width = view4.py_layoutEqulesWidth;
+    height = view4.py_layoutEqulesHeight;
+    NSLog(@"======================>\n%@,\n%@", width, height);
+    
+    id aspect = view5.py_layoutAspect;
+    NSLog(@"======================>\n%@",aspect);
+    
+    
+    constraints = [view py_removeAllLayout];
+    NSLog(@"======================>\n%@", constraints);
+    constraints = [view2 py_removeAllLayout];
+    NSLog(@"======================>\n%@", constraints);
+    constraints = [view3 py_removeAllLayout];
+    NSLog(@"======================>\n%@", constraints);
+    constraints = [view4 py_removeAllLayout];
+    NSLog(@"======================>\n%@", constraints);
+    constraints = [view5 py_removeAllLayout];
+    NSLog(@"======================>\n%@", constraints);
+    
+    NSLog(@"");
 }
 -(void) viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
