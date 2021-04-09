@@ -1,15 +1,15 @@
 //
-//  UIView+PYLayoutGetSet.m
+//  UIView+PYLayoutOption.m
 //  PYUtile
 //
 //  Created by wlpiaoyi on 2021/3/29.
 //  Copyright © 2021 wlpiaoyi. All rights reserved.
 //
 
-#import "UIView+PYLayoutGetSet.h"
+#import "UIView+PYLayoutOption.h"
 #import "PYConstraintMaker.h"
 
-@implementation UIView(PYLayoutGetSet)
+@implementation UIView(PYLayoutOption)
 
 -(nullable NSLayoutConstraint *) py_getLayoutRelationWithFirstAttribute:(NSLayoutAttribute) firstAttribute
                                                               firstAnchor:(nullable NSLayoutAnchor *)firstAnchor
@@ -27,16 +27,14 @@
             if(constraint.secondAttribute != secondAttribute) continue;
         }
         if(firstItem){
-            if(constraint.firstItem != firstItem) continue;
             if([firstItem isKindOfClass:[NSNull class]]){
-                if(constraint.firstItem == nil || constraint.firstItem == constraint.secondItem) continue;
-            }
+                if(constraint.firstItem != nil) continue;
+            }else if(constraint.firstItem != firstItem) continue;
         }
         if(secondItem){
-            if(constraint.secondItem != secondItem) continue;
             if([secondItem isKindOfClass:[NSNull class]]){
-                if(constraint.secondItem == nil || constraint.firstItem == constraint.secondItem) continue;
-            }
+                if(constraint.secondItem != nil) continue;
+            }else if(constraint.secondItem != secondItem) continue;
         }
         if(firstAnchor){
             if(constraint.firstAnchor != firstAnchor) continue;

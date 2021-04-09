@@ -13,7 +13,7 @@
 kPNRNA UIView * toItem;
 kPNAR CGFloat value;
 kPNAR BOOL isSafe;
-kPNAR BOOL isReversal;
+kPNAR BOOL isReversal NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, "derparecated method");
 kPNA BOOL isInstall;
 
 kPNA PYConstraintMaker * maker;

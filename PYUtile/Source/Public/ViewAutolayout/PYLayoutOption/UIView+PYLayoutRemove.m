@@ -134,42 +134,45 @@
     NSMutableArray<NSLayoutConstraint *> * lcs = [NSMutableArray new];
     NSLayoutConstraint * lc;
     
-    lc = [self py_removeLayoutTop];
-    if(lc) [lcs addObject:lc];
+    if (@available(iOS 11.0, *)) {
+        
+        lc = [self py_removeLayoutTopSafe];
+        if(lc) [lcs addObject:lc];
+        
+        lc = [self py_removeLayoutLeftSafe];
+        if(lc) [lcs addObject:lc];
+        
+        lc = [self py_removeLayoutBottomSafe];
+        if(lc) [lcs addObject:lc];
+        
+        lc = [self py_removeLayoutRightSafe];
+        if(lc) [lcs addObject:lc];
+        
+        lc = [self py_removeLayoutLeadingSafe];
+        if(lc) [lcs addObject:lc];
+        
+        lc = [self py_removeLayoutTrailingSafe];
+        if(lc) [lcs addObject:lc];
+        
+    }
     
-    lc = [self py_removeLayoutTopSafe];
+    lc = [self py_removeLayoutTop];
     if(lc) [lcs addObject:lc];
     
     lc = [self py_removeLayoutLeft];
     if(lc) [lcs addObject:lc];
     
-    lc = [self py_removeLayoutLeftSafe];
-    if(lc) [lcs addObject:lc];
-    
     lc = [self py_removeLayoutBottom];
-    if(lc) [lcs addObject:lc];
-    
-    lc = [self py_removeLayoutBottomSafe];
     if(lc) [lcs addObject:lc];
     
     lc = [self py_removeLayoutRight];
     if(lc) [lcs addObject:lc];
     
-    lc = [self py_removeLayoutRightSafe];
-    if(lc) [lcs addObject:lc];
-    
     lc = [self py_removeLayoutLeading];
-    if(lc) [lcs addObject:lc];
-    
-    lc = [self py_removeLayoutLeadingSafe];
     if(lc) [lcs addObject:lc];
     
     lc = [self py_removeLayoutTrailing];
     if(lc) [lcs addObject:lc];
-    
-    lc = [self py_removeLayoutTrailingSafe];
-    if(lc) [lcs addObject:lc];
-    
 
     lc = [self py_removeLayoutWidth];
     if(lc) [lcs addObject:lc];

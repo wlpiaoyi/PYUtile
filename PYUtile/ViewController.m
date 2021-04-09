@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 //#import "pyutilea.h"
-#import "UIView+PYLayoutGetSet.h"
+#import "UIView+PYLayoutOption.h"
 #import "UIView+PYExpand.h"
 
 @interface ViewController ()
@@ -38,38 +38,49 @@
     id left = view.py_layoutLeadingSafe;
     id bottom = view.py_layoutBottomSafe;
     id rigt = view.py_layoutTrailingSafe;
-    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", top, left,bottom, rigt);
+    NSMutableArray * array1 = [NSMutableArray new];
+    [array1 addObjectsFromArray:@[top, left,bottom, rigt]];
     
     top = view2.py_layoutTop;
     left = view2.py_layoutLeading;
     bottom = view2.py_layoutBottom;
     rigt = view2.py_layoutTrailing;
-    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", top, left,bottom, rigt);
+    [array1 addObjectsFromArray:@[top, left,bottom, rigt]];
     
     id width = view3.py_layoutWidth;
     id height = view3.py_layoutHeight;
     id centerX = view3.py_layoutCenterX;
     id centerY = view3.py_layoutCenterY;
-    NSLog(@"======================>\n%@,\n%@,\n%@,\n%@", width, height, centerX, centerY);
+     [array1 addObjectsFromArray:@[width, height, centerX, centerY]];
     
     width = view4.py_layoutEqulesWidth;
     height = view4.py_layoutEqulesHeight;
-    NSLog(@"======================>\n%@,\n%@", width, height);
+    [array1 addObjectsFromArray:@[width, height]];
     
     id aspect = view5.py_layoutAspect;
-    NSLog(@"======================>\n%@",aspect);
+    [array1 addObjectsFromArray:@[aspect]];
     
     
+    NSMutableArray * array2 = [NSMutableArray new];
     constraints = [view py_removeAllLayout];
-    NSLog(@"======================>\n%@", constraints);
+    [array2 addObjectsFromArray:constraints];
     constraints = [view2 py_removeAllLayout];
-    NSLog(@"======================>\n%@", constraints);
+    [array2 addObjectsFromArray:constraints];
     constraints = [view3 py_removeAllLayout];
-    NSLog(@"======================>\n%@", constraints);
+    [array2 addObjectsFromArray:constraints];
     constraints = [view4 py_removeAllLayout];
-    NSLog(@"======================>\n%@", constraints);
+    [array2 addObjectsFromArray:constraints];
     constraints = [view5 py_removeAllLayout];
-    NSLog(@"======================>\n%@", constraints);
+    [array2 addObjectsFromArray:constraints];
+    if(array1.count != array2.count){
+        NSLog(@"Error");
+    }
+    for (id obj in array1) {
+        if(![array2 containsObject:obj]){
+            NSLog(@"Error");
+        }
+    }
+    NSLog(@"%@", array1);
     
     NSLog(@"");
 }
