@@ -99,9 +99,9 @@
 +(BOOL) matchArg:(nonnull NSString*) arg regex:(nonnull NSString*) regex;
 
 
-- (nullable NSString *) pyEncodeToPercentEscapeString: (NSString *) input;
+- (nullable NSString *) pyEncodeToPercentEscapeString: (nullable NSString *) input;
 
-//- (NSString *) pyDecodeFromPercentEscapeString: (NSString *) input;
+- (nullable NSString *) pyDecodeFromPercentEscapeString;
 
 #pragma 字符串验证<=================================
 

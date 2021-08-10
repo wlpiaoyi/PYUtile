@@ -36,8 +36,8 @@ kPNSNA PYMotionNotification * motionNotify;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSString * str = [NSString stringWithContentsOfFile:@"/Users/wlpiaoyi/Documents/Source/iOS/PYUtile/Location.gpx" encoding:NSUTF8StringEncoding error:nil];
-    PYXmlDocument * doc = [PYXmlDocument instanceWithXmlString:str];
+    NSString * str = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'/><style>img{max-width:100%; max-height:'auto';};</style></header><p>他沟沟壑壑回家</p><img style=\"display: block; width: 100%; height: 100%; margin-left: auto; margin-right: auto; object-fit: cover;\" src='http://qn.100csc.com/oabsw6as2cr' alt=\"\"   />";//[NSString stringWithContentsOfFile:@"/Users/wlpiaoyi/Documents/Source/iOS/PYUtile/Location.gpx" encoding:NSUTF8StringEncoding error:nil];
+    PYXmlDocument * doc = [PYXmlDocument instanceWithXmlString:kFORMAT(@"<div>%@</div>", str)];
     _motionNotify = [PYMotionNotification new];
     [_motionNotify addListener:self];
     id obj = [ZLTLawModel objectWithDictionary:@{

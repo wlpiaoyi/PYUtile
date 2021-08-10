@@ -185,7 +185,8 @@
  从xib加载数据，序列号要和当前class名称相同
  */
 +(instancetype) loadXib{
-    UIView * owner = [[NSBundle  mainBundle] loadNibNamed:NSStringFromClass(self) owner:self options:nil] .lastObject;
+    NSString * name = NSStringFromClass(self);
+    UIView * owner = [[NSBundle  mainBundle] loadNibNamed:[name componentsSeparatedByString:@"."].lastObject owner:self options:nil] .lastObject;
     return owner;
 }
 -(UIImage * _Nullable) drawView{

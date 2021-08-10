@@ -37,6 +37,7 @@
 #import "PYUtile.h"
 #import "PYInvoke.h"
 #import "NSString+PYExpand.h"
+#import "NSObject+PYExpand.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -56,6 +57,7 @@
     if(property || ivar){
         char * chars = [self copyTypeEncodingFromeProperty:property ivar:ivar];
         *typeEncoding = chars;
+        
     } else {
         return NO;
     }
@@ -95,14 +97,28 @@
     id target = [[clazz alloc] init];
     if (!target)  return nil;
     
+    NSDictionary<NSString*, NSString *> * keyTypes = nil;
+    if(class_getClassMethod(clazz, @selector(pyObjectGetKeysType))){
+        keyTypes = [clazz performSelector:@selector(pyObjectGetKeysType)];
+    }
+    
     for (NSString *key in ((NSDictionary *)dictionary)) {
         NSString * fieldKey = [PYArchiveParse parseKeyToVar:key];
         id value = ((NSDictionary *)dictionary)[key];
         if (value == nil || value == [NSNull null]) {
             continue;
         }
+        bool hasFree = YES;
         char * typeEncoding = NULL;
-        if(![PYParseDictionary  copyTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
+        if(keyTypes.count > 0){
+            NSString * type = keyTypes[key];
+            if(type.length){
+                typeEncoding = type.UTF8String;
+                hasFree = NO;
+            }
+        }
+        
+        if((typeEncoding == NULL || strlen(typeEncoding) == 0) && ![PYParseDictionary  copyTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
             fieldKey = [NSString stringWithFormat:@"_%@",fieldKey];
             if(![PYParseDictionary  copyTypeEncoding:&typeEncoding clazz:clazz key:fieldKey]){
                 kPrintLogln("the class [%s] has no ivar [%s] type [%s]", NSStringFromClass(clazz).UTF8String, fieldKey.UTF8String, NSStringFromClass([value class]).UTF8String);
@@ -129,6 +145,10 @@
                         char * teding = [PYParseDictionary copyTypeEncodingFromeProperty:cproperty ivar:civar];
                         valuesClazz = [PYArchiveParse classFromTypeEncoding:teding];
                         free(teding);
+                    }
+
+                    if(valuesClazz == nil){
+                        valuesClazz  = keyTypes[[NSString stringWithFormat:@"ivar_%@",fieldKey]];
                     }
                     if(valuesClazz){
                         value = [self forEachValue:value clazz:valuesClazz];
@@ -193,7 +213,7 @@
                 }
             }
         } @finally {
-            free(typeEncoding);
+            if(hasFree) free(typeEncoding);
         }
     }
     

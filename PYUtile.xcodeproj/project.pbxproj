@@ -21,6 +21,7 @@
 		15422DC521E602830038D09E /* PYParseDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 15422DC021E5FA490038D09E /* PYParseDictionary.m */; };
 		155172D72619BD4F00DB8996 /* UIView+PYLayoutGet.m in Sources */ = {isa = PBXBuildFile; fileRef = 155172D62619BD4F00DB8996 /* UIView+PYLayoutGet.m */; };
 		155172DA2619BE7100DB8996 /* UIView+PYLayoutRemove.m in Sources */ = {isa = PBXBuildFile; fileRef = 155172D92619BE7100DB8996 /* UIView+PYLayoutRemove.m */; };
+		15790560262EC17200CCD37F /* UIView+PYLayoutOption.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15D14DD32611CDB600529822 /* UIView+PYLayoutOption.h */; };
 		15799F9B1F99DB54001A7276 /* PYXml.m in Sources */ = {isa = PBXBuildFile; fileRef = 153B97751F1DE566000F007C /* PYXml.m */; };
 		15799F9C1F99DB62001A7276 /* PYXml.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 153B97741F1DE566000F007C /* PYXml.h */; };
 		1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1583E1561DFA9F7000AD48EA /* UIResponder+Hook.m */; };
@@ -178,6 +179,7 @@
 			dstPath = "$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				15790560262EC17200CCD37F /* UIView+PYLayoutOption.h in CopyFiles */,
 				159960E5261D5E2100417C86 /* UIView+NoUse.h in CopyFiles */,
 				159960E6261D5E2100417C86 /* PYConstraintMaker.h in CopyFiles */,
 				159960E7261D5E2100417C86 /* PYConstraintCtx2.h in CopyFiles */,
@@ -753,7 +755,7 @@
 				TargetAttributes = {
 					15BFDEAA1DF4FFF20044EDAA = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = TVXZ27JPZ9;
+						DevelopmentTeam = 495X2M9F8V;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -1058,7 +1060,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = TVXZ27JPZ9;
+				DEVELOPMENT_TEAM = 495X2M9F8V;
 				INFOPLIST_FILE = PYUtile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1071,7 +1073,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = TVXZ27JPZ9;
+				DEVELOPMENT_TEAM = 495X2M9F8V;
 				INFOPLIST_FILE = PYUtile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

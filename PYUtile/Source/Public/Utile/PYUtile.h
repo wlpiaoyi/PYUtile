@@ -49,6 +49,7 @@ float boundsHeight(void);
 #pragma mark 线程操作
 void threadJoinMain(dispatch_block_t _Nullable block);
 void threadJoinGlobal(dispatch_block_t _Nullable block);
+void threadCreateGlobal(const char *_Nullable label, dispatch_block_t _Nullable block);
 ///<==================================
 
 //==================================>

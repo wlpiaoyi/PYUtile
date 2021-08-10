@@ -223,6 +223,16 @@ static NSMutableDictionary *colorNameCache = nil;
 						   alpha:MAX(a, alpha)];
 }
 
+-(nullable UIColor *) copyForChangeAlpha:(CGFloat) alpha{
+    CGFloat r,g,b,a;
+    if (![self red:&r green:&g blue:&b alpha:&a]) return nil;
+    
+    return [UIColor colorWithRed:r
+                           green:g
+                            blue:b
+                           alpha:alpha];
+}
+
 - (UIColor *)colorByDarkeningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
 	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use arithmatic operations");
 	

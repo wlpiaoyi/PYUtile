@@ -9,10 +9,13 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @protocol PYObjectParseProtocol <NSObject>
 
 @optional
 -(nullable NSArray *) pyObjectGetKeysForParseValue;
++(nullable NSDictionary *) pyObjectGetKeysType;
 
 @end
 

@@ -84,6 +84,8 @@
     
     NSLog(@"");
 }
+- (IBAction)onclickInit:(id)sender {
+}
 -(void) viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 }

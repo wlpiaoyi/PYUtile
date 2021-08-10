@@ -76,6 +76,11 @@ void threadJoinMain(dispatch_block_t block){
 void threadJoinGlobal(dispatch_block_t block){
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
+void threadCreateGlobal(const char *_Nullable label, dispatch_block_t _Nullable block){
+    dispatch_queue_t concurrentQueue = dispatch_queue_create(label, DISPATCH_QUEUE_CONCURRENT);
+    dispatch_async(concurrentQueue, block);
+}
+
 
 void lockForSemaphore(dispatch_block_t block, dispatch_semaphore_t semaphore){
     @try {

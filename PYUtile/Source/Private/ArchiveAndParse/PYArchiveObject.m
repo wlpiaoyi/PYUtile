@@ -45,6 +45,10 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     unsigned int outCount2;
     Ivar *ivars = class_copyIvarList(clazz, &outCount2);
     @try {
+        NSDictionary<NSString*, NSString *> * keyTypes = nil;
+        if([clazz conformsToProtocol:@protocol(PYObjectParseProtocol)] && class_getClassMethod(clazz, @selector(pyObjectGetKeysType))){
+            keyTypes = [clazz performSelector:@selector(pyObjectGetKeysType)];
+        }
         NSArray<NSString *> * parseKeys = nil;
         if([object conformsToProtocol:@protocol(PYObjectParseProtocol)]){
             if([object respondsToSelector:@selector(pyObjectGetKeysForParseValue)]){
@@ -104,7 +108,13 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             if(parseKeys && ![parseKeys containsObject:ivarName]){
                 continue;
             }
-            const char * typeEncoding = ivar_getTypeEncoding(ivar);
+            
+            char * typeEncoding = ivar_getTypeEncoding(ivar);
+            if(keyTypes.count > 0){
+                NSString * type = keyTypes[kFORMAT(@"%s",ivar_getName(ivar))];
+                if(type.length) typeEncoding = type.UTF8String;
+            }
+            NSLog(@"%s", typeEncoding);
             blockExcute(object, ivarName, typeEncoding, userInfo, YES);
         }
         if(!hasGoDeep) return;

@@ -42,7 +42,28 @@
     return [self objectToDictionaryWithClass:nil];
 }
 
+//-(nullable NSObject*) objectValueForVarName:(nullable NSString *) varName{
+//    Class clazz = [self class];
+//    NSDictionary<NSString*, NSString *> * keyTypes = nil;
+//    if(class_getClassMethod(clazz, @selector(pyObjectGetKeysType))){
+//        keyTypes = [clazz performSelector:@selector(pyObjectGetKeysType)];
+//    }
+//    char * typeEncoding = NULL;
+//    if(keyTypes.count > 0){
+//        NSString * type = keyTypes[varName];
+//        if(type.length){
+//            typeEncoding = type.UTF8String;
+//        }
+//    }
+//    if(typeEncoding == NULL){
+//        kPrintExceptionln("the class [%s]'s ivar [%s] has not found typeEncoding", NSStringFromClass(clazz).UTF8String, varName.UTF8String);
+//        return nil;
+//    }
+//    return [PYArchiveObject archvie:returnValue clazz:[PYArchiveParse classFromTypeEncoding:typeEncoding] deep: 1];
+//}
+
 -(nullable NSObject*) objectToDictionaryWithClass:(nullable Class) clazz{
+    
     return [PYArchiveObject archvie:self clazz:clazz deep:0];
 }
 
