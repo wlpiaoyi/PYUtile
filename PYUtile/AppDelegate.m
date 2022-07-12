@@ -13,39 +13,60 @@
 #import "PYKeychain.h"
 
 
-@interface ZLTLawModel : NSObject
-
-kPNSNA NSString * ldi;//    String    2001/10/27 00:00:00
-kPNSNA NSString * lato;//    String    中华人民共和国商标法(2001修正)第二十二条
-kPNSNA NSString * lao;//    String    中华人民共和国商标法(2001修正)第二十二条:注册商标需要改变其标志的，应当重新提出注册申请。
-kPNSNA NSString * lsd;//    String    1983/03/01 00:00:00
-kPNSNA NSString * ltio;//    String    中华人民共和国商标法(2001修正)
-kPNSNA NSString * cid;//   String    10048022001
-
-kPNRNA NSString * locationPath;
-
-@end
-
-@implementation ZLTLawModel
-@end
 
 @interface AppDelegate ()
-kPNSNA PYMotionNotification * motionNotify;
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSString * str = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'/><style>img{max-width:100%; max-height:'auto';};</style></header><p>他沟沟壑壑回家</p><img style=\"display: block; width: 100%; height: 100%; margin-left: auto; margin-right: auto; object-fit: cover;\" src='http://qn.100csc.com/oabsw6as2cr' alt=\"\"   />";//[NSString stringWithContentsOfFile:@"/Users/wlpiaoyi/Documents/Source/iOS/PYUtile/Location.gpx" encoding:NSUTF8StringEncoding error:nil];
-    PYXmlDocument * doc = [PYXmlDocument instanceWithXmlString:kFORMAT(@"<div>%@</div>", str)];
-    _motionNotify = [PYMotionNotification new];
-    [_motionNotify addListener:self];
-    id obj = [ZLTLawModel objectWithDictionary:@{
-        @"lato":@"中华人民共和国商标法(2019年修正)",
-        @"locationPath":@"法律法规/商标/中华人民共和国商标法(2019年修正).docx",
-    }];
-
+    
+    
+    
+    dispatch_queue_t myqueue1 = dispatch_queue_create("queue1", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_queue_t myqueue2 = dispatch_queue_create("queue2", DISPATCH_QUEUE_CONCURRENT);
+    void * p = NULL;
+    void (^block1) (void) = [self testBlock:&p];
+    NSInteger i = p;
+    void * p1 = i;
+//    NSString * a1 = (__bridge NSString *)(p1);
+//    NSString * b = (__bridge NSString *)();
+    NSLog(@"1");
+    //同步执行任务创建方法
+    dispatch_sync(myqueue1, ^{
+        void * p2 = i;
+//        NSString * a2 = (__bridge NSString *)(p2);
+        NSLog(@"1-1");
+        sleep(1);
+        NSLog(@"1-2");
+        block1();
+        
+    });
+    dispatch_sync(myqueue2, ^{
+        NSLog(@"2-1");
+        sleep(1);
+        NSLog(@"2-2");
+    });
+    NSLog(@"2");
+    //主队列的获取方法
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    //获取全局并发队列的方法
+    dispatch_queue_t queue1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     return YES;
+}
+
+-(void (^) (void)) testBlock:(void **) pointer{
+    NSObject * args = [NSObject new];
+    NSLog(@"args1,%@", args);
+    void * p1 = (__bridge void *)(args);
+    *pointer = p1;
+    kAssign(<#type#>)
+    __unsafe_unretained typeof(args) args2 = args;
+    void (^block1) (void) = ^(void){
+        NSLog(@"args2,%@", args2);
+    };
+    block1();
+    return block1;
 }
 
 - (void)motionBeganWithEvent:(nullable UIEvent *)event{

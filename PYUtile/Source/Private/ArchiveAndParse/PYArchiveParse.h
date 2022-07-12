@@ -16,10 +16,10 @@ extern char * _Nonnull __PY_ARCHIVE_DATE_PARSE;
 +(BOOL) canParset:(Class _Nullable ) clazz;
 +(int) clazz:(nonnull Class) clazz isMemberForClazz:(nonnull Class) memberForClazz;
 +(nullable NSObject *) parseValue:(nonnull NSObject *) value clazz:(nonnull Class) clazz;
-+(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz;
 +(nullable Class) classFromTypeEncoding:(const char *_Nullable) typeEncoding;
 +(nonnull NSString *) parseVarToKey:(nonnull NSString *) name;
 +(nonnull NSString *) parseKeyToVar:(nonnull NSString *) name;
++(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz object:(nullable id) object;
 
 @end
 

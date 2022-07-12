@@ -111,10 +111,18 @@
         bool hasFree = YES;
         char * typeEncoding = NULL;
         if(keyTypes.count > 0){
-            NSString * type = keyTypes[key];
-            if(type.length){
-                typeEncoding = type.UTF8String;
+            id obj = keyTypes[key];
+            if(obj){
                 hasFree = NO;
+                if([obj isKindOfClass:[NSString class]]){
+                    NSString * type = obj;
+                    if(type.length){
+                        typeEncoding = type.UTF8String;
+                    }
+                }else{
+                    Class clazz = obj;
+                    typeEncoding = kFORMAT(@"@\"%@\"",NSStringFromClass(clazz)).UTF8String;
+                }
             }
         }
         
@@ -158,7 +166,10 @@
                 }else if([PYArchiveParse canParset:cClazz]){
                     value = [PYArchiveParse parseValue:value clazz:cClazz];
                 }else{
-                    Class  cClazz = NSClassFromString([[[NSString stringWithUTF8String:typeEncoding] substringToIndex:tedl-1] substringFromIndex:2]);
+                    
+                    NSString * clazzName = [NSString stringWithUTF8String:typeEncoding];
+                    clazzName = [clazzName substringWithRange:NSMakeRange(2, clazzName.length - 3)];
+                    Class  cClazz = NSClassFromString(clazzName);
                     value = [self instanceClazz:cClazz dictionary:value];
                 }
             }else if((typeEncoding[0] == '{' && typeEncoding[tedl-1] == '}')){//结构体赋

@@ -15,6 +15,7 @@
 
 @optional
 -(nullable NSArray *) pyObjectGetKeysForParseValue;
+-(nullable id) pyObjectArchiveWithValue:(nonnull NSObject *) value clazz:(nullable Class) clazz returnValue:(nullable id) returnValue;
 +(nullable NSDictionary *) pyObjectGetKeysType;
 
 @end

@@ -14,6 +14,7 @@
 #import "NSDictionary+PYExpand.h"
 #import "NSData+PYExpand.h"
 #import "NSDate+PYExpand.h"
+#import "NSObject+PYExpand.h"
 
 #pragma 日期装换成秒
 char * __PY_ARCHIVE_DATE_PARSE_NUMBERX1 = "_date_to_numberx1";
@@ -118,6 +119,23 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 }
 @end
 
+
+@implementation UIImage(__PY_ARC_PAR)
++(NSObject *) __PY_PARSE:(NSObject *) value{
+    if(value == nil) return nil;
+    if([value isKindOfClass:[UIImage class]]){
+        UIImage * image = value;
+        return UIImagePNGRepresentation(image);
+    }
+    if([value isKindOfClass:[NSData class]]){
+        NSData * data = value;
+        return [UIImage imageWithData:data];
+    }
+    kPrintExceptionln("value:%s can't parset to %s", [value description].UTF8String, NSStringFromClass(self).UTF8String);
+    return nil;
+}
+@end
+
 @implementation PYArchiveParse
 +(void) initialize{
     static dispatch_once_t onceToken; dispatch_once(&onceToken, ^{
@@ -128,6 +146,7 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
                                    ,[NSData class]
                                    ,[NSURL class]
                                    ,[NSValue class]
+                                   ,[UIImage class]
                                    ];
         __PY_PARSE_VAR_TO_KEY = @{
                                   @"keyId":@"id",
@@ -177,13 +196,15 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
         returnValue = [NSData __PY_PARSE:value];
     }else if([self clazz:clazz isMemberForClazz:[NSURL class]]){
         returnValue = [NSURL __PY_PARSE:value];
+    }else if([self clazz:clazz isMemberForClazz:[UIImage class]]){
+        returnValue = [UIImage __PY_PARSE:value];
     }else{
         kPrintExceptionln("value:%s type:%s exception", [value description].UTF8String, NSStringFromClass([value class]).UTF8String);
     }
     return returnValue;
 }
 
-+(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz{
++(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz object:(nullable id) object{
     if(value == nil) return nil;
     if (![PYArchiveParse canParset:value.class]) return nil;
     NSObject * returnValue = nil;
@@ -205,7 +226,13 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
             returnValue = [NSData __PY_PARSE:value];
         }else if([self clazz:clazz isMemberForClazz:[NSURL class]]){
             returnValue = [NSURL __PY_PARSE:value];
+        }else if([self clazz:clazz isMemberForClazz:[UIImage class]]){
+            returnValue = [UIImage __PY_PARSE:value];
         }else returnValue = value;
+    }
+    if([[object class] conformsToProtocol:@protocol(PYObjectParseProtocol)] && [object respondsToSelector:@selector(pyObjectArchiveWithValue:clazz:returnValue:)]){
+        id<PYObjectParseProtocol> protocol = object;
+        returnValue = [protocol pyObjectArchiveWithValue:value clazz:clazz returnValue:returnValue];
     }
     return returnValue;
 }
@@ -213,7 +240,9 @@ NSDictionary * __PY_PARSE_KEY_TO_VAR_HEAD;
 +(nullable Class) classFromTypeEncoding:(const char *) typeEncoding{
     size_t tedl = strlen(typeEncoding);
     if(tedl > 3 && typeEncoding[0] == '@' && typeEncoding[1] == '\"' && typeEncoding[tedl-1] == '\"'){
-        return NSClassFromString([[NSString stringWithUTF8String:typeEncoding] substringWithRange:NSMakeRange(2, tedl-3)]);
+        NSString * clazzName = [NSString stringWithUTF8String:typeEncoding];
+        clazzName = [clazzName substringWithRange:NSMakeRange(2, clazzName.length - 3)];
+        return NSClassFromString(clazzName);
     }
     return nil;
 }

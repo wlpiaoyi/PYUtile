@@ -13,16 +13,16 @@ void * PYKeyboardNotifyPointerContextPointer = &PYKeyboardNotifyPointerContextPo
 
 @implementation UIResponder(PYKeyboard)
 -(void) addPYKeyboroard_pointerContext{
-    PYKeyboardNotifyPointerContext * rkpc = self.pykeyboroard_pointerContext;
-    if(rkpc) return;
-    rkpc = [[PYKeyboardNotifyPointerContext alloc] initWithResponder:self];
-    objc_setAssociatedObject(self, PYKeyboardNotifyPointerContextPointer, rkpc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [[PYKeyboardNotificationObject shareObject] addNoitfyContext:rkpc];
+//    PYKeyboardNotifyPointerContext * rkpc = self.pykeyboroard_pointerContext;
+//    if(rkpc) return;
+//    rkpc = [[PYKeyboardNotifyPointerContext alloc] initWithResponder:self];
+//    objc_setAssociatedObject(self, PYKeyboardNotifyPointerContextPointer, rkpc, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    [[PYKeyboardNotificationObject shareObject] addNoitfyContext:rkpc];
 }
 -(void) removePYKeyboroard_pointerContext{
-    PYKeyboardNotifyPointerContext * rkpc = self.pykeyboroard_pointerContext;
-    if(!rkpc) return;
-    [[PYKeyboardNotificationObject shareObject] removeNoitfyContext:rkpc];
+//    PYKeyboardNotifyPointerContext * rkpc = self.pykeyboroard_pointerContext;
+//    if(!rkpc) return;
+//    [[PYKeyboardNotificationObject shareObject] removeNoitfyContext:rkpc];
 }
 -(PYKeyboardNotifyPointerContext * _Nonnull) pykeyboroard_pointerContext{
     PYKeyboardNotifyPointerContext * rkpc = objc_getAssociatedObject(self, PYKeyboardNotifyPointerContextPointer);

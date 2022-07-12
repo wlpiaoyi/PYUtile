@@ -34,10 +34,10 @@
  @showEnd 键盘显示结束
  */
 +(BOOL)setKeyboardNotificationShowWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
-  [responder addPYKeyboroard_pointerContext];
-  responder.pykeyboroard_pointerContext.showBeginKeyboarAnimation = begin;
-  responder.pykeyboroard_pointerContext.showDoingKeyboarAnimation = doing;
-  responder.pykeyboroard_pointerContext.showEndKeyboarAnimation = end;
+//  [responder addPYKeyboroard_pointerContext];
+//  responder.pykeyboroard_pointerContext.showBeginKeyboarAnimation = begin;
+//  responder.pykeyboroard_pointerContext.showDoingKeyboarAnimation = doing;
+//  responder.pykeyboroard_pointerContext.showEndKeyboarAnimation = end;
     return true;
 }
 /**
@@ -48,10 +48,10 @@
  @showEnd 键盘隐藏结束
  */
 +(BOOL)setKeyboardNotificationHiddenWithResponder:(nonnull UIResponder*) responder begin:(nullable BlockKeyboardAnimatedBE) begin doing:(nullable BlockKeyboardAnimatedDoing) doing end:(nullable BlockKeyboardAnimatedBE) end{
-    [responder addPYKeyboroard_pointerContext];
-    responder.pykeyboroard_pointerContext.hiddenBeginKeyboarAnimation = begin;
-    responder.pykeyboroard_pointerContext.hiddenDoingKeyboarAnimation = doing;
-    responder.pykeyboroard_pointerContext.hiddenEndKeyboarAnimation = end;
+//    [responder addPYKeyboroard_pointerContext];
+//    responder.pykeyboroard_pointerContext.hiddenBeginKeyboarAnimation = begin;
+//    responder.pykeyboroard_pointerContext.hiddenDoingKeyboarAnimation = doing;
+//    responder.pykeyboroard_pointerContext.hiddenEndKeyboarAnimation = end;
     return true;
 }
 /**

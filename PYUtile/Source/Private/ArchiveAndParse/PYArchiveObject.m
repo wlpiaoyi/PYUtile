@@ -135,7 +135,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 
 +(NSObject*) archvie:(nonnull NSObject *) object clazz:(nullable Class) clazz deep:(int) deep{
     BOOL hasGoDeep = clazz ? NO : YES;
-    id result = [self valueArchive:object clazz:clazz];// [self __PY_NSOBJECT_EXPAND_OBJ_PARSET:object CLASS:clazz];
+    id result = [self valueArchive:object clazz:clazz object:object];// [self __PY_NSOBJECT_EXPAND_OBJ_PARSET:object CLASS:clazz];
     if(result) return result;
     
     result = [self checkObject:object deep:deep];// [self __PY_NSOBJECT_EXPAND_OBJ_CHECK:object DEEP:deep FILTERIRES:fliteries];
@@ -148,7 +148,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
             NSObject * value = ((NSDictionary *)object)[key];
             if(!value) continue;
             if ([PYArchiveParse canParset:value.class]){
-                value = [self valueArchive:value clazz:nil];// [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:value CLASS:clazz];
+                value = [self valueArchive:value clazz:nil object:object];// [NSObject __PY_NSOBJECT_EXPAND_OBJ_PARSET:value CLASS:clazz];
             }else{
                 value = [self archvie:value clazz:nil deep:deep + 1]; //[NSObject __PY_OBJ_TO_DICT_WITH_OBJ:value CLAZZ:clazz DEEP:deep+1 FLITERIES:fliteries];
             }
@@ -320,7 +320,7 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
     if(!returnValue) return nil;
     Class clazz = [PYArchiveParse classFromTypeEncoding:typeEncoding];
     id value = returnValue;
-    if(!(returnValue = [PYArchiveObject valueArchive:returnValue clazz:clazz])){
+    if(!(returnValue = [PYArchiveObject valueArchive:returnValue clazz:clazz object:object])){
         return value;
     }
     [dict setObject:returnValue forKey:[PYArchiveParse parseVarToKey:varName]];
@@ -328,14 +328,14 @@ id _Nullable (^ _Nullable PYBlockValueParsetoObject) (NSObject * _Nonnull value,
 }
 
 
-+ (NSObject * _Nullable)extracted:(Class  _Nullable __unsafe_unretained)clazz value:(NSObject * _Nonnull)value {
-    return [PYArchiveParse valueArchive:value clazz:clazz];
++ (NSObject * _Nullable)extracted:(Class  _Nullable __unsafe_unretained)clazz value:(NSObject * _Nonnull)value object:(nullable id) object{
+    return [PYArchiveParse valueArchive:value clazz:clazz object:object];
 }
 
-+(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz{
++(nullable NSObject *) valueArchive:(nonnull NSObject *) value clazz:(nullable Class) clazz object:(nullable id) object{
     NSObject * returnValue = nil;
     if(PYBlockValueParsetoObject && (returnValue = PYBlockValueParsetoObject(value, clazz))) return returnValue;
-    return [self extracted:clazz value:value];
+    return [self extracted:clazz value:value object:object];
 }
 
 
