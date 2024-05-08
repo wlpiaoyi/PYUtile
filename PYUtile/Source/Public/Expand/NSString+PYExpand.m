@@ -8,7 +8,7 @@
 
 #import "NSString+PYExpand.h"
 #import "NSString+__PY_Match.h"
-#import "py_data_function.h"
+#import "PYDataFunction.h"
 
 static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
 #pragma clang diagnostic push
@@ -127,14 +127,13 @@ static inline int py_str_compare_min(int a, int b) { return a < b ? a : b; }
  10001
  */
 -(NSInteger) toInteger{
-    
     if(self.length == 0) return 0;
     if(self.length > 2){
         NSString * head = [self substringWithRange:NSMakeRange(0, 2)];
         if([head isEqual:@"0x"]){
-            return py_data_16_to_10(self.uppercaseString.UTF8String);
+            return [PYDataFunction data16To10:self.uppercaseString.UTF8String];
         }else if([head isEqual:@"0b"]){
-            return py_data_2_to_10(self.uppercaseString.UTF8String);
+            return [PYDataFunction data2To10:self.uppercaseString.UTF8String];
         }
     }
     return self.integerValue;

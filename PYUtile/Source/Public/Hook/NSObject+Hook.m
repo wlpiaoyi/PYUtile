@@ -10,6 +10,8 @@
 #import "PYUtile.h"
 #import "PYInvoke.h"
 
+static NSMutableDictionary<NSString *, id> * RETAIN_OBJS;
+
 
 @implementation NSObject(Hook)
 
@@ -40,7 +42,7 @@
     return true;
 }
 
-+(BOOL) hookInstanceOriginalSel:(nonnull SEL) originalSel exchangeSel:(nonnull SEL) exchangeSel{
++(BOOL) hookInstanceOriginalSel:(nonnull SEL) originalSel exchangeSel:(nonnull SEL) exchangeSel{	
     IMP exchangeIMP = class_getMethodImplementation(self, exchangeSel);
     IMP originalIMP = class_getMethodImplementation(self, originalSel);
     IMP gmf = (IMP)_objc_msgForward;
@@ -103,7 +105,16 @@
 
 #pragma hook实例方法，使用block替换原方法，使用invoke执行原方法====>
 +(BOOL) hookInstanceMethodWithSel:(nonnull SEL) originalSel block:(nonnull id) exchangeBlock{
-    Method  originalMethod = class_getInstanceMethod(self, originalSel);
+    NSString * key = kFORMAT(@"%@,%@", NSStringFromClass([self class]), NSStringFromSelector(originalSel));
+    if(RETAIN_OBJS == nil){
+        @synchronized ([UISlider class]) {
+            if(RETAIN_OBJS == nil){
+                RETAIN_OBJS = [NSMutableDictionary dictionary];
+            }
+        }
+    }
+    [RETAIN_OBJS removeObjectForKey:key];
+    Method originalMethod = class_getInstanceMethod(self, originalSel);
     IMP exchangeImp = imp_implementationWithBlock(exchangeBlock);
     const char * types = method_getTypeEncoding(originalMethod);
     NSString * methodName = NSStringFromSelector(originalSel);
@@ -116,9 +127,12 @@
         kPrintErrorln("(%s) add method (%s) failed", NSStringFromClass(self).UTF8String, sel_getName(exchangeSel));
         return NO;
     }
-    return [self hookInstanceOriginalSel:originalSel exchangeSel:exchangeSel];
-    
+    if([self hookInstanceOriginalSel:originalSel exchangeSel:exchangeSel]){
+        [RETAIN_OBJS setValue:exchangeBlock forKey:key];
+        return true;
+    }else return false;
 }
+
 
 - (void) invokeOrginalWithSel:(nonnull SEL) originalSel returnValue:(nullable void*) returnValue params:(nullable void*) param,...NS_REQUIRES_NIL_TERMINATION{
     id target = self;

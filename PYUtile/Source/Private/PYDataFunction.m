@@ -1,15 +1,16 @@
 //
-//  py_data_function.c
+//  PYDataFunction.m
 //  PYUtile
 //
-//  Created by wlpiaoyi on 2019/2/10.
-//  Copyright © 2019 wlpiaoyi. All rights reserved.
+//  Created by piaoyi wl on 2024/4/30.
+//  Copyright © 2024 wlpiaoyi. All rights reserved.
 //
 
-#include "py_data_function.h"
-#include <string.h>
+#import "PYDataFunction.h"
 
-long py_data_16_to_10(const char * value){
+@implementation PYDataFunction
+
++(long) data16To10:(const char *) value{
     size_t length = strlen(value);
     if(length <= 2) return 0;
     if(value[0] != '0' || value[1] != 'X') return 0;
@@ -27,7 +28,8 @@ long py_data_16_to_10(const char * value){
     return integer;
 }
 
-long py_data_2_to_10(const char * value){
+
++(long) data2To10:(const char *) value{
     size_t length = strlen(value);
     if(length <= 2) return 0;
     if(value[0] != '0' || value[1] != 'B') return 0;
@@ -42,3 +44,7 @@ long py_data_2_to_10(const char * value){
     }
     return integer;
 }
+
+
+
+@end

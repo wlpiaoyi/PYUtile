@@ -139,9 +139,7 @@
 		15DB05B824DA4AEA00EF5CE4 /* PYConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DB05B724DA4AEA00EF5CE4 /* PYConstraintMaker.m */; };
 		15DB05C124DA821800EF5CE4 /* PYAutolayoutUtilites.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FB8C2B24DA48AF005F0F8D /* PYAutolayoutUtilites.h */; };
 		15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
-		15DB17431DF6935700182429 /* py_hook_encode_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 15DB171E1DF687AB00182429 /* py_hook_encode_type.c */; };
 		15E4FB04221021BA001EBCAF /* py_data_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 15E4FB03221021BA001EBCAF /* py_data_function.c */; };
-		15E4FB0522102522001EBCAF /* py_data_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 15E4FB03221021BA001EBCAF /* py_data_function.c */; };
 		15FA7FC6227EB327007C484E /* PYUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC0227EB327007C484E /* PYUncaughtExceptionHandler.m */; };
 		15FA7FC7227EB327007C484E /* PYUtile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FC3227EB327007C484E /* PYUtile.m */; };
 		15FA7FD3227EB357007C484E /* NSObject+PYCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA7FCE227EB357007C484E /* NSObject+PYCopy.m */; };
@@ -160,6 +158,10 @@
 		15FCA4EA239654CE008E4E96 /* UIButton+PYExpand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */; };
 		15FCA4EB239656E0008E4E96 /* UIButton+PYExpand.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */; };
 		15FCA4EC239656EF008E4E96 /* UIButton+PYExpand.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 15FCA4E8239654CD008E4E96 /* UIButton+PYExpand.h */; };
+		457C9E732BE081BB00E31D56 /* PYDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 457C9E722BE081BB00E31D56 /* PYDataFunction.m */; };
+		457C9E742BE082CA00E31D56 /* PYHookEncodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AC0B042BDDE6580034FDE0 /* PYHookEncodeType.m */; };
+		457C9E752BE082CA00E31D56 /* PYDataFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 457C9E722BE081BB00E31D56 /* PYDataFunction.m */; };
+		45AC0B052BDDE6580034FDE0 /* PYHookEncodeType.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AC0B042BDDE6580034FDE0 /* PYHookEncodeType.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -349,6 +351,10 @@
 		15FB8C2B24DA48AF005F0F8D /* PYAutolayoutUtilites.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYAutolayoutUtilites.h; sourceTree = "<group>"; };
 		15FCA4E8239654CD008E4E96 /* UIButton+PYExpand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+PYExpand.h"; sourceTree = "<group>"; };
 		15FCA4E9239654CE008E4E96 /* UIButton+PYExpand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+PYExpand.m"; sourceTree = "<group>"; };
+		457C9E712BE081BB00E31D56 /* PYDataFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYDataFunction.h; sourceTree = "<group>"; };
+		457C9E722BE081BB00E31D56 /* PYDataFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYDataFunction.m; sourceTree = "<group>"; };
+		45AC0B032BDDE6580034FDE0 /* PYHookEncodeType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYHookEncodeType.h; sourceTree = "<group>"; };
+		45AC0B042BDDE6580034FDE0 /* PYHookEncodeType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYHookEncodeType.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -410,6 +416,8 @@
 				155B965A21EDBE1D004AFEF2 /* Hook */,
 				15422DB721E5B3C00038D09E /* ArchiveAndParse */,
 				15E4FB02221021BA001EBCAF /* py_data_function.h */,
+				457C9E712BE081BB00E31D56 /* PYDataFunction.h */,
+				457C9E722BE081BB00E31D56 /* PYDataFunction.m */,
 				15E4FB03221021BA001EBCAF /* py_data_function.c */,
 			);
 			path = Private;
@@ -435,6 +443,8 @@
 				15B13E2622927AC20063AA74 /* NSObject+__PYHook_Private.m */,
 				15DB171E1DF687AB00182429 /* py_hook_encode_type.c */,
 				15DB171F1DF687AB00182429 /* py_hook_encode_type.h */,
+				45AC0B032BDDE6580034FDE0 /* PYHookEncodeType.h */,
+				45AC0B042BDDE6580034FDE0 /* PYHookEncodeType.m */,
 			);
 			path = Hook;
 			sourceTree = "<group>";
@@ -839,6 +849,7 @@
 				15BFDEB61DF4FFF20044EDAA /* ViewController.m in Sources */,
 				15BFDEB31DF4FFF20044EDAA /* AppDelegate.m in Sources */,
 				15BFDF0F1DF5034A0044EDAA /* EXTScope.m in Sources */,
+				45AC0B052BDDE6580034FDE0 /* PYHookEncodeType.m in Sources */,
 				15B11B23232216D000CB11FF /* PYKeychain.m in Sources */,
 				1583E1571DFA9F7000AD48EA /* UIResponder+Hook.m in Sources */,
 				15FA7FD3227EB357007C484E /* NSObject+PYCopy.m in Sources */,
@@ -873,6 +884,7 @@
 				15FCA4EA239654CE008E4E96 /* UIButton+PYExpand.m in Sources */,
 				159960E0261D563D00417C86 /* PYConstraintCtx2.m in Sources */,
 				15CECCA7228BAE6C008173E0 /* NSObject+Hook.m in Sources */,
+				457C9E732BE081BB00E31D56 /* PYDataFunction.m in Sources */,
 				15242A6C1DF6580100C361E4 /* PYOrientationNotification.m in Sources */,
 				15422DBA21E5B4A30038D09E /* PYArchiveParse.m in Sources */,
 				15DB17201DF687AB00182429 /* py_hook_encode_type.c in Sources */,
@@ -887,6 +899,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				457C9E742BE082CA00E31D56 /* PYHookEncodeType.m in Sources */,
+				457C9E752BE082CA00E31D56 /* PYDataFunction.m in Sources */,
 				159960EA261D5E3500417C86 /* UIView+NoUse.m in Sources */,
 				159960EB261D5E3500417C86 /* PYConstraintMaker.m in Sources */,
 				159960EC261D5E3500417C86 /* PYConstraintCtx2.m in Sources */,
@@ -908,13 +922,11 @@
 				15FA7FD9227EB375007C484E /* NSObject+PYDictionary.m in Sources */,
 				15FA7FDA227EB375007C484E /* NSObject+PYForm.m in Sources */,
 				15185D282269DF860009CD7A /* PYObjectCopy.m in Sources */,
-				15E4FB0522102522001EBCAF /* py_data_function.c in Sources */,
 				15422DC321E602830038D09E /* PYArchiveParse.m in Sources */,
 				15422DC421E602830038D09E /* PYArchiveObject.m in Sources */,
 				15422DC521E602830038D09E /* PYParseDictionary.m in Sources */,
 				15799F9B1F99DB54001A7276 /* PYXml.m in Sources */,
 				1583E1581DFA9FA400AD48EA /* UIResponder+Hook.m in Sources */,
-				15DB17431DF6935700182429 /* py_hook_encode_type.c in Sources */,
 				15C5FB391DF66C5200FF2C75 /* PYGraphicsDraw.m in Sources */,
 				15C5FB3A1DF66C5200FF2C75 /* PYGraphicsThumb.m in Sources */,
 				15C5FB2E1DF66A8300FF2C75 /* PYViewAutolayoutCenter.m in Sources */,
@@ -1099,6 +1111,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = S4NUSJ3KDJ;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -8,7 +8,9 @@
 
 #import "PYInvoke.h"
 #import <objc/runtime.h>
-#import "py_hook_encode_type.h"
+//#import "py_hook_encode_type.h"
+#import "PYHookEncodeType.h"
+
 
 NSArray<NSString *> * PYInvokeRemoveIvarNames;
 
@@ -238,9 +240,11 @@ NSArray<NSString *> * PYInvokeRemoveIvarNames;
         index++;
     }
     if(index > 0){
-        _encodeType = py_copy_chars_m(encodeType, index, strlen(encodeType));
+        _encodeType = [PYHookEncodeType copyChars:encodeType startIndex:index endIndex:strlen(encodeType)];
+//        _encodeType = py_copy_chars_m(encodeType, index, strlen(encodeType));
     }else{
-        _encodeType = py_copy_chars_m(encodeType, -1, -1);
+        _encodeType = [PYHookEncodeType copyChars:encodeType startIndex:-1 endIndex:-1];
+//        _encodeType = py_copy_chars_m(encodeType, -1, -1);
     }
     if(strcasecmp(_encodeType, @encode(void)) == 0){
         type = "Void";
