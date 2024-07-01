@@ -366,8 +366,16 @@ static NSMutableDictionary *colorNameCache = nil;
 // Returns a UIColor by scanning the string for a hex number and passing that to +[UIColor colorWithRGBHex:]
 // Skips any leading whitespace and ignores any trailing characters
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert {
+    if([[stringToConvert substringToIndex:1] isEqual:@"#"]){
+        stringToConvert = [stringToConvert substringFromIndex:1];
+    }else if([[stringToConvert substringToIndex:2] isEqual:@"0x"]){
+        stringToConvert = [stringToConvert substringFromIndex:2];
+    }
+    if(stringToConvert.length == 6){
+        stringToConvert = kFORMAT(@"%@FF", stringToConvert);
+    }
     size_t length = stringToConvert.length;
-    if(length!=8){
+    if(length != 8){
         return nil;
     }
     float red = 0.0f;

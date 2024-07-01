@@ -26,12 +26,23 @@
 +(BOOL) addInstanceMethod:(nonnull Method) method;
 
 /**
- void(^demoBlock)(id target) =^(id) { NSLog(@"demo");};
- int(^addBlock)(id target, int) =^(id target,int x, int y) { return x +y;};
+ * void(^demoBlock)(id target) =^(id) { NSLog(@"demo");};
+ * int(^addBlock)(id target, int) =^(id target,int x, int y) { return x +y;};
  */
 //=======================================================>
 #pragma hook实例方法，使用block替换原方法，使用invoke执行原方法 自动添加一个exchange{methodName}首字母大写的函数
  +(BOOL) hookInstanceMethodWithSel:(nonnull SEL) originalSel block:(nonnull id) exchangeBlock;
  -(void) invokeOrginalWithSel:(nonnull SEL) originalSel returnValue:(nullable void*) returnValue params:(nullable void*) param,...NS_REQUIRES_NIL_TERMINATION;
- ///<=======================================================
+///<=======================================================
+
+/**
+ * hookDealloc方法，对象回收时会自动清理数据和执行回调监听
+ */
++(BOOL) hookDeallocOnlyOnce:(void(^_Nullable)(void * _Nullable targetPointer)) deallocBlock clazz:(Class _Nonnull) clazz;
++(void) removehookDeallocByClazz:(Class _Nonnull ) clazz;
+
+
++(nullable NSMutableDictionary *) __paramsDictForHookStatic:(BOOL) isFill;
+-(nullable NSMutableDictionary *) __paramsDictForHookInstance:(BOOL) isFill;
+
 @end

@@ -114,13 +114,20 @@
     return tapGesture;
 }
 
+-(void) setRoundedRect:(CGRect) roundedRect roundingCorners:(UIRectCorner) roundingCorners cornerRadii:(CGSize)cornerRadii{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:roundedRect byRoundingCorners:roundingCorners cornerRadii:cornerRadii];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = roundedRect;
+    maskLayer.path = maskPath.CGPath;
+    self.layer.mask = maskLayer;
+}
+
 -(void)setCornerRadiusAndBorder:(CGFloat)radius borderWidth:(CGFloat)width borderColor:(UIColor *)color{
     self.layer.cornerRadius = radius;
     self.layer.borderWidth = width;
     if(color)self.layer.borderColor = color.CGColor;
     [self setClipsToBounds:YES];
 }
-
 /**
  设置阴影层
  */

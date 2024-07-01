@@ -19,6 +19,38 @@ NSArray<NSString *> * PYInvokeRemoveIvarNames;
 +(void) load{
     PYInvokeRemoveIvarNames = @[@"hash", @"superclass", @"description", @"debugDescription"];
 }
++ (void) setObjectVarValue:(nonnull id) target clazz:(nullable Class) clazz ivarName:(nonnull NSString *) ivarName ivarValue:(nullable id) ivarValue{
+    if(clazz == nil){
+        clazz = [target class];
+    }
+    unsigned int outCount2;
+    Ivar *ivars = class_copyIvarList(clazz, &outCount2);
+    
+    for (int i = 0; i < outCount2; i++) {
+        Ivar ivar = ivars[i];
+        if(![ivarName isEqual:[NSString stringWithUTF8String:ivar_getName(ivar)]]){
+            continue;
+        }
+        object_setIvar(target, ivar, ivarValue);
+        break;
+    }
+}
++ (nullable id) getObjectVarValue:(nonnull id) target clazz:(nullable Class) clazz ivarName:(nonnull NSString *) ivarName{
+    if(clazz == nil){
+        clazz = [target class];
+    }
+    unsigned int outCount2;
+    Ivar *ivars = class_copyIvarList(clazz, &outCount2);
+    
+    for (int i = 0; i < outCount2; i++) {
+        Ivar ivar = ivars[i];
+        if(![ivarName isEqual:[NSString stringWithUTF8String:ivar_getName(ivar)]]){
+            continue;
+        }
+        return object_getIvar(target, ivar);
+    }
+    return nil;
+}
 
 //==>分布执行方法
 + (nullable id) startInvoke:(nonnull id) target action:(nonnull SEL)action{

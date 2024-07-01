@@ -31,13 +31,6 @@ int  printf(const char * __restrict, ...) __printflike(1, 2);
 #pragma mark 获取当前语言
 #define kCurrentLanguage ([[NSLocale preferredLanguages] objectAtIndex:0])
 
-#pragma mark 打印日志
-#ifndef __OPTIMIZE__
-#    define NSLog(...) NSLog(__VA_ARGS__)
-#else
-#    define NSLog(...) {}
-#endif
-
 #define kPrintLogln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(log)[%s]\n",f].UTF8String, ## __VA_ARGS__)
 #define kPrintExceptionln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(exception)[%s]\n",f].UTF8String, ## __VA_ARGS__)
 #define kPrintErrorln(f, ...)  printf([NSString stringWithFormat:@"wlpiaoyi(error)[%s]\n",f].UTF8String, ## __VA_ARGS__)
@@ -53,25 +46,25 @@ int  printf(const char * __restrict, ...) __printflike(1, 2);
 #define kCoordinateEnabled(coordinate) (coordinate.latitude > -90 && coordinate.longitude > -180 && coordinate.latitude < 90 && coordinate.longitude < 180)
 
 #pragma mark 属性配置简写
-#define kPNSNA                         @property (nonatomic, strong, nullable)
-#define kPNSNN                        @property (nonatomic, strong, nonnull)
-#define kPNRNA                         @property (nonatomic, readonly, nullable)
-#define kPNRNN                        @property (nonatomic, readonly, nonnull)
-#define kPCNA                        @property (class, nonatomic, assign)
-#define kPCNRA                        @property (class, nonatomic, readonly, assign)
+#define kPNSNA                          @property (nonatomic, strong, nullable)
+#define kPNSNN                          @property (nonatomic, strong, nonnull)
+#define kPNRNA                          @property (nonatomic, readonly, nullable)
+#define kPNRNN                          @property (nonatomic, readonly, nonnull)
+#define kPCNA                           @property (class, nonatomic, assign)
+#define kPCNRA                          @property (class, nonatomic, readonly, assign)
 #define kPCNSNA                         @property (class, nonatomic, strong, nullable)
-#define kPCNRNN                        @property (class, nonatomic, readonly, nonnull)
+#define kPCNRNN                         @property (class, nonatomic, readonly, nonnull)
 //==============
-#define kPNCNA                         @property (nonatomic, copy, nullable)
-#define kPNCNN                        @property (nonatomic, copy, nonnull)
-#define kPNCRNA                       @property (nonatomic, copy, readonly, nullable)
-#define kPNCRNN                      @property (nonatomic, copy, readonly, nonnull)
+#define kPNCNA                          @property (nonatomic, copy, nullable)
+#define kPNCNN                          @property (nonatomic, copy, nonnull)
+#define kPNCRNA                         @property (nonatomic, copy, readonly, nullable)
+#define kPNCRNN                         @property (nonatomic, copy, readonly, nonnull)
 //==============
-#define kPRA                              @property (nonatomic,readonly, assign)
-#define kPNA                              @property (nonatomic, assign)
-#define kPNANA                         @property (nonatomic, assign, nullable)
-#define kPNANN                        @property (nonatomic, assign, nonnull)
-#define kPNAR                            @property (nonatomic, assign, readonly)
+#define kPRA                            @property (nonatomic,readonly, assign)
+#define kPNA                            @property (nonatomic, assign)
+#define kPNANA                          @property (nonatomic, assign, nullable)
+#define kPNANN                          @property (nonatomic, assign, nonnull)
+#define kPNAR                           @property (nonatomic, assign, readonly)
 #define kPNARA                          @property (nonatomic, assign, readonly, nullable)
 #define kPNARN                          @property (nonatomic, assign, readonly, nonnull)
 

@@ -8,6 +8,7 @@
 
 #import "PYXml.h"
 #import "NSData+PYExpand.h"
+#import "NSString+PYExpand.h"
 
 static NSMutableDictionary * TSZF_DICT_TO;
 static NSMutableDictionary * TSZF_DICT_FR;
@@ -95,6 +96,37 @@ kPNA unsigned int deep;
 }
 //step 3:获取头节点间内容
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
+    
+    BOOL flag = [NSString matchArg:string regex:@"([\n|\r|\t| ]{1,})"];
+    NSMutableString * regexStr = [NSMutableString new];
+    if([string containsString:@"\n"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\n"];
+    }
+    if([string containsString:@"\r"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\r"];
+    }
+    if([string containsString:@"\t"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\t"];
+    }
+    if([string containsString:@" "]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@" "];
+    }
+    NSString * regexAll = kFORMAT(@"^([%@]{1,})$", regexStr);
+    if([NSString matchArg:string regex:regexAll]){
+        return;
+    }
     PYXmlElement * stringNode = [[PYXmlElement alloc] initWithDeep:_deep parent:_curElement];
     stringNode.elementName = @"PYNode";
     stringNode.string = string;
@@ -121,6 +153,16 @@ kPNA unsigned int deep;
 @end
 
 @implementation PYXmlElement
+
+-(void) setDeep:(int)deep{
+    _deep = deep;
+    if(self.elements != nil){
+        for(PYXmlElement * subXml in self.elements){
+            subXml.deep = self.deep + 1;
+        }
+    }
+}
+
 -(instancetype) initWithDeep:(int) deep parent:(PYXmlElement *) parent{
     if(self = [super init]){
         _deep = deep;
@@ -130,7 +172,9 @@ kPNA unsigned int deep;
 }
 -(void) addSubElement:(nonnull PYXmlElement *) element{
     @synchronized(self){
+        [element removeFromParentElement];
         element->_parent = self;
+        element.deep = self.deep + 1;
         NSMutableArray<PYXmlElement *> * elements = [NSMutableArray new];
         if(_elements && _elements.count){
             [elements addObjectsFromArray:_elements];
@@ -192,6 +236,35 @@ kPNA unsigned int deep;
     }
     [stringValue appendFormat:@"</%@>", xmlDom.elementName];
 }
+
+- (id)copy{
+    return [self copyData];
+}
+
+-(nullable instancetype) copyData{
+    PYXmlElement * copyObj = [PYXmlElement new];
+    copyObj->_parent = self.parent;
+    copyObj.deep = self.deep;
+    copyObj.elementName = self.elementName;
+    copyObj->_elements = [self.elements mutableCopy];
+    copyObj.string = self.string;
+    copyObj.attributes = [self.attributes mutableCopy];
+    copyObj.cData = [self.cData mutableCopy];
+    return copyObj;
+}
+
+- (instancetype)deepCopy{
+    PYXmlElement * copyObj = [self copyData];
+    if(copyObj.elements != nil && copyObj.elements.count > 0){
+        NSArray<PYXmlElement *> * elements = [NSArray arrayWithArray:copyObj.elements];
+        copyObj->_elements = nil;
+        for(PYXmlElement * e in elements){
+            [copyObj addSubElement:[e deepCopy]];
+        }
+    }
+    return copyObj;
+}
+
 -(void) dealloc{
     
 }

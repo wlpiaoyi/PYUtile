@@ -52,6 +52,12 @@ kPNSNA NSData * cData;
  从父节点上移除
  */
 -(void) removeFromParentElement;
+
+/**
+ 复制对象
+ */
+-(nullable instancetype) copyData;
+-(nullable instancetype) deepCopy;
 @end
 
 /**

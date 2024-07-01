@@ -11,18 +11,63 @@
 #import <objc/runtime.h>
 #import "PYXml.h"
 #import "PYKeychain.h"
+#import "NSString+PYExpand.h"
 
 
 
 @interface AppDelegate ()
+kPNA BOOL ivarTest;
 @end
 
 @implementation AppDelegate
+//-(id) ivarTest{
+//    return _ivarTest;
+//}
+//-(void) setIvarTest:(BOOL)ivarTest{
+//    _ivarTest = ivarTest;
+//}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [PYInvoke setObjectVarValue:self clazz:nil ivarName:@"_ivarTest" ivarValue:@NO];
+    NSNumber * idIvarRes = [PYInvoke getObjectVarValue:self clazz:nil ivarName:@"_ivarTest"];
+    NSNumber * _ivarTestx = [self valueForKeyPath:@"_ivarTest"];
+    self.ivarTest = @YES;
+      _ivarTestx = [self valueForKeyPath:@"_ivarTest"];
+    [self setValue:@NO forKeyPath:@"_ivarTest"];
+    _ivarTestx = [self valueForKeyPath:@"_ivarTest"];
+    [self setValue:@YES forKeyPath:@"ivarTest"];
+    self.ivarTest;
+    NSString * str = @"\n\t\r\t   ";
     
+    BOOL flag = [NSString matchArg:str regex:@"([\n|\r|\t| ]{1,})"];
+    NSMutableString * regexStr = [NSMutableString new];
+    if([str containsString:@"\n"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\n"];
+    }
+    if([str containsString:@"\r"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\r"];
+    }
+    if([str containsString:@"\t"]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@"\t"];
+    }
+    if([str containsString:@" "]){
+        if(regexStr.length > 0){
+            [regexStr appendString:@"|"];
+        }
+        [regexStr appendString:@" "];
+    }
     
-    
+    NSString * flag_r = kFORMAT(@"^([%@]{1,})$", regexStr);
+    BOOL flag_a = [NSString matchArg:str regex:flag_r];
     dispatch_queue_t myqueue1 = dispatch_queue_create("queue1", DISPATCH_QUEUE_CONCURRENT);
     dispatch_queue_t myqueue2 = dispatch_queue_create("queue2", DISPATCH_QUEUE_CONCURRENT);
     void * p = NULL;
@@ -60,7 +105,7 @@
     NSLog(@"args1,%@", args);
     void * p1 = (__bridge void *)(args);
     *pointer = p1;
-    kAssign(<#type#>)
+//    kAssign(<#type#>)
     __unsafe_unretained typeof(args) args2 = args;
     void (^block1) (void) = ^(void){
         NSLog(@"args2,%@", args2);

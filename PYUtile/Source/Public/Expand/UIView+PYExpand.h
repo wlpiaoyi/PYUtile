@@ -32,6 +32,11 @@
  添加触控事件
  */
 -(nullable UITapGestureRecognizer*) addTapGestureWithTarget:(nonnull id)target action:(nonnull SEL)action;
+
+/**
+ 自定义圆角
+ */
+-(void) setRoundedRect:(CGRect) roundedRect roundingCorners:(UIRectCorner) roundingCorners cornerRadii:(CGSize)cornerRadii;
 /**
  图层的简单设置
  */

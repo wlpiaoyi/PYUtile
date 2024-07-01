@@ -13,6 +13,10 @@
  如果void * returnValue是一个人对象切记要使用 (__bridge id _Nullable)(returnValue)，否则会出现内存泄露
  */
 @interface PYInvoke : NSObject
+
++ (void) setObjectVarValue:(nonnull id) target clazz:(nullable Class) clazz ivarName:(nonnull NSString *) ivarName ivarValue:(nullable id) ivarValue;
++ (nullable id) getObjectVarValue:(nonnull id) target clazz:(nullable Class) clazz ivarName:(nonnull NSString *) ivarName;
+
 //==>分布执行方法
 + (nullable id) startInvoke:(nonnull id) target action:(nonnull SEL)action;
 + (void) setInvoke:(nullable void *) param index:(NSInteger) index invocation:(nonnull const id) invocation;

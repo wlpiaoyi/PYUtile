@@ -173,5 +173,7 @@ float app_cpu_usage(void);
 +(nonnull NSString *)MD5ForUpper16Bate:(nonnull NSString *)str;
 // 16位小写
 +(nonnull NSString *)MD5ForLower16Bate:(nonnull NSString *)str;
+// 文件MD5
++(nonnull NSString *)getFilePathForMD5:(nonnull NSString *)path;
 
 @end

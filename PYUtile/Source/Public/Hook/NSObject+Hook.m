@@ -9,7 +9,9 @@
 #import "NSObject+Hook.h"
 #import "PYUtile.h"
 #import "PYInvoke.h"
+#import <objc/runtime.h>
 
+void * UIResponderHookParamDictPointer = &UIResponderHookParamDictPointer;
 static NSMutableDictionary<NSString *, id> * RETAIN_OBJS;
 
 
@@ -72,17 +74,13 @@ static NSMutableDictionary<NSString *, id> * RETAIN_OBJS;
 #pragma hook method methodName:当前方法名称 需要添加一个exchange{methodName}首字母大写的函数====>
 +(BOOL) hookInstanceMethodName:(nonnull NSString *) methodName{
     SEL originalSel = sel_getUid(methodName.UTF8String);
-    SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
+    SEL exchangeSel = sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
     return [self hookInstanceOriginalSel:originalSel exchangeSel:exchangeSel];
 }
 
 +(BOOL) hookStaticMethodName:(nonnull NSString *) methodName{
     SEL originalSel = sel_getUid(methodName.UTF8String);
-    SEL exchangeSel =  sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
-    if([self respondsToSelector:exchangeSel]){
-        kPrintErrorln("(%s) contains method (%s)", NSStringFromClass(self).UTF8String, sel_getName(exchangeSel));
-        return NO;
-    }
+    SEL exchangeSel = sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
     return [self hookStaticOriginalSel:originalSel exchangeSel:exchangeSel];
 }
 #pragma hook method methodName:当前方法名称 需要添加一个exchange{methodName}首字母大写的函数<====
@@ -161,4 +159,96 @@ static NSMutableDictionary<NSString *, id> * RETAIN_OBJS;
 
 #pragma hook实例方法，使用block替换原方法，使用invoke执行原方法<====
 
+
+#pragma hookDealloc方法，对象回收时会自动清理数据和执行回调监听====>
+
++(void) removehookDeallocByClazz:(Class) clazz{
+    NSMutableDictionary * paramDict = [clazz __paramsDictForHookStatic:false];
+    if(paramDict == nil){
+        return;
+    }
+    NSString * deallocBlockTagKey = @"__HOOK_DEALLOC_BLOCK_TAG";
+    [paramDict removeObjectForKey:deallocBlockTagKey];
+}
+
++(BOOL) hookDeallocOnlyOnce:(void(^)(void * targetPointer)) deallocBlock clazz:(Class) clazz{
+    kDISPATCH_ONCE_BLOCK(^{
+        SEL hookAction = sel_getUid("dealloc");
+        NSAssert([NSObject hookInstanceMethodName:NSStringFromSelector(hookAction)], @"Hook dealloc failed");
+    });
+    
+    NSString * deallocBlockTagKey = @"__HOOK_DEALLOC_BLOCK_TAG";
+    if(deallocBlock != nil){
+        [[clazz __paramsDictForHookStatic:true] setValue:deallocBlock forKey:deallocBlockTagKey];
+    }
+    NSString * dellocTagKey = @"__HOOK_DEALLOC_TAG";
+    NSNumber * __HOOK_DEALLOC_TAG = [[clazz __paramsDictForHookStatic:true] valueForKey:dellocTagKey];
+    if(__HOOK_DEALLOC_TAG != nil && __HOOK_DEALLOC_TAG.boolValue){
+        return true;
+    }
+    @synchronized (clazz) {
+        __HOOK_DEALLOC_TAG = [[clazz __paramsDictForHookStatic:true] valueForKey:dellocTagKey];
+        if(__HOOK_DEALLOC_TAG != nil && __HOOK_DEALLOC_TAG.boolValue){
+            return true;
+        }
+        __HOOK_DEALLOC_TAG = [NSNumber numberWithBool:true];
+        [[clazz __paramsDictForHookStatic:true] setValue:__HOOK_DEALLOC_TAG forKey:dellocTagKey];
+    }
+    return true;
+}
+
+-(void) exchangeDealloc{
+    NSMutableDictionary * paramDict = [self.class __paramsDictForHookStatic:false];
+    if(paramDict == nil){
+        [self exchangeDealloc];
+        return;
+    }
+    void(^deallocBlock)(void * targetPointer) = [paramDict valueForKey:@"__HOOK_DEALLOC_BLOCK_TAG"];
+    if(deallocBlock != nil){
+        void * target = (__bridge void *)(self);
+        deallocBlock(target);
+    }
+    objc_removeAssociatedObjects(self);
+    [self exchangeDealloc];
+}
+
+#pragma hookDealloc方法，对象回收时会自动清理数据和执行回调监听<====
+
++(nullable NSMutableDictionary *) __paramsDictForHookStatic:(BOOL) isFill{
+    NSMutableDictionary * dict = objc_getAssociatedObject(self, UIResponderHookParamDictPointer);
+    if(dict != nil){
+        return dict;
+    }
+    if(!isFill){
+        return nil;
+    }
+    @synchronized (self) {
+        dict = objc_getAssociatedObject(self, UIResponderHookParamDictPointer);
+        if(dict != nil){
+            return dict;
+        }
+        dict = [NSMutableDictionary new];
+        objc_setAssociatedObject(self, UIResponderHookParamDictPointer, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return dict;
+}
+
+- (nullable NSMutableDictionary *) __paramsDictForHookInstance:(BOOL) isFill{
+    NSMutableDictionary * dict = objc_getAssociatedObject(self, UIResponderHookParamDictPointer);
+    if(dict != nil){
+        return dict;
+    }
+    if(!isFill){
+        return nil;
+    }
+    @synchronized (self) {
+        dict = objc_getAssociatedObject(self, UIResponderHookParamDictPointer);
+        if(dict != nil){
+            return dict;
+        }
+        dict = [NSMutableDictionary new];
+        objc_setAssociatedObject(self, UIResponderHookParamDictPointer, dict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return dict;
+}
 @end

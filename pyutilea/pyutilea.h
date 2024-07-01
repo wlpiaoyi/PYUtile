@@ -14,11 +14,6 @@
 
 #import  "PYHook.h"
 
-#import "PYKeyboardNotification.h"
-#import "PYMotionNotification.h"
-#import "PYOrientationNotification.h"
-
-//#import "UIView+PYLayoutOption.h"
 #import "UIView+PYAutolayout.h"
 
 #import  "NSDate+PYExpand.h"
@@ -38,11 +33,7 @@
 #import  "PYGraphicsThumb.h"
 
 #import  "NSObject+Hook.h"
-#import  "UIResponder+Hook.h"
-#import  "UIView+Hook.h"
-#import  "UIViewController+Hook.h"
-#import  "UIViewController+HookView.h"
-#import  "UIViewController+HookOrientation.h"
 
 #import "PYXml.h"
+#import "PYXmlGetter.h"
 #import "EXTScope.h"

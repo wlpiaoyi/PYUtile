@@ -17,11 +17,14 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>871</string>
+	<string>904</string>
 	<key>DevelopBundleVersion</key>
 	<dict>
+		<key>piaoyiwl</key>
+		<string>33</string>
 		<key>users</key>
 		<array>
+			<string>piaoyiwl</string>
 			<string>wlpiaoyi</string>
 		</array>
 		<key>wlpiaoyi</key>

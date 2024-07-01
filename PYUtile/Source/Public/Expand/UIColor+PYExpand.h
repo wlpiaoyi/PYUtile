@@ -34,27 +34,26 @@
 - (UIColor *)colorByLuminanceMapping;
 
 -(nullable UIColor *) copyForChangeAlpha:(CGFloat) alpha;
-- (UIColor *)colorByMultiplyingByRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
-- (UIColor *)       colorByAddingRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
-- (UIColor *) colorByLighteningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
-- (UIColor *)  colorByDarkeningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
+-(nullable UIColor *)colorByMultiplyingByRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
+-(nullable UIColor *)       colorByAddingRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
+-(nullable UIColor *) colorByLighteningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
+-(nullable UIColor *)  colorByDarkeningToRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 
-- (UIColor *)colorByMultiplyingByColor:(UIColor *)color;
-- (UIColor *)       colorByAddingColor:(UIColor *)color;
-- (UIColor *) colorByLighteningToColor:(UIColor *)color;
-- (UIColor *)  colorByDarkeningToColor:(UIColor *)color;
-+ (UIColor *)colorWithHexString:(NSString *)stringToConvert API_DEPRECATED_WITH_REPLACEMENT("colorWithHexNumber:", ios(1.0, 2.0));
+-(nullable UIColor *)colorByMultiplyingByColor:(nonnull UIColor *)color;
+-(nullable UIColor *)       colorByAddingColor:(nonnull UIColor *)color;
+-(nullable UIColor *) colorByLighteningToColor:(nonnull UIColor *)color;
+-(nullable UIColor *)  colorByDarkeningToColor:(nonnull UIColor *)color;
 
-- (NSString *)stringFromColor;
-- (NSString *)hexStringFromColor;
+-(nullable NSString *)stringFromColor;
+-(nullable NSString *)hexStringFromColor;
 
-+ (UIColor *)randomColor;
-+ (UIColor *)colorWithString:(NSString *)stringToConvert;
++(nullable UIColor *)randomColor;
 
-+ (UIColor *)colorWithHexNumber:(UInt32)hex;//0xFFEEDDEE
-+ (UIColor *)colorWithRGBHex:(UInt32)hex API_DEPRECATED_WITH_REPLACEMENT("colorWithHexNumber:", ios(1.0, 2.0));
-
-+ (UIColor *)colorWithName:(NSString *)cssColorName;
++(nullable UIColor *)  colorWithHexString:(nonnull NSString *)stringToConvert;
++(nullable UIColor *)     colorWithString:(nonnull NSString *)stringToConvert;
++(nullable UIColor *)  colorWithHexNumber:(UInt32)hex;//0xFFEEDDEE
++(nullable UIColor *)     colorWithRGBHex:(UInt32)hex API_DEPRECATED_WITH_REPLACEMENT("colorWithHexNumber:", ios(1.0, 2.0));
++(nullable UIColor *)       colorWithName:(nonnull NSString *)cssColorName;
 
 @end
 
