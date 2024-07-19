@@ -216,18 +216,118 @@ kPNRNN NSMutableDictionary * objectCaches;
     return resXml;
 }
 
--(void) iteratorLinkXml:(PYXmlElement *) xml{
-    if(xml == nil){
+-(BOOL) isCurPrimaryByCurXml:(PYXmlElement *) curXml linkXml:(PYXmlElement *) linkXml{
+    if([self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:curXml]){
+        return true;
+    }
+    if([self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:linkXml]){
+        return false;
+    }
+    return true;
+}
+
+-(PYXmlElement *) getSubElementByElements:(NSArray<PYXmlElement *> *) elements keyId:(NSString *) keyId{
+    for (PYXmlElement * subEle in elements) {
+        NSString * curKeyId = [self getXmlElementStringAttr:@"id" defaultValue:nil xml:subEle];
+        if(curKeyId == nil || curKeyId.length == 0){
+            continue;
+        }
+        if([curKeyId isEqual:keyId]){
+            return subEle;
+        }
+    }
+    return nil;
+}
+
+-(PYXmlElement *) getPrimarySubElementByElements:(NSArray<PYXmlElement *> *) elements eleName:(NSString *) eleName{
+    for (PYXmlElement * subEle in elements) {
+        if(![subEle.elementName isEqual:eleName]){
+            continue;
+        }
+        if(![self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:subEle]){
+            continue;
+        }
+        return subEle;
+    }
+    return nil;
+}
+
+-(BOOL) mergeXmlAttributesByCurXml:(PYXmlElement *) curXml linkXml:(PYXmlElement *) linkXml{
+    BOOL curPrimary = [self isCurPrimaryByCurXml:curXml linkXml:linkXml];
+    NSDictionary * linkAttributes = [linkXml.attributes mutableCopy];
+    if(linkAttributes == nil || linkAttributes.count == 0){
+        return curPrimary;
+    }
+    NSMutableDictionary * curAttributes;
+    if(curXml.attributes != nil){
+        curAttributes = [curXml.attributes mutableCopy];
+    }else{
+        curAttributes = [NSMutableDictionary new];
+    }
+    for(NSString * key in linkAttributes){
+        NSString * linkValue = [linkAttributes valueForKey:key];
+        NSString * curValue = [curAttributes valueForKey:key];
+        if(linkValue == nil || linkValue.length == 0){
+            continue;
+        }
+        if(curPrimary){
+            if(curValue == nil || curValue.length == 0){
+                [curAttributes setValue:linkValue forKey:key];
+            }else continue;
+        }else{
+            [curAttributes setValue:linkValue forKey:key];
+        }
+    }
+    [curXml setAttributes:curAttributes];
+    return curPrimary;
+}
+
+-(void) mergeXmlSubElementsByCurXml:(PYXmlElement *) curXml linkXml:(PYXmlElement *) linkXml{
+    BOOL curPrimary = [self mergeXmlAttributesByCurXml:curXml linkXml:linkXml];
+    NSArray<PYXmlElement *> * linkEles = [linkXml.elements mutableCopy];
+    if(linkEles == nil || linkEles.count == 0){
         return;
     }
-    void * pointerXml = (__bridge void *)(xml);
-    NSString * xmlPointerKey = kFORMAT(@"__xml_pointer_%ld", ((long) pointerXml));
-    if([self.objectCaches valueForKey:xmlPointerKey]){
+    NSArray<PYXmlElement *> * curSubElements = [curXml.elements mutableCopy];
+    if(curSubElements == nil){
+        curSubElements = [NSMutableArray new];
+    }
+    for(PYXmlElement * linkEle in linkEles){
+        NSString * linkKeyId = [self getXmlElementStringAttr:@"id" defaultValue:nil xml:linkEle];
+        if(linkKeyId == nil || linkKeyId.length == 0){
+            PYXmlElement * curEle = [self getSubElementByElements:curSubElements keyId:linkKeyId];
+            if(curEle == nil){
+                [curXml addSubElement:[linkEle deepCopy]];
+            }else{
+                [self mergeXmlSubElementsByCurXml:curEle linkXml:linkEle];
+            }
+            continue;
+        }
+        
+        if([self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:linkEle]){
+            PYXmlElement * curEle = [self getPrimarySubElementByElements:curSubElements eleName:linkEle.elementName];
+            if(curEle != nil){
+                [self mergeXmlSubElementsByCurXml:curEle linkXml:linkEle];
+                continue;
+            }
+        }
+        [curXml addSubElement:linkEle];
+    }
+    NSLog(@"");
+}
+
+-(void) iteratorLinkXml:(PYXmlElement *) curXml{
+    if(curXml == nil){
         return;
     }
-    [self.objectCaches setValue:@1 forKey:xmlPointerKey];
-    if(xml.attributes != nil && [xml.attributes valueForKey:@"link_xml_paths"]){
-        NSString * linkXmlPaths = [xml.attributes valueForKey:@"link_xml_paths"];
+    void * pointerCurXml = (__bridge void *)(curXml);
+    NSString * culXmlPointerKey = kFORMAT(@"__xml_pointer_%ld", ((long) pointerCurXml));
+    if([self.objectCaches valueForKey:culXmlPointerKey]){
+        return;
+    }
+    [self.objectCaches setValue:@1 forKey:culXmlPointerKey];
+    if(curXml.attributes != nil && [curXml.attributes valueForKey:@"link_xml_paths"]){
+        NSString * linkXmlPaths = [curXml.attributes valueForKey:@"link_xml_paths"];
         if(linkXmlPaths == nil || linkXmlPaths.length == 0){
             return;
         }
@@ -239,55 +339,7 @@ kPNRNN NSMutableDictionary * objectCaches;
             if(linkXml == nil){
                 return;
             }
-            if(linkXml.attributes != nil){
-                NSMutableDictionary * attributes;
-                if(xml.attributes != nil){
-                    attributes = [xml.attributes mutableCopy];
-                }else{
-                    attributes = [NSMutableDictionary new];
-                }
-                for(NSString * key in linkXml.attributes.allKeys){
-                    if([attributes valueForKey:key]){
-                        continue;
-                    }
-                    [attributes setValue:[linkXml.attributes valueForKey:key] forKey:key];
-                }
-                [xml setAttributes:attributes];
-            }
-            for(PYXmlElement * linkSub in linkXml.elements){
-                bool canAddSub = true;
-                NSMutableArray * removeX = [NSMutableArray new];
-                for(PYXmlElement * xSub in xml.elements){
-                    if(![xSub.elementName isEqual:linkSub.elementName]){
-                        continue;
-                    }
-                    NSString * xKeyId = [self getXmlElementStringAttr:@"id" defaultValue:nil xml:xSub];
-                    if(xKeyId == nil){
-                        if([self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:xSub]){
-                            canAddSub = false;
-                            break;
-                        }else{
-                            canAddSub = true;
-                            break;
-                        }
-                    }else{
-                        if(![xKeyId isEqual:[self getXmlElementStringAttr:@"id" defaultValue:nil xml:linkSub]]){
-                            continue;
-                        }
-                        if([self getXmlElementBooleanAttr:@"primary" defaultValue:FALSE xml:xSub]){
-                            canAddSub = false;
-                            break;
-                        }else{;
-                            canAddSub = true;
-                            [xSub removeFromParentElement];
-                            break;
-                        }
-                    }
-                }
-                if(canAddSub){
-                    [xml addSubElement:[linkSub deepCopy]];
-                }
-            }
+            [self mergeXmlSubElementsByCurXml:curXml linkXml:linkXml];
         }
     }
 }

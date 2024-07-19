@@ -8,7 +8,7 @@
 
 #import "PYInvoke.h"
 #import <objc/runtime.h>
-//#import "py_hook_encode_type.h"
+#import "PYUtileMacro.h"
 #import "PYHookEncodeType.h"
 
 
@@ -19,6 +19,16 @@ NSArray<NSString *> * PYInvokeRemoveIvarNames;
 +(void) load{
     PYInvokeRemoveIvarNames = @[@"hash", @"superclass", @"description", @"debugDescription"];
 }
+
+//+(BOOL) addInstanceMethodWithSel:(nonnull SEL) sel type:(const char *) types block:(nonnull id) block{
+//    IMP implBlock = imp_implementationWithBlock(block);
+//    if(!class_addMethod(self, sel, implBlock, types)){
+//        kPrintErrorln("(%s) add method (%s) failed", NSStringFromClass(self).UTF8String, sel_getName(sel));
+//        return NO;
+//    }
+//    return true;
+//}
+
 + (void) setObjectVarValue:(nonnull id) target clazz:(nullable Class) clazz ivarName:(nonnull NSString *) ivarName ivarValue:(nullable id) ivarValue{
     if(clazz == nil){
         clazz = [target class];

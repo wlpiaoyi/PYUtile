@@ -115,6 +115,12 @@
 }
 
 -(void) setRoundedRect:(CGRect) roundedRect roundingCorners:(UIRectCorner) roundingCorners cornerRadii:(CGSize)cornerRadii{
+    if(cornerRadii.width < 0){
+        cornerRadii.width = self.frameWidth * (0.01 * MAX(-1, ABS(cornerRadii.width)));
+    }
+    if(cornerRadii.height < 0){
+        cornerRadii.height = self.frameHeight * (0.01 * MAX(-1, ABS(cornerRadii.height)));
+    }
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:roundedRect byRoundingCorners:roundingCorners cornerRadii:cornerRadii];
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
     maskLayer.frame = roundedRect;
@@ -123,6 +129,9 @@
 }
 
 -(void)setCornerRadiusAndBorder:(CGFloat)radius borderWidth:(CGFloat)width borderColor:(UIColor *)color{
+    if(radius < 0){
+        radius = MIN(self.frameWidth, self.frameHeight) * (0.01 * MAX(-1, ABS(radius)));
+    }
     self.layer.cornerRadius = radius;
     self.layer.borderWidth = width;
     if(color)self.layer.borderColor = color.CGColor;

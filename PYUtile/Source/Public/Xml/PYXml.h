@@ -23,11 +23,11 @@ kPNARN PYXmlElement * parent;
 /**
  元素名称
  */
-kPNSNN NSString * elementName;
+kPNCNA NSString * elementName;
 /**
  属性字典
  */
-kPNSNA NSDictionary<NSString *, NSString *> * attributes;
+kPNCNA NSDictionary<NSString *, NSString *> * attributes;
 /**
  子元素数组
  */
@@ -35,11 +35,11 @@ kPNCRNA NSArray<PYXmlElement *> * elements;
 /**
  字符
  */
-kPNSNA NSString * string;
+kPNCNA NSString * string;
 /**
  数据
  */
-kPNSNA NSData * cData;
+kPNCNA NSData * cData;
 /**
  装换成只字符串
  */
