@@ -21,6 +21,9 @@
 #pragma hook method methodName:当前方法名称 需要添加一个exchange{methodName}首字母大写的函数
 +(BOOL) hookInstanceMethodName:(nonnull NSString *) methodName;
 +(BOOL) hookStaticMethodName:(nonnull NSString *) methodName;
+
++(BOOL) hookInstancePrivateMethodName:(nonnull NSString *) methodName;
++(BOOL) hookStaticPrivateMethodName:(nonnull NSString *) methodName;
 ///<=======================================================
 
 +(BOOL) addInstanceMethod:(nonnull Method) method;

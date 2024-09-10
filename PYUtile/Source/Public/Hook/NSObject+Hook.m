@@ -83,6 +83,18 @@ static NSMutableDictionary<NSString *, id> * RETAIN_OBJS;
     SEL exchangeSel = sel_getUid([NSString stringWithFormat:@"exchange%@%@",[[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
     return [self hookStaticOriginalSel:originalSel exchangeSel:exchangeSel];
 }
+
++(BOOL) hookInstancePrivateMethodName:(nonnull NSString *) methodName{
+    SEL originalSel = sel_getUid(methodName.UTF8String);
+    SEL exchangeSel = sel_getUid([NSString stringWithFormat:@"exchange%@%@%@", NSStringFromClass(self), [[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
+    return [self hookInstanceOriginalSel:originalSel exchangeSel:exchangeSel];
+}
+
++(BOOL) hookStaticPrivateMethodName:(nonnull NSString *) methodName{
+    SEL originalSel = sel_getUid(methodName.UTF8String);
+    SEL exchangeSel = sel_getUid([NSString stringWithFormat:@"exchange%@%@", NSStringFromClass(self), [[methodName substringToIndex:1] uppercaseString], [methodName substringFromIndex:1]].UTF8String);
+    return [self hookStaticOriginalSel:originalSel exchangeSel:exchangeSel];
+}
 #pragma hook method methodName:当前方法名称 需要添加一个exchange{methodName}首字母大写的函数<====
 
 +(BOOL) addInstanceMethod:(nonnull Method) method{
